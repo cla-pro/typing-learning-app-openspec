@@ -1,0 +1,17 @@
+<main class="welcome-container">
+  <div class="welcome-content">
+    <h1>Welcome to Typing Learning</h1>
+    <p class="subtitle">Improve your typing skills with interactive exercises</p>
+    
+    <nav class="exercises-nav">
+      <h2>Choose an Exercise</h2>
+      <ul class="exercise-list">
+        <li *ngFor="let exercise of exercises">
+          <a [routerLink]="['/exercices', exercise.id]" class="exercise-link">
+            {{ exercise.name }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</main>

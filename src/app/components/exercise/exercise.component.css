@@ -1,0 +1,72 @@
+.exercise-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 5rem 2rem 2rem;
+  background-color: #f5f5f5;
+}
+
+.exercise-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  max-width: 800px;
+  width: 100%;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.exercise-id {
+  font-size: 0.95rem;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+}
+
+code {
+  background-color: #ecf0f1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  color: #2c3e50;
+}
+
+.exercise-body {
+  margin-top: 2rem;
+  line-height: 1.8;
+  color: #34495e;
+}
+
+.placeholder {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #ffeaa7;
+  border-left: 4px solid #fdcb6e;
+  border-radius: 4px;
+}
+
+.exercise-description {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .exercise-container {
+    padding: 4rem 1rem 2rem;
+  }
+
+  .exercise-content {
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+}
