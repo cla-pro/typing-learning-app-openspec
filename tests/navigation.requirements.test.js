@@ -8,10 +8,10 @@ describe('Navigation Requirements Regression Tests', () => {
     const routesPath = path.join(root, 'src', 'app', 'routing', 'app.routes.ts');
     const routesCode = fs.readFileSync(routesPath, 'utf8');
 
-    expect(routesCode).toContain("path: ''");
-    expect(routesCode).toContain("path: 'exercices/:id'");
-    expect(routesCode).toContain("path: '**'");
-    expect(routesCode).toContain("redirectTo: '/'");
+    expect(routesCode).toContain('path: \'\'');
+    expect(routesCode).toContain('path: \'exercices/:id\'');
+    expect(routesCode).toContain('path: \'**\'');
+    expect(routesCode).toContain('redirectTo: \'/\'');
   });
 
   it('should keep templates and styles separated from component code', () => {
@@ -56,8 +56,8 @@ describe('Navigation Requirements Regression Tests', () => {
     );
     const template = fs.readFileSync(welcomeTemplatePath, 'utf8');
 
-    expect(template).toContain("[routerLink]=\"['/exercices', exercise.id]\"");
-    expect(template).toContain('*ngFor="let exercise of exercises"');
+    expect(template).toContain('[routerLink]="[\'/exercices\', exercise.id]"');
+    expect(template).toContain('@for (exercise of exercises; track exercise)');
   });
 
   it('should keep expected exercise IDs available for navigation', () => {
@@ -71,9 +71,9 @@ describe('Navigation Requirements Regression Tests', () => {
     );
     const welcomeComponentCode = fs.readFileSync(welcomeComponentPath, 'utf8');
 
-    expect(welcomeComponentCode).toContain("id: 'basic-typing'");
-    expect(welcomeComponentCode).toContain("id: 'speed-test'");
-    expect(welcomeComponentCode).toContain("id: 'accuracy-training'");
+    expect(welcomeComponentCode).toContain('id: \'basic-typing\'');
+    expect(welcomeComponentCode).toContain('id: \'speed-test\'');
+    expect(welcomeComponentCode).toContain('id: \'accuracy-training\'');
   });
 
   it('should provide home navigation from exercise pages', () => {
@@ -98,7 +98,7 @@ describe('Navigation Requirements Regression Tests', () => {
     const homeButtonTemplate = fs.readFileSync(homeButtonTemplatePath, 'utf8');
 
     expect(exerciseTemplate).toContain('<app-home-button></app-home-button>');
-    expect(homeButtonTemplate).toContain("[routerLink]=\"['/']\"");
+    expect(homeButtonTemplate).toContain('[routerLink]="[\'/\']"');
   });
 
   it('should extract exercise id from ActivatedRoute params', () => {
@@ -113,8 +113,8 @@ describe('Navigation Requirements Regression Tests', () => {
     const exerciseComponentCode = fs.readFileSync(exerciseComponentPath, 'utf8');
 
     expect(exerciseComponentCode).toContain('ActivatedRoute');
-    expect(exerciseComponentCode).toContain("this.route.params.subscribe");
-    expect(exerciseComponentCode).toContain("this.exerciseId = params['id']");
+    expect(exerciseComponentCode).toContain('this.route.params.subscribe');
+    expect(exerciseComponentCode).toContain('this.exerciseId = params[\'id\']');
   });
 
   it('should not rely on server.js in npm scripts', () => {

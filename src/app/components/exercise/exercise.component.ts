@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { HomeButtonComponent } from '../home-button/home-button.component';
 
 @Component({
-  selector: 'app-exercise',
-  standalone: true,
-  imports: [CommonModule, HomeButtonComponent],
-  templateUrl: './exercise.component.html',
-  styleUrls: ['./exercise.component.css']
+    selector: 'app-exercise',
+    imports: [HomeButtonComponent],
+    templateUrl: './exercise.component.html',
+    styleUrls: ['./exercise.component.css']
 })
 export class ExerciseComponent implements OnInit {
   exerciseId: string = '';

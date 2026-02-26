@@ -67,6 +67,12 @@ npm run lint
 ```
 Checks code quality using ESLint.
 
+### Dependency Policy Check
+```bash
+npm run check:deps
+```
+Validates that all direct dependencies are on latest compatible versions (or explicitly documented as temporary exceptions).
+
 ## Project Structure
 
 ```
@@ -78,7 +84,7 @@ typing-learning-app/
 ├── tests/
 │   └── navigation.requirements.test.js  # Navigation regression tests
 ├── package.json               # Project dependencies and scripts
-├── .eslintrc.js               # ESLint configuration
+├── eslint.config.js           # ESLint flat configuration
 ├── angular.json               # Angular workspace configuration
 └── README.md                  # This file
 ```
@@ -91,9 +97,17 @@ No custom runtime environment variables are required for local Angular developme
 
 ## Development
 
+### Dependency Version Governance
+
+- Angular is the compatibility pace-maker for dependency updates.
+- Upgrade Angular with Angular CLI (`ng update`) before other dependency waves.
+- Keep direct dependencies/devDependencies at latest compatible versions.
+- Record temporary compatibility exceptions in `docs/dependency-version-exceptions.json`.
+- Full workflow details are documented in `docs/dependency-version-governance.md`.
+
 ### Code Style
 
-The project uses ESLint for code quality. Configuration is in `.eslintrc.js`.
+The project uses ESLint flat config in `eslint.config.js`.
 
 Rules enforce:
 - Single quotes for strings
