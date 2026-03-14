@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
+import { ExerciseConfigService } from '../../services/exercise-config.service';
 
 @Component({
     selector: 'app-exercise',
@@ -11,22 +12,42 @@ import { HomeButtonComponent } from '../home-button/home-button.component';
 })
 export class ExerciseComponent implements OnInit {
   exerciseId: string = '';
-  exerciseName: string = 'Exercise';
+  exerciseName: string = '';
+  lettersToDisplay: string[] = [];
+  impactedKeys: string[] = [];
+  isExerciseFound: boolean = false;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private exerciseConfigService: ExerciseConfigService
+  ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.exerciseId = params['id'] || 'unknown';
-      this.exerciseName = this.formatExerciseName(this.exerciseId);
+    this.route.paramMap.subscribe(paramMap => {
+      this.exerciseId = (paramMap.get('id') ?? '').trim();
+      const exerciseConfig = this.exerciseConfigService.getExerciseById(this.exerciseId);
+
+      if (!exerciseConfig) {
+        this.isExerciseFound = false;
+        this.exerciseName = '';
+        this.lettersToDisplay = [];
+        this.impactedKeys = [];
+        return;
+      }
+
+      this.isExerciseFound = true;
+      this.exerciseName = exerciseConfig.name;
+      this.lettersToDisplay = this.normalizeLetters(exerciseConfig.letters);
+      this.impactedKeys = exerciseConfig.impactedKeys;
     });
   }
 
-  private formatExerciseName(id: string): string {
-    return id
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+  private normalizeLetters(letters: string[] | string): string[] {
+    if (Array.isArray(letters)) {
+      return letters;
+    }
+
+    return letters.split('');
   }
 }
 

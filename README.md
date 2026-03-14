@@ -82,7 +82,11 @@ typing-learning-app/
 │   ├── index.html             # Angular host page
 │   └── main.ts                # Angular bootstrap
 ├── tests/
-│   └── navigation.requirements.test.js  # Navigation regression tests
+│   ├── app/                   # App requirements tests (mirrors src/app)
+│   │   ├── components/
+│   │   ├── routing/
+│   │   └── services/
+│   └── project/               # Project-level requirements tests
 ├── package.json               # Project dependencies and scripts
 ├── eslint.config.js           # ESLint flat configuration
 ├── angular.json               # Angular workspace configuration
@@ -121,6 +125,12 @@ Tests are written with Jest. Run tests with:
 ```bash
 npm test
 ```
+
+Test files are split by concern for readability and maintainability:
+- `tests/app/**` mirrors `src/app/**` (components, routing, services)
+- `tests/project/**` contains project-level checks (for example, npm scripts)
+
+When adding a new test, place it in the matching folder path and use `*.test.js` naming so Jest discovers it automatically.
 
 ## Future Enhancements
 

@@ -1,15 +1,35 @@
 <app-home-button></app-home-button>
 
 <main class="exercise-container">
-  <div class="exercise-content">
-    <h1>{{ exerciseName }}</h1>
-    <p class="exercise-id">Exercise ID: <code>{{ exerciseId }}</code></p>
-    
-    <section class="exercise-body">
-      <p class="placeholder">Exercise content will be implemented here.</p>
-      <p class="exercise-description">
-        This is the {{ exerciseName }} page. You can navigate between different exercises using the Welcome page.
+  @if (isExerciseFound) {
+    <div class="exercise-content">
+      <h1>{{ exerciseName }}</h1>
+      <p class="exercise-id">Exercise ID: <code>{{ exerciseId }}</code></p>
+
+      <section class="exercise-body">
+        <p class="placeholder">Exercise content will be implemented here.</p>
+
+        <section class="exercise-meta">
+          <h2>Letters to display</h2>
+          <p class="exercise-values">{{ lettersToDisplay.join(' ') }}</p>
+        </section>
+
+        <section class="exercise-meta">
+          <h2>Impacted keyboard keys</h2>
+          <p class="exercise-values">{{ impactedKeys.join(', ') }}</p>
+        </section>
+      </section>
+    </div>
+  } @else {
+    <div class="exercise-content error-content">
+      <h1>Exercise Not Found</h1>
+      <p class="error-message">
+        No exercise is found with this id:
+        <code>{{ exerciseId || 'missing-id' }}</code>
       </p>
-    </section>
-  </div>
+      <p class="exercise-description">
+        Use the home button to go back to the welcome page.
+      </p>
+    </div>
+  }
 </main>

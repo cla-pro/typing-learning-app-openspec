@@ -57,6 +57,34 @@ code {
   font-size: 1rem;
 }
 
+.exercise-meta {
+  margin-top: 1.25rem;
+}
+
+.exercise-meta h2 {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.exercise-values {
+  color: #34495e;
+  background-color: #ecf0f1;
+  border: 1px solid #7f8c8d;
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+
+.error-content {
+  border: 1px solid #fdcb6e;
+  background-color: #ffeaa7;
+}
+
+.error-message {
+  font-size: 1.05rem;
+  color: #2c3e50;
+}
+
 @media (max-width: 768px) {
   .exercise-container {
     padding: 4rem 1rem 2rem;

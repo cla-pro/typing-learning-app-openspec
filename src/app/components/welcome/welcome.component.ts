@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { ExerciseConfig } from '../../models/exercise-config.model';
+import { ExerciseConfigService } from '../../services/exercise-config.service';
 
 @Component({
     selector: 'app-welcome',
@@ -9,10 +11,10 @@ import { RouterLink } from '@angular/router';
     styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent {
-  exercises = [
-    { id: 'basic-typing', name: '🔤 Basic Typing' },
-    { id: 'speed-test', name: '⚡ Speed Test' },
-    { id: 'accuracy-training', name: '🎯 Accuracy Training' }
-  ];
+  exercises: ExerciseConfig[];
+
+  constructor(private exerciseConfigService: ExerciseConfigService) {
+    this.exercises = this.exerciseConfigService.listExercises();
+  }
 }
 
