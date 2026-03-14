@@ -57,6 +57,64 @@ code {
   font-size: 1rem;
 }
 
+.runtime-panel {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #b2bec3;
+  border-radius: 6px;
+  background-color: #f7f9fb;
+}
+
+.runtime-panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.runtime-state {
+  margin: 0 0 0.75rem;
+}
+
+.runtime-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.runtime-button {
+  border: 1px solid #2c3e50;
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 0.5rem 0.9rem;
+  text-transform: lowercase;
+  cursor: pointer;
+}
+
+.runtime-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.temporary-complete-button {
+  background-color: #636e72;
+  border-color: #636e72;
+}
+
+.runtime-help {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  color: #55606a;
+}
+
+.key-display-panel {
+  margin-top: 1rem;
+}
+
+.key-display-value {
+  font-weight: 600;
+}
+
 .exercise-meta {
   margin-top: 1.25rem;
 }

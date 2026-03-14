@@ -2,12 +2,52 @@
 
 <main class="exercise-container">
   @if (isExerciseFound) {
-    <div class="exercise-content">
+    <div
+      class="exercise-content"
+      tabindex="0"
+      (keydown)="handleExerciseKeydown($event)"
+    >
       <h1>{{ exerciseName }}</h1>
       <p class="exercise-id">Exercise ID: <code>{{ exerciseId }}</code></p>
 
       <section class="exercise-body">
         <p class="placeholder">Exercise content will be implemented here.</p>
+
+        <section class="runtime-panel">
+          <h2>Exercise Runtime</h2>
+          <p class="runtime-state">
+            Current state: <strong>{{ exerciseRuntimeState }}</strong>
+          </p>
+          <div class="runtime-controls">
+            @if (exerciseRuntimeState !== 'completed') {
+              <button
+                type="button"
+                class="runtime-button"
+                (click)="toggleRuntimeState()"
+              >
+                {{ runtimeActionLabel }}
+              </button>
+            }
+            <button
+              type="button"
+              class="runtime-button temporary-complete-button"
+              (click)="completeExerciseTemporarily()"
+              [disabled]="exerciseRuntimeState === 'completed'"
+            >
+              complete (temporary)
+            </button>
+          </div>
+          <p class="runtime-help">
+            Focus this panel and press keys while running.
+          </p>
+        </section>
+
+        <section class="exercise-meta key-display-panel">
+          <h2>Last key pressed while running</h2>
+          <p class="exercise-values key-display-value">
+            {{ lastPressedKey || '(none)' }}
+          </p>
+        </section>
 
         <section class="exercise-meta">
           <h2>Letters to display</h2>

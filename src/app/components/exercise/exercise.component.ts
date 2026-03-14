@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HomeButtonComponent } from '../home-button/home-button.component';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 
+type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
+
 @Component({
     selector: 'app-exercise',
     imports: [HomeButtonComponent],
@@ -16,6 +18,16 @@ export class ExerciseComponent implements OnInit {
   lettersToDisplay: string[] = [];
   impactedKeys: string[] = [];
   isExerciseFound: boolean = false;
+  exerciseRuntimeState: ExerciseRuntimeState = 'opened';
+  lastPressedKey: string = '';
+
+  get isExerciseRunning(): boolean {
+    return this.exerciseRuntimeState === 'running';
+  }
+
+  get runtimeActionLabel(): string {
+    return this.isExerciseRunning ? 'pause' : 'start';
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +44,8 @@ export class ExerciseComponent implements OnInit {
         this.exerciseName = '';
         this.lettersToDisplay = [];
         this.impactedKeys = [];
+        this.exerciseRuntimeState = 'opened';
+        this.lastPressedKey = '';
         return;
       }
 
@@ -39,7 +53,33 @@ export class ExerciseComponent implements OnInit {
       this.exerciseName = exerciseConfig.name;
       this.lettersToDisplay = this.normalizeLetters(exerciseConfig.letters);
       this.impactedKeys = exerciseConfig.impactedKeys;
+      this.exerciseRuntimeState = 'opened';
+      this.lastPressedKey = '';
     });
+  }
+
+  toggleRuntimeState(): void {
+    if (!this.isExerciseFound || this.exerciseRuntimeState === 'completed') {
+      return;
+    }
+
+    if (this.exerciseRuntimeState === 'running') {
+      this.exerciseRuntimeState = 'pending';
+    } else {
+      this.exerciseRuntimeState = 'running';
+    }
+  }
+
+  completeExerciseTemporarily(): void {
+    if (this.isExerciseFound) {
+      this.exerciseRuntimeState = 'completed';
+    }
+  }
+
+  handleExerciseKeydown(event: KeyboardEvent): void {
+    if (this.isExerciseRunning) {
+      this.lastPressedKey = event.key;
+    }
   }
 
   private normalizeLetters(letters: string[] | string): string[] {
