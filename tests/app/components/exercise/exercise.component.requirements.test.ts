@@ -1,4 +1,4 @@
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { Subject } from 'rxjs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -10,6 +10,7 @@ describe('Exercise Component Requirements', () => {
   let component: ExerciseComponent;
   let paramMap$: Subject<any>;
   let serviceStub: { getExerciseById: ReturnType<typeof vi.fn> };
+  let routerStub: { navigate: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     paramMap$ = new Subject<any>();
@@ -28,6 +29,10 @@ describe('Exercise Component Requirements', () => {
       })
     };
 
+    routerStub = {
+      navigate: vi.fn()
+    };
+
     const routeStub = {
       paramMap: paramMap$.asObservable()
     } as ActivatedRoute;
@@ -41,6 +46,10 @@ describe('Exercise Component Requirements', () => {
         {
           provide: ExerciseConfigService,
           useValue: serviceStub
+        },
+        {
+          provide: Router,
+          useValue: routerStub
         }
       ]
     }).compileComponents();
@@ -53,10 +62,10 @@ describe('Exercise Component Requirements', () => {
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
 
     expect(serviceStub.getExerciseById).toHaveBeenCalledWith('basic-typing');
-    expect(component.isExerciseFound).toBe(true);
     expect(component.exerciseName).toBe('Basic Typing');
     expect(component.exerciseRuntimeState).toBe('opened');
     expect(component.runtimeActionLabel).toBe('start');
+    expect(routerStub.navigate).not.toHaveBeenCalled();
   });
 
   test('transitions runtime state and label on primary toggle', () => {
@@ -99,15 +108,22 @@ describe('Exercise Component Requirements', () => {
     expect(component.lastPressedKey).toBe('b');
   });
 
-  test('shows not-found state and resets runtime/key state on invalid id', () => {
+  test('redirects to dedicated not-found route on invalid id and resets runtime/key state', () => {
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
     component.toggleRuntimeState();
     component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
 
     paramMap$.next(convertToParamMap({ id: 'does-not-exist' }));
 
-    expect(component.isExerciseFound).toBe(false);
+    expect(routerStub.navigate).toHaveBeenCalledWith(['/exercices/not-found']);
     expect(component.exerciseRuntimeState).toBe('opened');
     expect(component.lastPressedKey).toBe('');
+  });
+
+  test('redirects to dedicated not-found route when id is missing', () => {
+    paramMap$.next(convertToParamMap({ id: undefined }));
+
+    expect(serviceStub.getExerciseById).not.toHaveBeenCalled();
+    expect(routerStub.navigate).toHaveBeenCalledWith(['/exercices/not-found']);
   });
 });

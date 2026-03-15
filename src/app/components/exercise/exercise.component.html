@@ -1,75 +1,60 @@
-<app-home-button></app-home-button>
-
 <main class="exercise-container">
-  @if (isExerciseFound) {
-    <div
-      class="exercise-content"
-      tabindex="0"
-      (keydown)="handleExerciseKeydown($event)"
-    >
-      <h1>{{ exerciseName }}</h1>
-      <p class="exercise-id">Exercise ID: <code>{{ exerciseId }}</code></p>
+  <div
+    class="exercise-content"
+    tabindex="0"
+    (keydown)="handleExerciseKeydown($event)"
+  >
+    <h1>{{ exerciseName }}</h1>
+    <p class="exercise-id">Exercise ID: <code>{{ exerciseId }}</code></p>
 
-      <section class="exercise-body">
-        <p class="placeholder">Exercise content will be implemented here.</p>
+    <section class="exercise-body">
+      <p class="placeholder">Exercise content will be implemented here.</p>
 
-        <section class="runtime-panel">
-          <h2>Exercise Runtime</h2>
-          <p class="runtime-state">
-            Current state: <strong>{{ exerciseRuntimeState }}</strong>
-          </p>
-          <div class="runtime-controls">
-            @if (exerciseRuntimeState !== 'completed') {
-              <button
-                type="button"
-                class="runtime-button"
-                (click)="toggleRuntimeState()"
-              >
-                {{ runtimeActionLabel }}
-              </button>
-            }
+      <section class="runtime-panel">
+        <h2>Exercise Runtime</h2>
+        <p class="runtime-state">
+          Current state: <strong>{{ exerciseRuntimeState }}</strong>
+        </p>
+        <div class="runtime-controls">
+          @if (exerciseRuntimeState !== 'completed') {
             <button
               type="button"
-              class="runtime-button temporary-complete-button"
-              (click)="completeExerciseTemporarily()"
-              [disabled]="exerciseRuntimeState === 'completed'"
+              class="runtime-button"
+              (click)="toggleRuntimeState()"
             >
-              complete (temporary)
+              {{ runtimeActionLabel }}
             </button>
-          </div>
-          <p class="runtime-help">
-            Focus this panel and press keys while running.
-          </p>
-        </section>
-
-        <section class="exercise-meta key-display-panel">
-          <h2>Last key pressed while running</h2>
-          <p class="exercise-values key-display-value">
-            {{ lastPressedKey || '(none)' }}
-          </p>
-        </section>
-
-        <section class="exercise-meta">
-          <h2>Letters to display</h2>
-          <p class="exercise-values">{{ lettersToDisplay.join(' ') }}</p>
-        </section>
-
-        <section class="exercise-meta">
-          <h2>Impacted keyboard keys</h2>
-          <p class="exercise-values">{{ impactedKeys.join(', ') }}</p>
-        </section>
+          }
+          <button
+            type="button"
+            class="runtime-button temporary-complete-button"
+            (click)="completeExerciseTemporarily()"
+            [disabled]="exerciseRuntimeState === 'completed'"
+          >
+            complete (temporary)
+          </button>
+        </div>
+        <p class="runtime-help">
+          Focus this panel and press keys while running.
+        </p>
       </section>
-    </div>
-  } @else {
-    <div class="exercise-content error-content">
-      <h1>Exercise Not Found</h1>
-      <p class="error-message">
-        No exercise is found with this id:
-        <code>{{ exerciseId || 'missing-id' }}</code>
-      </p>
-      <p class="exercise-description">
-        Use the home button to go back to the welcome page.
-      </p>
-    </div>
-  }
+
+      <section class="exercise-meta key-display-panel">
+        <h2>Last key pressed while running</h2>
+        <p class="exercise-values key-display-value">
+          {{ lastPressedKey || '(none)' }}
+        </p>
+      </section>
+
+      <section class="exercise-meta">
+        <h2>Letters to display</h2>
+        <p class="exercise-values">{{ lettersToDisplay.join(' ') }}</p>
+      </section>
+
+      <section class="exercise-meta">
+        <h2>Impacted keyboard keys</h2>
+        <p class="exercise-values">{{ impactedKeys.join(', ') }}</p>
+      </section>
+    </section>
+  </div>
 </main>

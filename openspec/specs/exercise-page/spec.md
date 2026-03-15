@@ -16,26 +16,15 @@ The system SHALL render exercise-page content based on configuration resolved fr
 - **THEN** the page displays the exercise name at the top and renders configured letters and impacted keys
 
 ### Requirement: Invalid or missing exercise id error page
-The system SHALL display an error page when the exercise id is missing or does not match any configuration.
+The system SHALL redirect to a dedicated exercise-not-found page when the exercise id is missing or does not match any configuration, and this validation MUST occur during `ExerciseComponent` initialization.
 
-#### Scenario: Missing exercise id
+#### Scenario: Missing exercise id redirects to dedicated page
 - **WHEN** the exercise page initializes without a usable exercise id parameter
-- **THEN** the page displays an error state informing that no exercise is found with this id
+- **THEN** the page triggers Angular Router navigation to the exercise-not-found route
 
-#### Scenario: Invalid exercise id
+#### Scenario: Invalid exercise id redirects to dedicated page
 - **WHEN** a user navigates to an exercise id that is not present in `ExerciseConfigService`
-- **THEN** the page displays an error state informing that no exercise is found with this id
-
-### Requirement: Error page recovery navigation
-The system SHALL provide a home navigation action from the invalid-exercise error page.
-
-#### Scenario: Home button is available on error page
-- **WHEN** the invalid-exercise error page is displayed
-- **THEN** a home button is visible and enabled
-
-#### Scenario: Home button returns to welcome page
-- **WHEN** a user clicks the home button on the invalid-exercise error page
-- **THEN** the application navigates to the root welcome page using Angular routing
+- **THEN** the page triggers Angular Router navigation to the exercise-not-found route
 
 ### Requirement: Automated test coverage for introduced exercise-page changes
 The system SHALL include automated tests for service behavior and page integration introduced by this change, and those tests MUST validate behavior through public APIs and observable outcomes rather than source-file text inspection.
@@ -46,11 +35,15 @@ The system SHALL include automated tests for service behavior and page integrati
 
 #### Scenario: Exercise page integration is tested
 - **WHEN** test suites are executed
-- **THEN** tests verify valid-id rendering and invalid/missing-id error-page behavior through component interaction and rendered output assertions
+- **THEN** tests verify valid-id rendering and invalid/missing-id redirection behavior through component interaction and observable outcomes
 
 #### Scenario: Exercise runtime lifecycle and key capture are tested
 - **WHEN** test suites are executed
 - **THEN** tests verify lifecycle state transitions, start/pause button-label switching, temporary completion transition, and running-state key capture/display via observable page behavior
+
+#### Scenario: Exercise redirection test exists for invalid lookup
+- **WHEN** exercise component requirements tests are executed
+- **THEN** at least one test asserts Angular Router navigation is triggered when exercise lookup fails during initialization
 
 #### Scenario: Exercise tests avoid implementation-text assertions
 - **WHEN** exercise-page requirements tests are authored or maintained

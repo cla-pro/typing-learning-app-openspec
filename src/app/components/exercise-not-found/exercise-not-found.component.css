@@ -1,0 +1,50 @@
+.exercise-not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 5rem 2rem 2rem;
+  background-color: #f5f5f5;
+}
+
+.exercise-not-found-content {
+  background: #ffeaa7;
+  border: 1px solid #fdcb6e;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  max-width: 640px;
+  width: 100%;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.error-message {
+  font-size: 1.05rem;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+}
+
+.exercise-description {
+  font-size: 1rem;
+  color: #34495e;
+}
+
+@media (max-width: 768px) {
+  .exercise-not-found-container {
+    padding: 4rem 1rem 2rem;
+  }
+
+  .exercise-not-found-content {
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+}
