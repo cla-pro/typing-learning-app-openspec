@@ -8,28 +8,38 @@ export class ExerciseConfigService {
     {
       id: 'basic-typing',
       name: '🔤 Basic Typing',
-      letters: ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'],
+      expectedChars: ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'],
       impactedKeys: ['A', 'S', 'D', 'F', 'J', 'K', 'L', ';']
     },
     {
       id: 'speed-test',
       name: '⚡ Speed Test',
-      letters: 'qwertyuiop',
+      expectedChars: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
       impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
     },
     {
       id: 'accuracy-training',
       name: '🎯 Accuracy Training',
-      letters: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+      expectedChars: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
       impactedKeys: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
     }
   ];
 
   listExercises(): ExerciseConfig[] {
-    return this.exercises;
+    return this.exercises.filter(exercise => this.hasValidExpectedChars(exercise));
   }
 
   getExerciseById(exerciseId: string): ExerciseConfig | undefined {
-    return this.exercises.find(exercise => exercise.id === exerciseId);
+    const exercise = this.exercises.find(candidate => candidate.id === exerciseId);
+
+    if (!exercise || !this.hasValidExpectedChars(exercise)) {
+      return undefined;
+    }
+
+    return exercise;
+  }
+
+  private hasValidExpectedChars(exercise: ExerciseConfig): boolean {
+    return Array.isArray(exercise.expectedChars) && exercise.expectedChars.length > 0;
   }
 }

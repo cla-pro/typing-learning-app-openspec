@@ -24,6 +24,17 @@ describe('ExerciseConfigService Requirements', () => {
     expect(config).toBeDefined();
     expect(config?.id).toBe('basic-typing');
     expect(config?.name).toContain('Basic Typing');
+    expect(config?.expectedChars.length).toBeGreaterThan(0);
+  });
+
+  test('provides expectedChars and no empty expected-character configs', () => {
+    const exercises = service.listExercises();
+
+    expect(exercises.length).toBeGreaterThan(0);
+    for (const exercise of exercises) {
+      expect(Array.isArray(exercise.expectedChars)).toBe(true);
+      expect(exercise.expectedChars.length).toBeGreaterThan(0);
+    }
   });
 
   test('returns undefined for unknown exercise id', () => {

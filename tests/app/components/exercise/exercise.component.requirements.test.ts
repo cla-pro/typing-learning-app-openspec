@@ -20,7 +20,7 @@ describe('Exercise Component Requirements', () => {
           return {
             id: 'basic-typing',
             name: 'Basic Typing',
-            letters: ['a', 's'],
+            expectedChars: ['a', 'S'],
             impactedKeys: ['A', 'S']
           };
         }
@@ -63,6 +63,8 @@ describe('Exercise Component Requirements', () => {
 
     expect(serviceStub.getExerciseById).toHaveBeenCalledWith('basic-typing');
     expect(component.exerciseName).toBe('Basic Typing');
+    expect(component.activeExpectedCharIndex).toBe(0);
+    expect(component.activeExpectedChar).toBe('a');
     expect(component.exerciseRuntimeState).toBe('opened');
     expect(component.runtimeActionLabel).toBe('start');
     expect(routerStub.navigate).not.toHaveBeenCalled();
@@ -106,6 +108,28 @@ describe('Exercise Component Requirements', () => {
     component.toggleRuntimeState();
     component.handleExerciseKeydown({ key: 'c' } as KeyboardEvent);
     expect(component.lastPressedKey).toBe('b');
+  });
+
+  test('advances only on exact active expected-character match and is case-sensitive', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'A' } as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(0);
+    expect(component.activeExpectedChar).toBe('a');
+    expect(component.exerciseRuntimeState).toBe('running');
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(1);
+    expect(component.activeExpectedChar).toBe('S');
+    expect(component.exerciseRuntimeState).toBe('running');
+
+    component.handleExerciseKeydown({ key: 's' } as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(1);
+    expect(component.exerciseRuntimeState).toBe('running');
+
+    component.handleExerciseKeydown({ key: 'S' } as KeyboardEvent);
+    expect(component.exerciseRuntimeState).toBe('completed');
   });
 
   test('redirects to dedicated not-found route on invalid id and resets runtime/key state', () => {

@@ -1,6 +1,6 @@
 export interface ExerciseConfig {
   id: string;
   name: string;
-  letters: string[] | string;
+  expectedChars: string[];
   impactedKeys: string[];
 }

@@ -6,8 +6,8 @@ import { ExerciseConfig } from '../../../../src/app/models/exercise-config.model
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
 
 const exercises: ExerciseConfig[] = [
-  { id: 'a', name: 'A', letters: ['a'], impactedKeys: ['A'] },
-  { id: 'b', name: 'B', letters: ['b'], impactedKeys: ['B'] }
+  { id: 'a', name: 'A', expectedChars: ['a'], impactedKeys: ['A'] },
+  { id: 'b', name: 'B', expectedChars: ['b'], impactedKeys: ['B'] }
 ];
 
 const serviceStub = {

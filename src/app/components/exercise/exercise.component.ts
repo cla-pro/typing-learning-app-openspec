@@ -17,11 +17,16 @@ export class ExerciseComponent implements OnInit {
 
   exerciseId: string = '';
   exerciseName: string = '';
-  lettersToDisplay: string[] = [];
+  expectedCharsToDisplay: string[] = [];
+  activeExpectedCharIndex: number = 0;
   impactedKeys: string[] = [];
   exerciseRuntimeState: ExerciseRuntimeState = 'opened';
   lastPressedKey: string = '';
   private hasValidExercise: boolean = false;
+
+  get activeExpectedChar(): string {
+    return this.expectedCharsToDisplay[this.activeExpectedCharIndex] ?? '';
+  }
 
   get isExerciseRunning(): boolean {
     return this.exerciseRuntimeState === 'running';
@@ -51,7 +56,15 @@ export class ExerciseComponent implements OnInit {
 
       this.hasValidExercise = true;
       this.exerciseName = exerciseConfig.name;
-      this.lettersToDisplay = this.normalizeLetters(exerciseConfig.letters);
+
+      if (!this.hasValidExpectedChars(exerciseConfig.expectedChars)) {
+        this.resetExerciseState();
+        this.redirectToNotFound();
+        return;
+      }
+
+      this.expectedCharsToDisplay = exerciseConfig.expectedChars;
+      this.activeExpectedCharIndex = 0;
       this.impactedKeys = exerciseConfig.impactedKeys;
       this.exerciseRuntimeState = 'opened';
       this.lastPressedKey = '';
@@ -77,23 +90,33 @@ export class ExerciseComponent implements OnInit {
   }
 
   handleExerciseKeydown(event: KeyboardEvent): void {
-    if (this.isExerciseRunning) {
-      this.lastPressedKey = event.key;
+    if (!this.isExerciseRunning) {
+      return;
     }
+
+    this.lastPressedKey = event.key;
+
+    if (event.key !== this.activeExpectedChar) {
+      return;
+    }
+
+    if (this.activeExpectedCharIndex >= this.expectedCharsToDisplay.length - 1) {
+      this.exerciseRuntimeState = 'completed';
+      return;
+    }
+
+    this.activeExpectedCharIndex += 1;
   }
 
-  private normalizeLetters(letters: string[] | string): string[] {
-    if (Array.isArray(letters)) {
-      return letters;
-    }
-
-    return letters.split('');
+  private hasValidExpectedChars(expectedChars: string[]): boolean {
+    return Array.isArray(expectedChars) && expectedChars.length > 0;
   }
 
   private resetExerciseState(): void {
     this.hasValidExercise = false;
     this.exerciseName = '';
-    this.lettersToDisplay = [];
+    this.expectedCharsToDisplay = [];
+    this.activeExpectedCharIndex = 0;
     this.impactedKeys = [];
     this.exerciseRuntimeState = 'opened';
     this.lastPressedKey = '';

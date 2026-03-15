@@ -48,7 +48,17 @@
 
       <section class="exercise-meta">
         <h2>Letters to display</h2>
-        <p class="exercise-values">{{ lettersToDisplay.join(' ') }}</p>
+        <p class="exercise-values">
+          @for (expectedChar of expectedCharsToDisplay; track $index; let index = $index) {
+            <span class="expected-char" [class.active-expected-char]="index === activeExpectedCharIndex">
+              {{ expectedChar }}
+            </span>
+          }
+        </p>
+        <p class="exercise-description">
+          Active character:
+          <code>{{ activeExpectedChar || '(none)' }}</code>
+        </p>
       </section>
 
       <section class="exercise-meta">
