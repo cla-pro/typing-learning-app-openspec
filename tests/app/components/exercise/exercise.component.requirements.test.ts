@@ -20,7 +20,7 @@ describe('Exercise Component Requirements', () => {
           return {
             id: 'basic-typing',
             name: 'Basic Typing',
-            expectedChars: ['a', 'S'],
+            expectedChars: ['a', 'b', 'C', 'd', 'e', 'f'],
             impactedKeys: ['A', 'S']
           };
         }
@@ -65,6 +65,9 @@ describe('Exercise Component Requirements', () => {
     expect(component.exerciseName).toBe('Basic Typing');
     expect(component.activeExpectedCharIndex).toBe(0);
     expect(component.activeExpectedChar).toBe('a');
+    expect(component.previousSideChars).toEqual([]);
+    expect(component.zoomWindowChars).toEqual([null, null, 'a', 'b', 'C']);
+    expect(component.followingSideChars).toEqual(['d', 'e', 'f']);
     expect(component.exerciseRuntimeState).toBe('opened');
     expect(component.runtimeActionLabel).toBe('start');
     expect(routerStub.navigate).not.toHaveBeenCalled();
@@ -121,15 +124,79 @@ describe('Exercise Component Requirements', () => {
 
     component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
     expect(component.activeExpectedCharIndex).toBe(1);
-    expect(component.activeExpectedChar).toBe('S');
+    expect(component.activeExpectedChar).toBe('b');
     expect(component.exerciseRuntimeState).toBe('running');
 
-    component.handleExerciseKeydown({ key: 's' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
     expect(component.activeExpectedCharIndex).toBe(1);
     expect(component.exerciseRuntimeState).toBe('running');
 
-    component.handleExerciseKeydown({ key: 'S' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(2);
+    expect(component.activeExpectedChar).toBe('C');
+
+    component.handleExerciseKeydown({ key: 'c' } as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(2);
+
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(3);
+    expect(component.activeExpectedChar).toBe('d');
+  });
+
+  test('updates zoom-window composition across start, middle, and end boundaries', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    expect(component.zoomWindowChars).toEqual([null, null, 'a', 'b', 'C']);
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    expect(component.zoomWindowChars).toEqual(['a', 'b', 'C', 'd', 'e']);
+
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    expect(component.zoomWindowChars).toEqual(['d', 'e', 'f', null, null]);
+  });
+
+  test('shifts stream left on correct key and does not shift on incorrect key', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    const initialZoom = [...component.zoomWindowChars];
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.zoomWindowChars).toEqual(initialZoom);
+    expect(component.previousSideChars).toEqual([]);
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    expect(component.zoomWindowChars).toEqual([null, 'a', 'b', 'C', 'd']);
+
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    expect(component.zoomWindowChars).toEqual(['a', 'b', 'C', 'd', 'e']);
+
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    expect(component.previousSideChars).toEqual(['a']);
+    expect(component.zoomWindowChars).toEqual(['b', 'C', 'd', 'e', 'f']);
+  });
+
+  test('leaves no active center character after final correct key', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
     expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.hasActiveExpectedChar).toBe(false);
+    expect(component.activeExpectedChar).toBe('');
+    expect(component.zoomWindowChars[2]).toBeNull();
+    expect(component.previousSideChars).toEqual(['a', 'b', 'C', 'd']);
+    expect(component.zoomWindowChars).toEqual(['e', 'f', null, null, null]);
   });
 
   test('redirects to dedicated not-found route on invalid id and resets runtime/key state', () => {
@@ -149,5 +216,19 @@ describe('Exercise Component Requirements', () => {
 
     expect(serviceStub.getExerciseById).not.toHaveBeenCalled();
     expect(routerStub.navigate).toHaveBeenCalledWith(['/exercices/not-found']);
+  });
+
+  test('transitions to completed after last expected-character match', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
+    expect(component.exerciseRuntimeState).toBe('completed');
   });
 });

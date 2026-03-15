@@ -1,12 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { HomeButtonComponent } from '../home-button/home-button.component';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 
 type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
+const ZOOM_OFFSETS: readonly number[] = [-2, -1, 0, 1, 2];
 
 @Component({
     selector: 'app-exercise',
+  imports: [HomeButtonComponent],
     templateUrl: './exercise.component.html',
     styleUrls: ['./exercise.component.css']
 })
@@ -26,6 +29,31 @@ export class ExerciseComponent implements OnInit {
 
   get activeExpectedChar(): string {
     return this.expectedCharsToDisplay[this.activeExpectedCharIndex] ?? '';
+  }
+
+  get hasActiveExpectedChar(): boolean {
+    return this.activeExpectedCharIndex >= 0
+      && this.activeExpectedCharIndex < this.expectedCharsToDisplay.length;
+  }
+
+  get previousSideChars(): string[] {
+    const endExclusive = Math.max(0, this.activeExpectedCharIndex - 2);
+    return this.expectedCharsToDisplay.slice(0, endExclusive);
+  }
+
+  get followingSideChars(): string[] {
+    const start = Math.min(this.expectedCharsToDisplay.length, this.activeExpectedCharIndex + 3);
+    return this.expectedCharsToDisplay.slice(start);
+  }
+
+  get zoomWindowChars(): Array<string | null> {
+    return ZOOM_OFFSETS.map((offset: number): string | null => {
+      if (!this.hasActiveExpectedChar && offset === 0) {
+        return null;
+      }
+
+      return this.expectedCharsToDisplay[this.activeExpectedCharIndex + offset] ?? null;
+    });
   }
 
   get isExerciseRunning(): boolean {
@@ -101,6 +129,7 @@ export class ExerciseComponent implements OnInit {
     }
 
     if (this.activeExpectedCharIndex >= this.expectedCharsToDisplay.length - 1) {
+      this.activeExpectedCharIndex = this.expectedCharsToDisplay.length;
       this.exerciseRuntimeState = 'completed';
       return;
     }
