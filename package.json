@@ -8,9 +8,10 @@
     "dev": "ng serve --configuration development --port 3000",
     "build:angular": "ng build --configuration production",
     "dev:angular": "ng serve --configuration development",
-    "test": "jest --coverage",
+    "test": "npm run check:behavior-tests && vitest run --coverage",
     "lint": "eslint src tests",
-    "check:deps": "node scripts/check-dependency-policy.js"
+    "check:deps": "node scripts/check-dependency-policy.js",
+    "check:behavior-tests": "node scripts/check-behavior-tests.js"
   },
   "keywords": [
     "typing",
@@ -37,10 +38,12 @@
     "@angular/compiler-cli": "^21.2.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.3.1",
+    "@vitest/coverage-v8": "^4.1.0",
     "eslint": "^10.0.2",
     "globals": "^17.3.0",
-    "jest": "^30.2.0",
+    "jsdom": "^28.1.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1"
+    "typescript-eslint": "^8.56.1",
+    "vitest": "^4.1.0"
   }
 }

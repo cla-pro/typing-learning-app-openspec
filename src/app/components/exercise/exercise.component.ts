@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
@@ -13,6 +13,9 @@ type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
     styleUrls: ['./exercise.component.css']
 })
 export class ExerciseComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly exerciseConfigService = inject(ExerciseConfigService);
+
   exerciseId: string = '';
   exerciseName: string = '';
   lettersToDisplay: string[] = [];
@@ -28,11 +31,6 @@ export class ExerciseComponent implements OnInit {
   get runtimeActionLabel(): string {
     return this.isExerciseRunning ? 'pause' : 'start';
   }
-
-  constructor(
-    private route: ActivatedRoute,
-    private exerciseConfigService: ExerciseConfigService
-  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
