@@ -88,11 +88,20 @@ describe('Exercise Component Requirements', () => {
     expect(component.exerciseRuntimeState).toBe('running');
   });
 
-  test('transitions to completed via temporary completion action', () => {
+  test('keeps the primary control disabled and visible after completion', () => {
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
-    component.completeExerciseTemporarily();
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
 
     expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.isRuntimeControlDisabled).toBe(true);
+    expect(component.runtimeActionLabel).toBe('start');
 
     component.toggleRuntimeState();
     expect(component.exerciseRuntimeState).toBe('completed');
@@ -230,5 +239,34 @@ describe('Exercise Component Requirements', () => {
     component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
 
     expect(component.exerciseRuntimeState).toBe('completed');
+  });
+
+  test('exposes a blank pressed-key display until a running key press is captured', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.displayedPressedKey).toBe('\u00A0');
+
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+
+    expect(component.displayedPressedKey).toBe('b');
+  });
+
+  test('keeps the runtime control enabled until completion and then disables it', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.isRuntimeControlDisabled).toBe(false);
+
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
+    expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.isRuntimeControlDisabled).toBe(true);
+    expect(component.runtimeActionLabel).toBe('start');
   });
 });

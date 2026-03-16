@@ -60,6 +60,14 @@ export class ExerciseComponent implements OnInit {
     return this.exerciseRuntimeState === 'running';
   }
 
+  get isRuntimeControlDisabled(): boolean {
+    return this.exerciseRuntimeState === 'completed';
+  }
+
+  get displayedPressedKey(): string {
+    return this.lastPressedKey || '\u00A0';
+  }
+
   get runtimeActionLabel(): string {
     return this.isExerciseRunning ? 'pause' : 'start';
   }
@@ -108,12 +116,6 @@ export class ExerciseComponent implements OnInit {
       this.exerciseRuntimeState = 'pending';
     } else {
       this.exerciseRuntimeState = 'running';
-    }
-  }
-
-  completeExerciseTemporarily(): void {
-    if (this.hasValidExercise) {
-      this.exerciseRuntimeState = 'completed';
     }
   }
 

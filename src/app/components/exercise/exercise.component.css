@@ -16,17 +16,13 @@
   width: 100%;
 }
 
-code {
-  background-color: #ecf0f1;
-  padding: 0.2rem 0.5rem;
-  border-radius: 3px;
-  font-family: 'Courier New', monospace;
-  color: #2c3e50;
-}
-
 .exercise-body {
+  --focus-box-size: 2.75rem;
+  --focus-font-size: 1.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 0.5rem;
-  line-height: 1.8;
   color: #34495e;
 }
 
@@ -34,34 +30,40 @@ code {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
+  width: 100%;
   column-gap: 1.25rem;
-  margin: 0.5rem 0 1rem;
+  margin: 0.5rem 0 1.25rem;
 }
 
 .stream-side {
-  min-height: 3.4rem;
+  display: flex;
+  align-items: center;
+  min-height: calc(var(--focus-box-size) + 1.2rem);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;
   font-size: 1.15rem;
+  line-height: 1;
   opacity: 0.58;
   color: #5b6670;
 }
 
 .stream-side-left {
-  text-align: right;
+  justify-content: flex-end;
   padding-right: 0.8rem;
 }
 
 .stream-side-right {
-  text-align: left;
+  justify-content: flex-start;
   padding-left: 0.8rem;
 }
 
 .side-char {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 1.2rem;
-  text-align: center;
+  height: var(--focus-box-size);
   margin: 0 0.12rem;
 }
 
@@ -69,23 +71,27 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 4.2rem;
+  min-height: calc(var(--focus-box-size) + 1.2rem);
   border: 1px solid #b2bec3;
   background-color: #f7f9fb;
   border-radius: 8px;
   padding: 0.6rem 0.9rem;
 }
 
-.zoom-char {
+.zoom-char,
+.key-display-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.2rem;
-  height: 2.2rem;
-  margin: 0 0.18rem;
-  font-size: 1.55rem;
+  width: var(--focus-box-size);
+  height: var(--focus-box-size);
+  font-size: var(--focus-font-size);
   line-height: 1;
   border-radius: 6px;
+}
+
+.zoom-char {
+  margin: 0 0.18rem;
   color: #2c3e50;
 }
 
@@ -95,90 +101,41 @@ code {
   font-weight: 700;
 }
 
-.runtime-panel {
-  margin-top: 1.25rem;
-  padding: 1rem;
-  border: 1px solid #b2bec3;
-  border-radius: 6px;
-  background-color: #f7f9fb;
-}
-
-.runtime-panel h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
-  color: #2c3e50;
-}
-
-.runtime-state {
-  margin: 0 0 0.75rem;
-}
-
-.runtime-controls {
+.exercise-focus-stack {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.key-display-box {
+  margin: 0;
+  border: 1px solid #7f8c8d;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  font-weight: 700;
 }
 
 .runtime-button {
+  min-width: 8.5rem;
   border: 1px solid #2c3e50;
   background-color: #2c3e50;
   color: #ffffff;
-  border-radius: 4px;
-  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
   text-transform: lowercase;
+  letter-spacing: 0.03em;
   cursor: pointer;
 }
 
 .runtime-button:disabled {
-  opacity: 0.65;
+  border-color: #b2bec3;
+  background-color: #dfe6e9;
+  color: #636e72;
+  box-shadow: inset 0 0 0 1px rgba(99, 110, 114, 0.12);
   cursor: not-allowed;
-}
-
-.temporary-complete-button {
-  background-color: #636e72;
-  border-color: #636e72;
-}
-
-.runtime-help {
-  margin: 0.75rem 0 0;
-  font-size: 0.95rem;
-  color: #55606a;
-}
-
-.key-display-panel {
-  margin-top: 1rem;
-}
-
-.key-display-value {
-  font-weight: 600;
-}
-
-.exercise-meta {
-  margin-top: 1.25rem;
-}
-
-.exercise-meta h2 {
-  font-size: 1.1rem;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
-
-.exercise-values {
-  color: #34495e;
-  background-color: #ecf0f1;
-  border: 1px solid #7f8c8d;
-  border-radius: 4px;
-  padding: 0.75rem;
-}
-
-.error-content {
-  border: 1px solid #fdcb6e;
-  background-color: #ffeaa7;
-}
-
-.error-message {
-  font-size: 1.05rem;
-  color: #2c3e50;
 }
 
 @media (max-width: 768px) {
@@ -190,20 +147,24 @@ code {
     padding: 2rem;
   }
 
+  .exercise-body {
+    --focus-box-size: 2.2rem;
+    --focus-font-size: 1.35rem;
+  }
+
   .exercise-stream-shell {
     grid-template-columns: 1fr;
     row-gap: 0.8rem;
   }
 
   .stream-side {
-    text-align: center;
+    justify-content: center;
     padding: 0;
     font-size: 1.05rem;
   }
 
-  .zoom-char {
-    width: 1.8rem;
-    height: 1.8rem;
-    font-size: 1.25rem;
+  .runtime-button {
+    width: 100%;
+    max-width: 12rem;
   }
 }

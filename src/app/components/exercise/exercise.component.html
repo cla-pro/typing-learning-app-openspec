@@ -18,7 +18,7 @@
           @for (zoomChar of zoomWindowChars; track $index; let slotIndex = $index) {
             <span
               class="zoom-char"
-              [class.active-zoom-char]="slotIndex === 2 && hasActiveExpectedChar && zoomChar !== null"
+              [class.active-zoom-char]="slotIndex === 2 && zoomChar !== null"
             >
               {{ zoomChar ?? '' }}
             </span>
@@ -32,40 +32,23 @@
         </div>
       </section>
 
-      <section class="exercise-meta key-display-panel">
-        <h2>Last key pressed while running</h2>
-        <p class="exercise-values key-display-value">
-          {{ lastPressedKey || '(none)' }}
+      <section class="exercise-focus-stack">
+        <p
+          class="key-display-box"
+          aria-live="polite"
+          aria-label="Last key pressed while running"
+        >
+          {{ displayedPressedKey }}
         </p>
-      </section>
 
-      <section class="runtime-panel">
-        <h2>Exercise Runtime</h2>
-        <p class="runtime-state">
-          Current state: <strong>{{ exerciseRuntimeState }}</strong>
-        </p>
-        <div class="runtime-controls">
-          @if (exerciseRuntimeState !== 'completed') {
-            <button
-              type="button"
-              class="runtime-button"
-              (click)="toggleRuntimeState()"
-            >
-              {{ runtimeActionLabel }}
-            </button>
-          }
-          <button
-            type="button"
-            class="runtime-button temporary-complete-button"
-            (click)="completeExerciseTemporarily()"
-            [disabled]="exerciseRuntimeState === 'completed'"
-          >
-            complete (temporary)
-          </button>
-        </div>
-        <p class="runtime-help">
-          Focus this panel and press keys while running.
-        </p>
+        <button
+          type="button"
+          class="runtime-button"
+          (click)="toggleRuntimeState()"
+          [disabled]="isRuntimeControlDisabled"
+        >
+          {{ runtimeActionLabel }}
+        </button>
       </section>
     </section>
   </div>
