@@ -17,8 +17,13 @@
 }
 
 .exercise-body {
-  --focus-box-size: 2.75rem;
-  --focus-font-size: 1.7rem;
+  --stream-size-scale: 1;
+  --base-focus-box-size: 2.75rem;
+  --base-focus-font-size: 1.7rem;
+  --base-side-font-size: 1.15rem;
+  --focus-box-size: calc(var(--base-focus-box-size) * var(--stream-size-scale));
+  --focus-font-size: calc(var(--base-focus-font-size) * var(--stream-size-scale));
+  --side-font-size: calc(var(--base-side-font-size) * var(--stream-size-scale));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +47,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;
-  font-size: 1.15rem;
+  font-size: var(--side-font-size);
   line-height: 1;
   opacity: 0.58;
   color: #5b6670;
@@ -101,6 +106,17 @@
   font-weight: 700;
 }
 
+.size-slider-shell {
+  width: min(100%, 24rem);
+  margin-bottom: 0.25rem;
+}
+
+.size-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: #2c3e50;
+}
+
 .exercise-focus-stack {
   display: flex;
   flex-direction: column;
@@ -148,8 +164,9 @@
   }
 
   .exercise-body {
-    --focus-box-size: 2.2rem;
-    --focus-font-size: 1.35rem;
+    --base-focus-box-size: 2.2rem;
+    --base-focus-font-size: 1.35rem;
+    --base-side-font-size: 1.05rem;
   }
 
   .exercise-stream-shell {
@@ -160,7 +177,6 @@
   .stream-side {
     justify-content: center;
     padding: 0;
-    font-size: 1.05rem;
   }
 
   .runtime-button {

@@ -6,6 +6,8 @@ import { ExerciseComponent } from '../../../../src/app/components/exercise/exerc
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
 import { TestBed } from '@angular/core/testing';
 
+const STREAM_SIZE_STORAGE_KEY = 'exercise.streamSizeValue';
+
 describe('Exercise Component Requirements', () => {
   let component: ExerciseComponent;
   let paramMap$: Subject<any>;
@@ -13,6 +15,7 @@ describe('Exercise Component Requirements', () => {
   let routerStub: { navigate: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
+    globalThis.localStorage?.clear();
     paramMap$ = new Subject<any>();
     serviceStub = {
       getExerciseById: vi.fn((id: string) => {
@@ -69,8 +72,39 @@ describe('Exercise Component Requirements', () => {
     expect(component.zoomWindowChars).toEqual([null, null, 'a', 'b', 'C']);
     expect(component.followingSideChars).toEqual(['d', 'e', 'f']);
     expect(component.exerciseRuntimeState).toBe('opened');
+    expect(component.streamSizeValue).toBe(0);
+    expect(component.streamSizeScale).toBe(1);
     expect(component.runtimeActionLabel).toBe('start');
     expect(routerStub.navigate).not.toHaveBeenCalled();
+  });
+
+  test('updates stream size linearly and persists the chosen value', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.handleStreamSizeInput({
+      target: {
+        value: '0.5'
+      }
+    } as unknown as Event);
+
+    expect(component.streamSizeValue).toBe(0.5);
+    expect(component.streamSizeScale).toBe(1.3);
+    expect(globalThis.localStorage?.getItem(STREAM_SIZE_STORAGE_KEY)).toBe('0.5');
+  });
+
+  test('restores persisted stream size and falls back to baseline for invalid values', () => {
+    globalThis.localStorage?.setItem(STREAM_SIZE_STORAGE_KEY, '0.4');
+
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.streamSizeValue).toBe(0.4);
+    expect(component.streamSizeScale).toBe(1.24);
+
+    globalThis.localStorage?.setItem(STREAM_SIZE_STORAGE_KEY, 'invalid');
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.streamSizeValue).toBe(0);
+    expect(component.streamSizeScale).toBe(1);
   });
 
   test('transitions runtime state and label on primary toggle', () => {

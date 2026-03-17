@@ -6,6 +6,10 @@ import { ExerciseConfigService } from '../../services/exercise-config.service';
 
 type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
 const ZOOM_OFFSETS: readonly number[] = [-2, -1, 0, 1, 2];
+const STREAM_SIZE_STORAGE_KEY: string = 'exercise.streamSizeValue';
+const STREAM_SIZE_MIN: number = 0;
+const STREAM_SIZE_MAX: number = 1;
+const STREAM_SIZE_SCALE_SPAN: number = 0.6;
 
 @Component({
     selector: 'app-exercise',
@@ -25,6 +29,7 @@ export class ExerciseComponent implements OnInit {
   impactedKeys: string[] = [];
   exerciseRuntimeState: ExerciseRuntimeState = 'opened';
   lastPressedKey: string = '';
+  streamSizeValue: number = STREAM_SIZE_MIN;
   private hasValidExercise: boolean = false;
 
   get activeExpectedChar(): string {
@@ -68,6 +73,18 @@ export class ExerciseComponent implements OnInit {
     return this.lastPressedKey || '\u00A0';
   }
 
+  get streamSizeMin(): number {
+    return STREAM_SIZE_MIN;
+  }
+
+  get streamSizeMax(): number {
+    return STREAM_SIZE_MAX;
+  }
+
+  get streamSizeScale(): number {
+    return 1 + (this.streamSizeValue * STREAM_SIZE_SCALE_SPAN);
+  }
+
   get runtimeActionLabel(): string {
     return this.isExerciseRunning ? 'pause' : 'start';
   }
@@ -104,7 +121,16 @@ export class ExerciseComponent implements OnInit {
       this.impactedKeys = exerciseConfig.impactedKeys;
       this.exerciseRuntimeState = 'opened';
       this.lastPressedKey = '';
+      this.streamSizeValue = this.loadPersistedStreamSize();
     });
+  }
+
+  handleStreamSizeInput(event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    const nextValue = Number(target?.value);
+
+    this.streamSizeValue = this.coerceStreamSizeValue(nextValue);
+    this.persistStreamSize();
   }
 
   toggleRuntimeState(): void {
@@ -151,6 +177,32 @@ export class ExerciseComponent implements OnInit {
     this.impactedKeys = [];
     this.exerciseRuntimeState = 'opened';
     this.lastPressedKey = '';
+    this.streamSizeValue = STREAM_SIZE_MIN;
+  }
+
+  private loadPersistedStreamSize(): number {
+    try {
+      const storedValue = globalThis.localStorage?.getItem(STREAM_SIZE_STORAGE_KEY);
+      return this.coerceStreamSizeValue(Number(storedValue));
+    } catch {
+      return STREAM_SIZE_MIN;
+    }
+  }
+
+  private persistStreamSize(): void {
+    try {
+      globalThis.localStorage?.setItem(STREAM_SIZE_STORAGE_KEY, this.streamSizeValue.toString());
+    } catch {
+      // Ignore storage failures and keep the in-memory value.
+    }
+  }
+
+  private coerceStreamSizeValue(value: number): number {
+    if (!Number.isFinite(value)) {
+      return STREAM_SIZE_MIN;
+    }
+
+    return Math.min(STREAM_SIZE_MAX, Math.max(STREAM_SIZE_MIN, value));
   }
 
   private redirectToNotFound(): void {

@@ -6,7 +6,10 @@
     tabindex="0"
     (keydown)="handleExerciseKeydown($event)"
   >
-    <section class="exercise-body">
+    <section
+      class="exercise-body"
+      [style.--stream-size-scale]="streamSizeScale"
+    >
       <section class="exercise-stream-shell">
         <div class="stream-side stream-side-left">
           @for (previousChar of previousSideChars; track $index) {
@@ -30,6 +33,19 @@
             <span class="side-char">{{ followingChar }}</span>
           }
         </div>
+      </section>
+
+      <section class="size-slider-shell">
+        <input
+          type="range"
+          class="size-slider"
+          [value]="streamSizeValue"
+          [attr.min]="streamSizeMin"
+          [attr.max]="streamSizeMax"
+          step="any"
+          aria-label="Adjust exercise stream size"
+          (input)="handleStreamSizeInput($event)"
+        >
       </section>
 
       <section class="exercise-focus-stack">

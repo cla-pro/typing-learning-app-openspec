@@ -1,15 +1,4 @@
-## Purpose
-
-Exercise-page visual alignment and focused interaction layout for expected-character stream presentation, pressed-key feedback, and primary runtime control placement.
-
-## Requirements
-
-### Requirement: Stream rows share a vertical center line
-The system SHALL align the reduced-emphasis side stream segments and the zoomed center row on the same vertical center line so the focused expected-character stream reads as one continuous horizontal band.
-
-#### Scenario: Stream centers align during exercise rendering
-- **WHEN** the exercise page renders a stream with an active expected character
-- **THEN** the left side segment, center zoom row, and right side segment share a common vertical center alignment
+## MODIFIED Requirements
 
 ### Requirement: Pressed-key feedback forms a centered focus box
 The system SHALL render pressed-key feedback as an unlabeled character box centered beneath the active zoom character, and the feedback box SHALL match the active zoom-character focus target in visual size while remaining positioned below the size slider.
