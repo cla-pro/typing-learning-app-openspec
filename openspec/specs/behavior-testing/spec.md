@@ -13,7 +13,7 @@ The system SHALL implement requirements tests that validate observable behavior 
 
 #### Scenario: Service behavior is validated through public methods
 - **WHEN** requirements tests validate `ExerciseConfigService`
-- **THEN** tests call public service methods (`listExercises`, `getExerciseById`) and assert returned behavior contracts
+- **THEN** tests call public service methods (`listExerciseCategories`, `getExerciseById`) and assert returned behavior contracts
 
 #### Scenario: Component behavior is validated through interactions
 - **WHEN** requirements tests validate component behavior

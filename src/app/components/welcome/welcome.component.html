@@ -5,15 +5,21 @@
 
     <nav class="exercises-nav">
       <h2>Choose an Exercise</h2>
-      <ul class="exercise-list">
-        @for (exercise of exercises; track exercise) {
-          <li>
-            <a [routerLink]="['/exercices', exercise.id]" class="exercise-link">
-              {{ exercise.name }}
-            </a>
-          </li>
-        }
-      </ul>
+      @for (category of exerciseCategories; track category.name) {
+        <section class="exercise-category">
+          <h3 class="exercise-category-title">{{ category.name }}</h3>
+
+          <ul class="exercise-list">
+            @for (exercise of category.exercises; track exercise.id) {
+              <li>
+                <a [routerLink]="['/exercices', exercise.id]" class="exercise-link">
+                  {{ exercise.name }}
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
+      }
     </nav>
   </div>
 </main>

@@ -4,3 +4,8 @@ export interface ExerciseConfig {
   expectedChars: string[];
   impactedKeys: string[];
 }
+
+export interface ExerciseCategory {
+  name: string;
+  exercises: ExerciseConfig[];
+}

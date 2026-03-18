@@ -40,11 +40,27 @@ h1 {
   color: #2c3e50;
 }
 
+.exercise-category {
+  margin-top: 1.5rem;
+}
+
+.exercise-category:first-of-type {
+  margin-top: 0;
+}
+
+.exercise-category-title {
+  margin-bottom: 0.75rem;
+  color: #34495e;
+  font-size: 1.125rem;
+}
+
 .exercise-list {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding: 0;
+  margin: 0;
 }
 
 .exercise-link {

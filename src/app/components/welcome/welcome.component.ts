@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { ExerciseConfig } from '../../models/exercise-config.model';
+import { ExerciseCategory } from '../../models/exercise-config.model';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 
 @Component({
@@ -13,10 +13,10 @@ import { ExerciseConfigService } from '../../services/exercise-config.service';
 export class WelcomeComponent {
   private readonly exerciseConfigService = inject(ExerciseConfigService);
 
-  exercises: ExerciseConfig[];
+  exerciseCategories: ExerciseCategory[];
 
   constructor() {
-    this.exercises = this.exerciseConfigService.listExercises();
+    this.exerciseCategories = this.exerciseConfigService.listExerciseCategories();
   }
 }
 
