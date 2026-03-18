@@ -351,4 +351,102 @@ describe('Exercise Component Requirements', () => {
     expect(component.isRuntimeControlDisabled).toBe(true);
     expect(component.runtimeActionLabel).toBe('start');
   });
+
+  test('error counter initializes to zero and is accessible when exercise is loaded', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.errorCount).toBe(0);
+    expect(component.isLastKeyWrong).toBe(false);
+  });
+
+  test('wrong key press increments error count by one while running', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.errorCount).toBe(1);
+
+    component.handleExerciseKeydown({ key: 'y' } as KeyboardEvent);
+    expect(component.errorCount).toBe(2);
+  });
+
+  test('correct key press does not increment error count while running', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    expect(component.errorCount).toBe(0);
+  });
+
+  test('key press in opened, pending, and completed state does not increment error count', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.errorCount).toBe(0);
+
+    component.toggleRuntimeState();
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.errorCount).toBe(0);
+
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+    expect(component.exerciseRuntimeState).toBe('completed');
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.errorCount).toBe(0);
+  });
+
+  test('wrong key press marks pressed-key feedback as error state', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    expect(component.isLastKeyWrong).toBe(false);
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.isLastKeyWrong).toBe(true);
+  });
+
+  test('correct key press clears pressed-key feedback error state', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.isLastKeyWrong).toBe(true);
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    expect(component.isLastKeyWrong).toBe(false);
+  });
+
+  test('error count persists across pause and resume without resetting', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'y' } as KeyboardEvent);
+    expect(component.errorCount).toBe(2);
+
+    component.toggleRuntimeState();
+    expect(component.errorCount).toBe(2);
+
+    component.toggleRuntimeState();
+    expect(component.errorCount).toBe(2);
+
+    component.handleExerciseKeydown({ key: 'z' } as KeyboardEvent);
+    expect(component.errorCount).toBe(3);
+  });
+
+  test('error count resets to zero when a new exercise is opened', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.errorCount).toBe(1);
+
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    expect(component.errorCount).toBe(0);
+  });
 });

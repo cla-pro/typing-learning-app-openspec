@@ -50,13 +50,17 @@
       </section>
 
       <section class="exercise-focus-stack">
-        <p
-          class="key-display-box"
-          aria-live="polite"
-          aria-label="Last key pressed while running"
-        >
-          {{ displayedPressedKey }}
-        </p>
+        <div class="key-feedback-row">
+          <p
+            class="key-display-box"
+            [class.key-display-error]="isLastKeyWrong"
+            aria-live="polite"
+            aria-label="Last key pressed while running"
+          >
+            {{ displayedPressedKey }}
+          </p>
+          <span class="error-counter" aria-live="polite" aria-label="Error count">{{ errorCount }} errors</span>
+        </div>
 
         <button
           type="button"

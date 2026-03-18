@@ -30,6 +30,8 @@ export class ExerciseComponent implements OnInit {
   impactedKeys: string[] = [];
   exerciseRuntimeState: ExerciseRuntimeState = 'opened';
   lastPressedKey: string = '';
+  errorCount: number = 0;
+  isLastKeyWrong: boolean = false;
   streamSizeValue: number = STREAM_SIZE_MIN;
   private hasValidExercise: boolean = false;
 
@@ -122,6 +124,8 @@ export class ExerciseComponent implements OnInit {
       this.impactedKeys = exerciseConfig.impactedKeys;
       this.exerciseRuntimeState = 'opened';
       this.lastPressedKey = '';
+      this.errorCount = 0;
+      this.isLastKeyWrong = false;
       this.streamSizeValue = this.loadPersistedStreamSize();
     });
   }
@@ -155,8 +159,12 @@ export class ExerciseComponent implements OnInit {
     this.lastPressedKey = event.key;
 
     if (event.key !== this.activeExpectedChar) {
+      this.errorCount++;
+      this.isLastKeyWrong = true;
       return;
     }
+
+    this.isLastKeyWrong = false;
 
     if (this.activeExpectedCharIndex >= this.expectedCharsToDisplay.length - 1) {
       this.activeExpectedCharIndex = this.expectedCharsToDisplay.length;
@@ -179,6 +187,8 @@ export class ExerciseComponent implements OnInit {
     this.impactedKeys = [];
     this.exerciseRuntimeState = 'opened';
     this.lastPressedKey = '';
+    this.errorCount = 0;
+    this.isLastKeyWrong = false;
     this.streamSizeValue = STREAM_SIZE_MIN;
   }
 

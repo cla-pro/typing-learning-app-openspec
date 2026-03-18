@@ -124,12 +124,31 @@
   gap: 1rem;
 }
 
+.key-feedback-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .key-display-box {
   margin: 0;
   border: 1px solid #7f8c8d;
   background-color: #ecf0f1;
   color: #2c3e50;
   font-weight: 700;
+}
+
+.key-display-error {
+  border-color: #e74c3c;
+  background-color: #fdecea;
+  color: #c0392b;
+}
+
+.error-counter {
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 1.35rem;
+  min-width: 2rem;
 }
 
 .runtime-button {

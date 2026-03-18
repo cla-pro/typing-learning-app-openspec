@@ -13,31 +13,34 @@ describe('ExerciseConfigService Requirements', () => {
     const categories = service.listExerciseCategories();
 
     expect(categories.map(category => category.name)).toEqual([
-      'Core Drills',
       'Middle Line',
       'Upper Line',
       'Lower Line'
     ]);
     expect(categories[0]?.exercises.map(exercise => exercise.id)).toEqual([
-      'basic-typing',
-      'speed-test',
-      'accuracy-training'
-    ]);
-    expect(categories[1]?.exercises.map(exercise => exercise.id)).toEqual([
       'middle-line-fj',
       'middle-line-dk',
       'middle-line-sl',
       'middle-line-gh',
-      'middle-line-random-1',
-      'middle-line-random-2'
+      'middle-line-all-1',
+      'middle-line-all-2'
+    ]);
+    expect(categories[1]?.exercises.map(exercise => exercise.id)).toEqual([
+      'upper-line-tz',
+      'upper-line-ru',
+      'upper-line-ei',
+      'upper-line-wo',
+      'upper-line-qp',
+      'upper-line-all-1',
+      'upper-line-all-2'
     ]);
 
     const flattenedExerciseIds = categories.flatMap(category =>
       category.exercises.map(exercise => exercise.id)
     );
-    expect(flattenedExerciseIds).toContain('basic-typing');
-    expect(flattenedExerciseIds).toContain('speed-test');
-    expect(flattenedExerciseIds).toContain('accuracy-training');
+    expect(flattenedExerciseIds).toContain('middle-line-fj');
+    expect(flattenedExerciseIds).toContain('upper-line-all-1');
+    expect(flattenedExerciseIds).toContain('lower-line-vbn');
     expect(new Set(flattenedExerciseIds).size).toBe(flattenedExerciseIds.length);
   });
 
@@ -55,11 +58,11 @@ describe('ExerciseConfigService Requirements', () => {
   });
 
   test('returns exercise configuration by id', () => {
-    const config = service.getExerciseById('basic-typing');
+    const config = service.getExerciseById('middle-line-fj');
 
     expect(config).toBeDefined();
-    expect(config?.id).toBe('basic-typing');
-    expect(config?.name).toContain('Basic Typing');
+    expect(config?.id).toBe('middle-line-fj');
+    expect(config?.name).toContain('F / J');
     expect(config?.expectedChars.length).toBeGreaterThan(0);
   });
 
