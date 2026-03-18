@@ -6,41 +6,42 @@ import { ExerciseCategory, ExerciseConfig } from '../models/exercise-config.mode
 export class ExerciseConfigService {
   private readonly exerciseCategories: ExerciseCategory[] = [
     {
-      name: 'Core Drills',
-      exercises: [
-        {
-          id: 'basic-typing',
-          name: '🔤 Basic Typing',
-          expectedChars: ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'],
-          impactedKeys: ['A', 'S', 'D', 'F', 'J', 'K', 'L', ';']
-        },
-        {
-          id: 'speed-test',
-          name: '⚡ Speed Test',
-          expectedChars: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-          impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
-        },
-        {
-          id: 'accuracy-training',
-          name: '🎯 Accuracy Training',
-          expectedChars: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
-          impactedKeys: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
-        }
-      ]
-    },
-    {
       name: 'Middle Line',
       exercises: [
         {
-          id: 'middle-line-random-1',
-          name: '⌨️ Middle Line Random 1',
-          expectedChars: Array.from('asdfghjklé agjdls hfkéajg dslhfkaé jgdsl'),
+          id: 'middle-line-fj',
+          name: 'F / J',
+          expectedChars: ['f', 'j', 'j', 'f', 'j', 'j', 'f', 'j', 'f', 'j', 'j', 'f', 'f', 'j', 'f', 'f', 'j'],
+          impactedKeys: ['F', 'J']
+        },
+        {
+          id: 'middle-line-dk',
+          name: 'D / K',
+          expectedChars: ['k', 'd', 'k', 'k', 'd', 'k', 'd', 'd', 'k', 'k', 'd', 'd', 'k', 'd', 'k', 'k', 'd'],
+          impactedKeys: ['D', 'K']
+        },
+        {
+          id: 'middle-line-sl',
+          name: 'S / L',
+          expectedChars: ['l', 's', 'l', 'l', 's', 's', 'l', 's', 'l', 's', 's', 'l', 'l', 's', 'l', 's', 's'],
+          impactedKeys: ['S', 'L']
+        },
+        {
+          id: 'middle-line-gh',
+          name: 'G / H',
+          expectedChars: ['h', 'g', 'g', 'h', 'g', 'h', 'h', 'g', 'h', 'g', 'g', 'h', 'h', 'g', 'h', 'g', 'g'],
+          impactedKeys: ['G', 'H']
+        },
+        {
+          id: 'middle-line-all-1',
+          name: 'All 1',
+          expectedChars: Array.from('gfkdéls jah sdfjgklé dahfs jékgld saef jh'),
           impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'É', ' ']
         },
         {
-          id: 'middle-line-random-2',
-          name: '⌨️ Middle Line Random 2',
-          expectedChars: Array.from('élkjhgfdsa shadgjkl fésalg hdjk ldfaésgh'),
+          id: 'middle-line-all-2',
+          name: 'All 2',
+          expectedChars: Array.from('ghfkdlés jfag édhsglkf jédals gfhkj éds'),
           impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'É', ' ']
         }
       ]
@@ -49,15 +50,45 @@ export class ExerciseConfigService {
       name: 'Upper Line',
       exercises: [
         {
-          id: 'upper-line-random-1',
-          name: '⬆️ Upper Line Random 1',
-          expectedChars: Array.from('qwertzuiop èqztwruiopqe rtzuièowq rztep '),
+          id: 'upper-line-tz',
+          name: 'T / Z',
+          expectedChars: ['t', 'z', 't', 't', 'z', 'z', 't', 'z', 't', 'z', 'z', 't', 't', 'z', 't', 'z', 'z'],
+          impactedKeys: ['T', 'Z']
+        },
+        {
+          id: 'upper-line-ru',
+          name: 'R / U',
+          expectedChars: ['u', 'r', 'r', 'u', 'r', 'u', 'u', 'r', 'u', 'r', 'r', 'u', 'u', 'r', 'u', 'r', 'r'],
+          impactedKeys: ['R', 'U']
+        },
+        {
+          id: 'upper-line-ei',
+          name: 'E / I',
+          expectedChars: ['e', 'i', 'i', 'e', 'i', 'i', 'e', 'i', 'e', 'i', 'i', 'e', 'e', 'i', 'e', 'e', 'i'],
+          impactedKeys: ['E', 'I']
+        },
+        {
+          id: 'upper-line-wo',
+          name: 'W / O',
+          expectedChars: ['o', 'w', 'w', 'o', 'w', 'o', 'o', 'w', 'o', 'w', 'w', 'o', 'o', 'w', 'o', 'w', 'w'],
+          impactedKeys: ['W', 'O']
+        },
+        {
+          id: 'upper-line-qp',
+          name: 'Q / P',
+          expectedChars: ['p', 'q', 'q', 'p', 'q', 'q', 'p', 'q', 'p', 'q', 'q', 'p', 'p', 'q', 'p', 'p', 'q'],
+          impactedKeys: ['Q', 'P']
+        },
+        {
+          id: 'upper-line-all-1',
+          name: 'All 1',
+          expectedChars: Array.from('tzuiéowq tréuiopz èqwtzrui zpowèqrt eitz'),
           impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'È', ' ']
         },
         {
-          id: 'upper-line-random-2',
-          name: '⬆️ Upper Line Random 2',
-          expectedChars: Array.from('èpoiuztrewq ztqeuiop rtwèzuiopqe tzruip '),
+          id: 'upper-line-all-2',
+          name: 'All 2',
+          expectedChars: Array.from('upqwétzroi tuiézwopq trèzquipo étpzuroi'),
           impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'È', ' ']
         }
       ]
@@ -66,15 +97,39 @@ export class ExerciseConfigService {
       name: 'Lower Line',
       exercises: [
         {
-          id: 'lower-line-random-1',
-          name: '⬇️ Lower Line Random 1',
-          expectedChars: Array.from('yxcvbnm,. myx cvbn,. ymbxcnv,. yxvbm,nc.'),
+          id: 'lower-line-vbn',
+          name: 'V / B / N',
+          expectedChars: ['b', 'v', 'n', 'v', 'b', 'n', 'n', 'b', 'v', 'n', 'v', 'b', 'v', 'n', 'b', 'b', 'n'],
+          impactedKeys: ['V', 'B', 'N']
+        },
+        {
+          id: 'lower-line-cm',
+          name: 'C / M',
+          expectedChars: ['m', 'c', 'c', 'm', 'c', 'c', 'm', 'c', 'm', 'c', 'c', 'm', 'm', 'c', 'm', 'c', 'c'],
+          impactedKeys: ['C', 'M']
+        },
+        {
+          id: 'lower-line-x-comma',
+          name: 'X / ,',
+          expectedChars: ['x', ',', ',', 'x', ',', 'x', 'x', ',', 'x', ',', ',', 'x', 'x', ',', 'x', ',', ','],
+          impactedKeys: ['X', ',']
+        },
+        {
+          id: 'lower-line-y-period',
+          name: 'Y / .',
+          expectedChars: ['y', '.', '.', 'y', '.', '.', 'y', '.', 'y', '.', '.', 'y', 'y', '.', 'y', 'y', '.'],
+          impactedKeys: ['Y', '.']
+        },
+        {
+          id: 'lower-line-all-1',
+          name: 'All 1',
+          expectedChars: Array.from('xcnmbvyé, xnbvmy,. cvbnamy,. mybxcnv,.'),
           impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
         },
         {
-          id: 'lower-line-random-2',
-          name: '⬇️ Lower Line Random 2',
-          expectedChars: Array.from('.,mnbvcxy yxm ,cvbn. nyxvcbm,. y,mxnbvc.'),
+          id: 'lower-line-all-2',
+          name: 'All 2',
+          expectedChars: Array.from(',.mybcvxn ycnxmb,v. nmbvcx,y. y,xnmcbv'),
           impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
         }
       ]

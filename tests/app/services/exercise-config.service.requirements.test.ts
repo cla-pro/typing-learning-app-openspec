@@ -24,6 +24,10 @@ describe('ExerciseConfigService Requirements', () => {
       'accuracy-training'
     ]);
     expect(categories[1]?.exercises.map(exercise => exercise.id)).toEqual([
+      'middle-line-fj',
+      'middle-line-dk',
+      'middle-line-sl',
+      'middle-line-gh',
       'middle-line-random-1',
       'middle-line-random-2'
     ]);
