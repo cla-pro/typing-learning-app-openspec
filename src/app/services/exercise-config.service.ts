@@ -22,6 +22,42 @@ export class ExerciseConfigService {
       name: '🎯 Accuracy Training',
       expectedChars: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
       impactedKeys: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    },
+    {
+      id: 'middle-line-random-1',
+      name: '⌨️ Middle Line Random 1',
+      expectedChars: Array.from('asdfghjklé agjdls hfkéajg dslhfkaé jgdsl'),
+      impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'É', ' ']
+    },
+    {
+      id: 'middle-line-random-2',
+      name: '⌨️ Middle Line Random 2',
+      expectedChars: Array.from('élkjhgfdsa shadgjkl fésalg hdjk ldfaésgh'),
+      impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'É', ' ']
+    },
+    {
+      id: 'upper-line-random-1',
+      name: '⬆️ Upper Line Random 1',
+      expectedChars: Array.from('qwertzuiop èqztwruiopqe rtzuièowq rztep '),
+      impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'È', ' ']
+    },
+    {
+      id: 'upper-line-random-2',
+      name: '⬆️ Upper Line Random 2',
+      expectedChars: Array.from('èpoiuztrewq ztqeuiop rtwèzuiopqe tzruip '),
+      impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'È', ' ']
+    },
+    {
+      id: 'lower-line-random-1',
+      name: '⬇️ Lower Line Random 1',
+      expectedChars: Array.from('yxcvbnm,. myx cvbn,. ymbxcnv,. yxvbm,nc.'),
+      impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
+    },
+    {
+      id: 'lower-line-random-2',
+      name: '⬇️ Lower Line Random 2',
+      expectedChars: Array.from('.,mnbvcxy yxm ,cvbn. nyxvcbm,. y,mxnbvc.'),
+      impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
     }
   ];
 

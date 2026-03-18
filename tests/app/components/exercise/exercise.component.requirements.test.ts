@@ -122,6 +122,54 @@ describe('Exercise Component Requirements', () => {
     expect(component.exerciseRuntimeState).toBe('running');
   });
 
+  test('moves focus from the runtime button to exercise content on start and resume', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    const runtimeButton = document.createElement('button');
+    const exerciseContent = document.createElement('div');
+    exerciseContent.tabIndex = 0;
+
+    document.body.append(runtimeButton, exerciseContent);
+    runtimeButton.focus();
+    (component as any).exerciseContentRef = { nativeElement: exerciseContent };
+
+    component.toggleRuntimeState();
+    expect(component.exerciseRuntimeState).toBe('running');
+    expect(document.activeElement).toBe(exerciseContent);
+
+    component.toggleRuntimeState();
+    expect(component.exerciseRuntimeState).toBe('pending');
+
+    runtimeButton.focus();
+    component.toggleRuntimeState();
+    expect(component.exerciseRuntimeState).toBe('running');
+    expect(document.activeElement).toBe(exerciseContent);
+
+    runtimeButton.remove();
+    exerciseContent.remove();
+  });
+
+  test('keeps the exercise running when Space is typed while running', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'space-drill',
+      name: 'Space Drill',
+      expectedChars: [' '],
+      impactedKeys: ['SPACE']
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    const exerciseContent = document.createElement('div');
+    exerciseContent.tabIndex = 0;
+    (component as any).exerciseContentRef = { nativeElement: exerciseContent };
+
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: ' ' } as KeyboardEvent);
+
+    expect(component.lastPressedKey).toBe(' ');
+    expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.isRuntimeControlDisabled).toBe(true);
+  });
+
   test('keeps the primary control disabled and visible after completion', () => {
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
     component.toggleRuntimeState();

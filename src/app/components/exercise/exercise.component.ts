@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
@@ -21,6 +21,7 @@ export class ExerciseComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly exerciseConfigService = inject(ExerciseConfigService);
+  @ViewChild('exerciseContent') private exerciseContentRef?: ElementRef<HTMLDivElement>;
 
   exerciseId: string = '';
   exerciseName: string = '';
@@ -142,6 +143,7 @@ export class ExerciseComponent implements OnInit {
       this.exerciseRuntimeState = 'pending';
     } else {
       this.exerciseRuntimeState = 'running';
+      this.focusExerciseContent();
     }
   }
 
@@ -203,6 +205,10 @@ export class ExerciseComponent implements OnInit {
     }
 
     return Math.min(STREAM_SIZE_MAX, Math.max(STREAM_SIZE_MIN, value));
+  }
+
+  private focusExerciseContent(): void {
+    this.exerciseContentRef?.nativeElement.focus();
   }
 
   private redirectToNotFound(): void {
