@@ -3,15 +3,18 @@
     <h1>Typing Learning</h1>
 
     <nav class="exercises-nav">
-      @for (category of exerciseCategories; track category.name) {
+      @for (category of exerciseCategoriesWithProgress; track category.name) {
         <section class="exercise-category">
           <h3 class="exercise-category-title">{{ category.name }}</h3>
 
           <ul class="exercise-list">
-            @for (exercise of category.exercises; track exercise.id) {
+            @for (tile of category.exercises; track tile.id) {
               <li>
-                <a [routerLink]="['/exercices', exercise.id]" class="exercise-link">
-                  {{ exercise.name }}
+                <a [routerLink]="['/exercices', tile.id]" class="exercise-link" [class.exercise-link--completed]="tile.completed">
+                  {{ tile.name }}
+                  @if (tile.completed) {
+                    <span class="exercise-stars">{{ '★'.repeat(tile.stars) + '☆'.repeat(3 - tile.stars) }}</span>
+                  }
                 </a>
               </li>
             }

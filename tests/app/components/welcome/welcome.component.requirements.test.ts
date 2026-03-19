@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { WelcomeComponent } from '../../../../src/app/components/welcome/welcome.component';
 import { ExerciseCategory, ExerciseConfig } from '../../../../src/app/models/exercise-config.model';
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
+import { ExerciseProgressService } from '../../../../src/app/services/exercise-progress.service';
 
 const exercises: ExerciseConfig[] = [
   { id: 'a', name: 'A', expectedChars: ['a'], impactedKeys: ['A'] },
@@ -26,17 +27,31 @@ const serviceStub = {
   listExerciseCategories: vi.fn(() => exerciseCategories)
 };
 
+let progressStub: {
+  isCompleted: ReturnType<typeof vi.fn>;
+  getStars: ReturnType<typeof vi.fn>;
+};
+
 describe('Welcome Component Requirements', () => {
   let component: WelcomeComponent;
 
   beforeEach(async () => {
     serviceStub.listExerciseCategories.mockClear();
 
+    progressStub = {
+      isCompleted: vi.fn(() => false),
+      getStars: vi.fn(() => 0)
+    };
+
     await TestBed.configureTestingModule({
       providers: [
         {
           provide: ExerciseConfigService,
           useValue: serviceStub
+        },
+        {
+          provide: ExerciseProgressService,
+          useValue: progressStub
         }
       ]
     }).compileComponents();
@@ -65,5 +80,30 @@ describe('Welcome Component Requirements', () => {
     ]);
     expect(allExerciseLinks).toEqual(['A', 'B', 'C']);
     expect(new Set(allExerciseLinks).size).toBe(allExerciseLinks.length);
+  });
+
+  test('exercise tile has completed flag set to true when progress service reports it as completed', () => {
+    progressStub.isCompleted.mockReturnValue(true);
+    const enrichedComponent = TestBed.runInInjectionContext(() => new WelcomeComponent());
+    const firstTile = enrichedComponent.exerciseCategoriesWithProgress[0].exercises[0];
+    expect(firstTile.completed).toBe(true);
+  });
+
+  test('exercise tile has completed flag set to false when progress service reports it as not completed', () => {
+    const firstTile = component.exerciseCategoriesWithProgress[0].exercises[0];
+    expect(firstTile.completed).toBe(false);
+  });
+
+  test('exercise tile has star count from progress service when exercise is completed', () => {
+    progressStub.isCompleted.mockReturnValue(true);
+    progressStub.getStars.mockReturnValue(2);
+    const enrichedComponent = TestBed.runInInjectionContext(() => new WelcomeComponent());
+    const firstTile = enrichedComponent.exerciseCategoriesWithProgress[0].exercises[0];
+    expect(firstTile.stars).toBe(2);
+  });
+
+  test('exercise tile has zero stars when exercise is not completed', () => {
+    const firstTile = component.exerciseCategoriesWithProgress[0].exercises[0];
+    expect(firstTile.stars).toBe(0);
   });
 });

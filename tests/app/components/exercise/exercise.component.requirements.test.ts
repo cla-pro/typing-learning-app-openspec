@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { ExerciseComponent } from '../../../../src/app/components/exercise/exercise.component';
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
+import { ExerciseProgressService } from '../../../../src/app/services/exercise-progress.service';
 import { TestBed } from '@angular/core/testing';
 
 const STREAM_SIZE_STORAGE_KEY = 'exercise.streamSizeValue';
@@ -13,6 +14,7 @@ describe('Exercise Component Requirements', () => {
   let paramMap$: Subject<any>;
   let serviceStub: { getExerciseById: ReturnType<typeof vi.fn> };
   let routerStub: { navigate: ReturnType<typeof vi.fn> };
+  let progressStub: { recordCompletion: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     globalThis.localStorage?.clear();
@@ -36,6 +38,10 @@ describe('Exercise Component Requirements', () => {
       navigate: vi.fn()
     };
 
+    progressStub = {
+      recordCompletion: vi.fn()
+    };
+
     const routeStub = {
       paramMap: paramMap$.asObservable()
     } as ActivatedRoute;
@@ -49,6 +55,10 @@ describe('Exercise Component Requirements', () => {
         {
           provide: ExerciseConfigService,
           useValue: serviceStub
+        },
+        {
+          provide: ExerciseProgressService,
+          useValue: progressStub
         },
         {
           provide: Router,
@@ -448,5 +458,33 @@ describe('Exercise Component Requirements', () => {
 
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
     expect(component.errorCount).toBe(0);
+  });
+
+  test('recordCompletion is called with exercise id, error count, and total chars when exercise completes', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
+    expect(component.exerciseRuntimeState).toBe('completed');
+    expect(progressStub.recordCompletion).toHaveBeenCalledOnce();
+    expect(progressStub.recordCompletion).toHaveBeenCalledWith('basic-typing', 1, 6);
+  });
+
+  test('recordCompletion is not called while exercise is still running or pending', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    expect(progressStub.recordCompletion).not.toHaveBeenCalled();
+
+    component.toggleRuntimeState();
+    expect(progressStub.recordCompletion).not.toHaveBeenCalled();
   });
 });

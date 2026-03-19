@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
+import { ExerciseProgressService } from '../../services/exercise-progress.service';
 
 type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
 const ZOOM_OFFSETS: readonly number[] = [-2, -1, 0, 1, 2];
@@ -21,6 +22,7 @@ export class ExerciseComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly exerciseConfigService = inject(ExerciseConfigService);
+  private readonly exerciseProgressService = inject(ExerciseProgressService);
   @ViewChild('exerciseContent') private exerciseContentRef?: ElementRef<HTMLDivElement>;
 
   exerciseId: string = '';
@@ -168,6 +170,7 @@ export class ExerciseComponent implements OnInit {
 
     if (this.activeExpectedCharIndex >= this.expectedCharsToDisplay.length - 1) {
       this.activeExpectedCharIndex = this.expectedCharsToDisplay.length;
+      this.exerciseProgressService.recordCompletion(this.exerciseId, this.errorCount, this.expectedCharsToDisplay.length);
       this.exerciseRuntimeState = 'completed';
       return;
     }
