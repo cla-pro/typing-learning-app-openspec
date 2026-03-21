@@ -84,13 +84,13 @@ export class ExerciseConfigService {
         {
           id: 'upper-line-all-1',
           name: 'All 1',
-          expectedChars: Array.from('tzuiéowq tréuiopz èqwtzrui zpowèqrt eitz'),
+          expectedChars: Array.from('tzuièowq trèuiopz èqwtzrui zpowèqrt eitz'),
           impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'È', ' ']
         },
         {
           id: 'upper-line-all-2',
           name: 'All 2',
-          expectedChars: Array.from('upqwétzroi tuiézwopq trèzquipo étpzuroi'),
+          expectedChars: Array.from('upqwètzroi tuièzwopq trèzquipo ètpzuroi'),
           impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'È', ' ']
         }
       ]
