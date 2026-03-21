@@ -5,6 +5,7 @@ import { WelcomeComponent } from '../../../../src/app/components/welcome/welcome
 import { ExerciseCategory, ExerciseConfig } from '../../../../src/app/models/exercise-config.model';
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
 import { ExerciseProgressService } from '../../../../src/app/services/exercise-progress.service';
+import { KeyboardLayoutService } from '../../../../src/app/services/keyboard-layout.service';
 
 const exercises: ExerciseConfig[] = [
   { id: 'a', name: 'A', expectedChars: ['a'], impactedKeys: ['A'] },
@@ -15,16 +16,23 @@ const exercises: ExerciseConfig[] = [
 const exerciseCategories: ExerciseCategory[] = [
   {
     name: 'First Group',
+    keyboardLayouts: ['fr-ch', 'de-ch'],
     exercises: [exercises[0], exercises[1]]
   },
   {
     name: 'Second Group',
+    keyboardLayouts: ['fr-ch', 'de-ch'],
     exercises: [exercises[2]]
   }
 ];
 
 const serviceStub = {
   listExerciseCategories: vi.fn(() => exerciseCategories)
+};
+
+const layoutServiceStub = {
+  getChosenLayout: vi.fn(() => 'fr-ch'),
+  getSupportedLayouts: vi.fn(() => ['fr-ch', 'de-ch'])
 };
 
 let progressStub: {
@@ -37,6 +45,7 @@ describe('Welcome Component Requirements', () => {
 
   beforeEach(async () => {
     serviceStub.listExerciseCategories.mockClear();
+    layoutServiceStub.getChosenLayout.mockClear();
 
     progressStub = {
       isCompleted: vi.fn(() => false),
@@ -52,6 +61,10 @@ describe('Welcome Component Requirements', () => {
         {
           provide: ExerciseProgressService,
           useValue: progressStub
+        },
+        {
+          provide: KeyboardLayoutService,
+          useValue: layoutServiceStub
         }
       ]
     }).compileComponents();
@@ -105,5 +118,10 @@ describe('Welcome Component Requirements', () => {
   test('exercise tile has zero stars when exercise is not completed', () => {
     const firstTile = component.exerciseCategoriesWithProgress[0].exercises[0];
     expect(firstTile.stars).toBe(0);
+  });
+
+  test('loads exercise categories using the chosen keyboard layout from KeyboardLayoutService', () => {
+    expect(layoutServiceStub.getChosenLayout).toHaveBeenCalledTimes(1);
+    expect(serviceStub.listExerciseCategories).toHaveBeenCalledWith('fr-ch');
   });
 });

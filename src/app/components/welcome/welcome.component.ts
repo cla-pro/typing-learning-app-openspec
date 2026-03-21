@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ExerciseCategory } from '../../models/exercise-config.model';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 import { ExerciseProgressService } from '../../services/exercise-progress.service';
+import { KeyboardLayoutService } from '../../services/keyboard-layout.service';
 
 export interface ExerciseTile {
   id: string;
@@ -26,12 +27,14 @@ export interface ExerciseCategoryWithProgress {
 export class WelcomeComponent {
   private readonly exerciseConfigService = inject(ExerciseConfigService);
   private readonly exerciseProgressService = inject(ExerciseProgressService);
+  private readonly keyboardLayoutService = inject(KeyboardLayoutService);
 
   exerciseCategories: ExerciseCategory[];
   exerciseCategoriesWithProgress: ExerciseCategoryWithProgress[];
 
   constructor() {
-    this.exerciseCategories = this.exerciseConfigService.listExerciseCategories();
+    const layout = this.keyboardLayoutService.getChosenLayout();
+    this.exerciseCategories = this.exerciseConfigService.listExerciseCategories(layout);
     this.exerciseCategoriesWithProgress = this.exerciseCategories.map(category => ({
       name: category.name,
       exercises: category.exercises.map(exercise => {

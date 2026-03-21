@@ -10,7 +10,7 @@ describe('ExerciseConfigService Requirements', () => {
   });
 
   test('lists ordered exercise categories through public API', () => {
-    const categories = service.listExerciseCategories();
+    const categories = service.listExerciseCategories('fr-ch');
 
     expect(categories.map(category => category.name)).toEqual([
       'Middle Line',
@@ -45,7 +45,7 @@ describe('ExerciseConfigService Requirements', () => {
   });
 
   test('provides expectedChars and no empty expected-character configs in grouped data', () => {
-    const categories = service.listExerciseCategories();
+    const categories = service.listExerciseCategories('fr-ch');
 
     expect(categories.length).toBeGreaterThan(0);
     for (const category of categories) {
@@ -70,5 +70,22 @@ describe('ExerciseConfigService Requirements', () => {
     const config = service.getExerciseById('unknown-id');
 
     expect(config).toBeUndefined();
+  });
+
+  test('returns categories that include the requested layout', () => {
+    const categories = service.listExerciseCategories('fr-ch');
+
+    expect(categories.length).toBeGreaterThan(0);
+    for (const category of categories) {
+      expect(category.keyboardLayouts).toContain('fr-ch');
+    }
+  });
+
+  test('excludes categories that do not include the requested layout', () => {
+    const categoriesForUnknown = service.listExerciseCategories('unknown-layout');
+    expect(categoriesForUnknown).toEqual([]);
+
+    const categoriesForDeCh = service.listExerciseCategories('de-ch');
+    expect(categoriesForDeCh).toEqual([]);
   });
 });

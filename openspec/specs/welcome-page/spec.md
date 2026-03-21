@@ -5,7 +5,7 @@ Landing page interface displaying a welcome message as proof of concept for the 
 ## Requirements
 
 ### Requirement: Welcome landing page display
-The system SHALL display a welcome page with navigation to exercise pages when a user navigates to the root URL, and SHALL source that navigation from ordered exercise categories provided by `ExerciseConfigService`.
+The system SHALL display a welcome page with navigation to exercise pages when a user navigates to the root URL, SHALL obtain the chosen keyboard layout from `KeyboardLayoutService`, and SHALL source grouped navigation from ordered exercise categories returned by `ExerciseConfigService` for that chosen layout.
 
 #### Scenario: Loading the welcome page
 - **WHEN** a user navigates to `http://localhost:3000/`
@@ -23,6 +23,10 @@ The system SHALL display a welcome page with navigation to exercise pages when a
 - **WHEN** the welcome page renders grouped exercise navigation
 - **THEN** each exercise link is displayed under exactly one category and is not duplicated across sections
 
+#### Scenario: Chosen keyboard layout is used for category loading
+- **WHEN** the welcome page loads grouped exercise navigation
+- **THEN** it requests categories from `ExerciseConfigService` using the layout returned by `KeyboardLayoutService`
+
 #### Scenario: Correct content type
 - **WHEN** a user navigates to the home page
 - **THEN** the response has content-type `text/html` and renders properly in a web browser
@@ -32,7 +36,7 @@ The system SHALL display a welcome page with navigation to exercise pages when a
 - **THEN** it is rendered as an Angular component with proper routing integration
 
 ### Requirement: Automated test coverage for welcome-page service integration
-The system SHALL include automated tests for welcome-page exercise-link integration with `ExerciseConfigService`, including grouped data and ordering behavior.
+The system SHALL include automated tests for welcome-page exercise-link integration with `ExerciseConfigService`, including grouped data and ordering behavior, and SHALL verify chosen-layout propagation from `KeyboardLayoutService`.
 
 #### Scenario: Welcome-page link data source is tested
 - **WHEN** test suites are executed
@@ -41,6 +45,10 @@ The system SHALL include automated tests for welcome-page exercise-link integrat
 #### Scenario: Welcome-page grouped ordering is tested
 - **WHEN** test suites are executed
 - **THEN** tests verify that category order and within-category exercise order match the grouped data returned by `ExerciseConfigService`
+
+#### Scenario: Welcome-page chosen layout propagation is tested
+- **WHEN** test suites are executed
+- **THEN** tests verify that the chosen layout from `KeyboardLayoutService` is passed to `ExerciseConfigService` when loading categories
 
 ### Requirement: Page structure and styling
 The system SHALL provide a properly structured welcome page with navigation elements and basic styling using a compact, dense layout with smaller exercise tiles arranged in responsive multi-column rows.

@@ -7,6 +7,7 @@ export class ExerciseConfigService {
   private readonly exerciseCategories: ExerciseCategory[] = [
     {
       name: 'Middle Line',
+      keyboardLayouts: ['fr-ch'],
       exercises: [
         {
           id: 'middle-line-fj',
@@ -48,6 +49,7 @@ export class ExerciseConfigService {
     },
     {
       name: 'Upper Line',
+      keyboardLayouts: ['fr-ch'],
       exercises: [
         {
           id: 'upper-line-tz',
@@ -95,6 +97,7 @@ export class ExerciseConfigService {
     },
     {
       name: 'Lower Line',
+      keyboardLayouts: ['fr-ch'],
       exercises: [
         {
           id: 'lower-line-vbn',
@@ -136,8 +139,9 @@ export class ExerciseConfigService {
     }
   ];
 
-  listExerciseCategories(): ExerciseCategory[] {
+  listExerciseCategories(layout: string): ExerciseCategory[] {
     return this.exerciseCategories
+      .filter((category: ExerciseCategory) => category.keyboardLayouts.includes(layout))
       .map((category: ExerciseCategory) => ({
         ...category,
         exercises: category.exercises.filter((exercise: ExerciseConfig) => this.hasValidExpectedChars(exercise))
