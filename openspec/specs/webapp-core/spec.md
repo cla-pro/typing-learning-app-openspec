@@ -46,7 +46,7 @@ The system SHALL serve static files (HTML, CSS, JavaScript) including bundled An
 - **THEN** the host serves the files from the Angular build output directory
 
 ### Requirement: Project structure and tooling
-The system SHALL include npm configuration, build scripts, and standard project directories for web development, and MUST define dependency management rules that keep all direct dependencies and devDependencies at the most recent versions compatible with the current Angular baseline, with Angular upgrades executed through Angular CLI (`ng update`).
+The system SHALL include npm configuration, build scripts, and standard project directories for web development, SHALL externalize typing scenario/category data under `src/app/data` using per-layout modules to improve readability and service testability, and MUST define dependency management rules that keep all direct dependencies and devDependencies at the most recent versions compatible with the current Angular baseline, with Angular upgrades executed through Angular CLI (`ng update`).
 
 #### Scenario: npm scripts are available
 - **WHEN** running `npm start` in the project root
@@ -55,6 +55,14 @@ The system SHALL include npm configuration, build scripts, and standard project 
 #### Scenario: Project structure is organized
 - **WHEN** a developer clones the project
 - **THEN** they find `/src` for source code, `/public` for static assets, and clear configuration files
+
+#### Scenario: Typing scenarios are externalized under app data
+- **WHEN** a developer inspects exercise-category scenario definitions
+- **THEN** typing scenarios are defined under `src/app/data` rather than hardcoded in `ExerciseConfigService`
+
+#### Scenario: Typing scenarios are split per keyboard layout
+- **WHEN** a developer inspects typing-scenario sources
+- **THEN** scenarios/categories are organized in per-layout modules
 
 #### Scenario: Dependency versions follow latest-compatible policy
 - **WHEN** maintainers add or update a direct dependency
