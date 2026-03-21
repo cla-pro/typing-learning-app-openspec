@@ -27,12 +27,13 @@ const exerciseCategories: ExerciseCategory[] = [
 ];
 
 const serviceStub = {
-  listExerciseCategories: vi.fn(() => exerciseCategories)
+  listExerciseCategories: vi.fn((layout: string) => exerciseCategories)
 };
 
 const layoutServiceStub = {
   getChosenLayout: vi.fn(() => 'fr-ch'),
-  getSupportedLayouts: vi.fn(() => ['fr-ch', 'de-ch'])
+  getSupportedLayouts: vi.fn(() => ['fr-ch', 'de-ch']),
+  setChosenLayout: vi.fn()
 };
 
 let progressStub: {
@@ -46,6 +47,22 @@ describe('Welcome Component Requirements', () => {
   beforeEach(async () => {
     serviceStub.listExerciseCategories.mockClear();
     layoutServiceStub.getChosenLayout.mockClear();
+    layoutServiceStub.getSupportedLayouts.mockClear();
+    layoutServiceStub.setChosenLayout.mockClear();
+    layoutServiceStub.getChosenLayout.mockReturnValue('fr-ch');
+    serviceStub.listExerciseCategories.mockImplementation((layout: string) => {
+      if (layout === 'de-ch') {
+        return [
+          {
+            name: 'German Group',
+            keyboardLayouts: ['de-ch'],
+            exercises: [exercises[2]]
+          }
+        ];
+      }
+
+      return exerciseCategories;
+    });
 
     progressStub = {
       isCompleted: vi.fn(() => false),
@@ -75,6 +92,12 @@ describe('Welcome Component Requirements', () => {
   test('loads grouped exercise links from ExerciseConfigService public API', () => {
     expect(serviceStub.listExerciseCategories).toHaveBeenCalledTimes(1);
     expect(component.exerciseCategories).toEqual(exerciseCategories);
+  });
+
+  test('exposes supported layouts and current selection for chooser rendering', () => {
+    expect(layoutServiceStub.getSupportedLayouts).toHaveBeenCalledTimes(1);
+    expect(component.supportedLayouts).toEqual(['fr-ch', 'de-ch']);
+    expect(component.selectedLayout).toBe('fr-ch');
   });
 
   test('exposes grouped exercise links in category and exercise order without duplication', () => {
@@ -123,5 +146,17 @@ describe('Welcome Component Requirements', () => {
   test('loads exercise categories using the chosen keyboard layout from KeyboardLayoutService', () => {
     expect(layoutServiceStub.getChosenLayout).toHaveBeenCalledTimes(1);
     expect(serviceStub.listExerciseCategories).toHaveBeenCalledWith('fr-ch');
+  });
+
+  test('changing the selected layout updates the service and reloads categories', () => {
+    layoutServiceStub.getChosenLayout.mockReturnValue('de-ch');
+
+    component.onLayoutChange({ target: { value: 'de-ch' } } as unknown as Event);
+
+    expect(layoutServiceStub.setChosenLayout).toHaveBeenCalledWith('de-ch');
+    expect(serviceStub.listExerciseCategories).toHaveBeenLastCalledWith('de-ch');
+    expect(component.selectedLayout).toBe('de-ch');
+    expect(component.exerciseCategories.map(category => category.name)).toEqual(['German Group']);
+    expect(component.exerciseCategoriesWithProgress[0]?.exercises.map(exercise => exercise.name)).toEqual(['C']);
   });
 });

@@ -1,8 +1,4 @@
-## Purpose
-
-Landing page interface displaying a welcome message as proof of concept for the typing learning application.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Welcome landing page display
 The system SHALL display a welcome page with navigation to exercise pages when a user navigates to the root URL, SHALL obtain the chosen keyboard layout from `KeyboardLayoutService`, SHALL render a layout chooser using supported layouts from `KeyboardLayoutService`, and SHALL source grouped navigation from ordered exercise categories returned by `ExerciseConfigService` for the currently selected layout.

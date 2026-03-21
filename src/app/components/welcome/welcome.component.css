@@ -22,6 +22,14 @@ h1 {
   font-weight: 700;
 }
 
+.layout-chooser {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #2c3e50;
+  font: inherit;
+}
+
 .exercises-nav {
   text-align: left;
   margin-top: 2rem;

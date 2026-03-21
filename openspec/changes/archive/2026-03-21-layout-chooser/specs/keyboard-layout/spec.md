@@ -1,8 +1,4 @@
-## Purpose
-
-Service managing supported keyboard layouts and the currently chosen layout for the typing learning application.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Keyboard layout service exposes supported layouts
 The system SHALL provide a keyboard layout service that exposes the currently supported keyboard layouts.

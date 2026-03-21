@@ -2,6 +2,12 @@
   <div class="welcome-content">
     <h1>Typing Learning</h1>
 
+    <select id="layout-chooser" class="layout-chooser" [value]="selectedLayout" (change)="onLayoutChange($event)">
+      @for (layout of supportedLayouts; track layout) {
+        <option [value]="layout">{{ layout }}</option>
+      }
+    </select>
+
     <nav class="exercises-nav">
       @for (category of exerciseCategoriesWithProgress; track category.name) {
         <section class="exercise-category">

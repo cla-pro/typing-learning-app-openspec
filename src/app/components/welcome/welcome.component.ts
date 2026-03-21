@@ -29,11 +29,32 @@ export class WelcomeComponent {
   private readonly exerciseProgressService = inject(ExerciseProgressService);
   private readonly keyboardLayoutService = inject(KeyboardLayoutService);
 
+  supportedLayouts: string[];
+  selectedLayout: string;
   exerciseCategories: ExerciseCategory[];
   exerciseCategoriesWithProgress: ExerciseCategoryWithProgress[];
 
   constructor() {
-    const layout = this.keyboardLayoutService.getChosenLayout();
+    this.supportedLayouts = this.keyboardLayoutService.getSupportedLayouts();
+    this.selectedLayout = this.keyboardLayoutService.getChosenLayout();
+    this.exerciseCategories = [];
+    this.exerciseCategoriesWithProgress = [];
+    this.reloadCategories(this.selectedLayout);
+  }
+
+  onLayoutChange(event: Event): void {
+    const nextLayout = (event.target as HTMLSelectElement | null)?.value;
+
+    if (!nextLayout) {
+      return;
+    }
+
+    this.keyboardLayoutService.setChosenLayout(nextLayout);
+    this.selectedLayout = this.keyboardLayoutService.getChosenLayout();
+    this.reloadCategories(this.selectedLayout);
+  }
+
+  private reloadCategories(layout: string): void {
     this.exerciseCategories = this.exerciseConfigService.listExerciseCategories(layout);
     this.exerciseCategoriesWithProgress = this.exerciseCategories.map(category => ({
       name: category.name,
