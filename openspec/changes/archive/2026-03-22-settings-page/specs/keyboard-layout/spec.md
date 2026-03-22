@@ -1,8 +1,4 @@
-## Purpose
-
-Supported keyboard-layout options, chosen-layout persistence, and layout-based category filtering behavior for the typing learning application.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Supported keyboard layouts are exposed
 The system SHALL expose the currently supported keyboard layouts.
@@ -33,24 +29,6 @@ The system SHALL expose the currently chosen keyboard layout, SHALL persist layo
 #### Scenario: Unsupported chosen layout is rejected
 - **WHEN** a consumer attempts to set the chosen layout to an unsupported value
 - **THEN** the chosen layout remains unchanged
-
-### Requirement: Exercise categories declare compatible keyboard layouts
-The system SHALL include a `keyboardLayouts` field on each exercise category that lists all keyboard layouts compatible with that category.
-
-#### Scenario: Category compatibility metadata is available
-- **WHEN** exercise category configuration is loaded
-- **THEN** each category includes a non-empty `keyboardLayouts` list
-
-### Requirement: Category retrieval is filtered by keyboard layout
-The system SHALL require a keyboard layout input when retrieving exercise categories and SHALL return only categories whose `keyboardLayouts` contains that layout.
-
-#### Scenario: Matching categories are included
-- **WHEN** categories are requested with layout `fr-ch`
-- **THEN** categories that include `fr-ch` in `keyboardLayouts` are returned
-
-#### Scenario: Non-matching categories are excluded
-- **WHEN** categories are requested with layout `fr-ch`
-- **THEN** categories that do not include `fr-ch` in `keyboardLayouts` are not returned
 
 ### Requirement: Automated test coverage for keyboard layout filtering
 The system SHALL include automated tests that verify supported layouts, chosen layout, layout persistence, and layout-based category filtering behavior.

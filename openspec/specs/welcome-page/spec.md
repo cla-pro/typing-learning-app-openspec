@@ -5,7 +5,7 @@ Landing page interface displaying a welcome message as proof of concept for the 
 ## Requirements
 
 ### Requirement: Welcome landing page display
-The system SHALL display a welcome page with navigation to exercise pages when a user navigates to the root URL, SHALL obtain the chosen keyboard layout from `KeyboardLayoutService`, SHALL render a layout chooser using supported layouts from `KeyboardLayoutService`, and SHALL source grouped navigation from ordered exercise categories returned by `ExerciseConfigService` for the currently selected layout.
+The system SHALL display a welcome page with navigation to exercise pages when a user navigates to the root URL, SHALL obtain the currently chosen keyboard layout, and SHALL source grouped navigation from ordered exercise categories returned by `ExerciseConfigService` for that chosen layout.
 
 #### Scenario: Loading the welcome page
 - **WHEN** a user navigates to `http://localhost:3000/`
@@ -25,19 +25,15 @@ The system SHALL display a welcome page with navigation to exercise pages when a
 
 #### Scenario: Chosen keyboard layout is used for category loading
 - **WHEN** the welcome page loads grouped exercise navigation
-- **THEN** it requests categories from `ExerciseConfigService` using the layout returned by `KeyboardLayoutService`
+- **THEN** it requests categories from `ExerciseConfigService` using the current chosen layout
 
-#### Scenario: Layout chooser displays supported layouts
+#### Scenario: Layout chooser is not displayed on welcome page
 - **WHEN** the welcome page loads
-- **THEN** it displays a chooser control containing all supported layouts returned by `KeyboardLayoutService`
+- **THEN** no keyboard-layout chooser control is rendered in the welcome-page content
 
-#### Scenario: Layout chooser initializes with chosen layout
+#### Scenario: Settings entry action is displayed on top-right
 - **WHEN** the welcome page loads
-- **THEN** the chooser displays the currently chosen layout as the selected value
-
-#### Scenario: Changing chooser updates categories
-- **WHEN** the user selects a different supported layout in the chooser
-- **THEN** the welcome page updates the chosen layout through `KeyboardLayoutService` and reloads categories from `ExerciseConfigService` for the newly selected layout
+- **THEN** a top-right gear-icon button is displayed to open Settings
 
 #### Scenario: Correct content type
 - **WHEN** a user navigates to the home page
@@ -48,7 +44,7 @@ The system SHALL display a welcome page with navigation to exercise pages when a
 - **THEN** it is rendered as an Angular component with proper routing integration
 
 ### Requirement: Automated test coverage for welcome-page service integration
-The system SHALL include automated tests for welcome-page exercise-link integration with `ExerciseConfigService`, including grouped data and ordering behavior, SHALL verify chosen-layout propagation from `KeyboardLayoutService`, and SHALL verify chooser rendering and layout-change behavior.
+The system SHALL include automated tests for welcome-page exercise-link integration with `ExerciseConfigService`, including grouped data and ordering behavior, SHALL verify chosen-layout propagation, and SHALL verify gear-button rendering and navigation behavior.
 
 #### Scenario: Welcome-page link data source is tested
 - **WHEN** test suites are executed
@@ -60,15 +56,11 @@ The system SHALL include automated tests for welcome-page exercise-link integrat
 
 #### Scenario: Welcome-page chosen layout propagation is tested
 - **WHEN** test suites are executed
-- **THEN** tests verify that the chosen layout from `KeyboardLayoutService` is passed to `ExerciseConfigService` when loading categories
+- **THEN** tests verify that the chosen layout is passed to `ExerciseConfigService` when loading categories
 
-#### Scenario: Welcome-page chooser renders supported layouts
+#### Scenario: Welcome-page gear-button behavior is tested
 - **WHEN** test suites are executed
-- **THEN** tests verify that the chooser exposes the supported layouts returned by `KeyboardLayoutService`
-
-#### Scenario: Welcome-page chooser change behavior is tested
-- **WHEN** test suites are executed
-- **THEN** tests verify that changing the chooser updates `KeyboardLayoutService` and reloads categories for the new layout
+- **THEN** tests verify that the welcome page renders a gear button and routes to Settings when clicked
 
 ### Requirement: Page structure and styling
 The system SHALL provide a properly structured welcome page with navigation elements and basic styling using a compact, dense layout with smaller exercise tiles arranged in responsive multi-column rows.

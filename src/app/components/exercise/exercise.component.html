@@ -36,19 +36,6 @@
         </div>
       </section>
 
-      <section class="size-slider-shell">
-        <input
-          type="range"
-          class="size-slider"
-          [value]="streamSizeValue"
-          [attr.min]="streamSizeMin"
-          [attr.max]="streamSizeMax"
-          step="any"
-          aria-label="Adjust exercise stream size"
-          (input)="handleStreamSizeInput($event)"
-        >
-      </section>
-
       <section class="exercise-focus-stack">
         <div class="key-feedback-row">
           <p

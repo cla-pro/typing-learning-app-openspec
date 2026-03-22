@@ -4,12 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HomeButtonComponent } from '../home-button/home-button.component';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 import { ExerciseProgressService } from '../../services/exercise-progress.service';
+import { SettingsService } from '../../services/settings.service';
 
 type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
 const ZOOM_OFFSETS: readonly number[] = [-2, -1, 0, 1, 2];
-const STREAM_SIZE_STORAGE_KEY: string = 'exercise.streamSizeValue';
 const STREAM_SIZE_MIN: number = 0;
-const STREAM_SIZE_MAX: number = 1;
 const STREAM_SIZE_SCALE_SPAN: number = 0.6;
 
 @Component({
@@ -23,6 +22,7 @@ export class ExerciseComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly exerciseConfigService = inject(ExerciseConfigService);
   private readonly exerciseProgressService = inject(ExerciseProgressService);
+  private readonly settingsService = inject(SettingsService);
   @ViewChild('exerciseContent') private exerciseContentRef?: ElementRef<HTMLDivElement>;
 
   exerciseId: string = '';
@@ -78,14 +78,6 @@ export class ExerciseComponent implements OnInit {
     return this.lastPressedKey || '\u00A0';
   }
 
-  get streamSizeMin(): number {
-    return STREAM_SIZE_MIN;
-  }
-
-  get streamSizeMax(): number {
-    return STREAM_SIZE_MAX;
-  }
-
   get streamSizeScale(): number {
     return 1 + (this.streamSizeValue * STREAM_SIZE_SCALE_SPAN);
   }
@@ -128,16 +120,8 @@ export class ExerciseComponent implements OnInit {
       this.lastPressedKey = '';
       this.errorCount = 0;
       this.isLastKeyWrong = false;
-      this.streamSizeValue = this.loadPersistedStreamSize();
+      this.streamSizeValue = this.settingsService.getStreamSizeValue();
     });
-  }
-
-  handleStreamSizeInput(event: Event): void {
-    const target = event.target as HTMLInputElement | null;
-    const nextValue = Number(target?.value);
-
-    this.streamSizeValue = this.coerceStreamSizeValue(nextValue);
-    this.persistStreamSize();
   }
 
   toggleRuntimeState(): void {
@@ -193,31 +177,6 @@ export class ExerciseComponent implements OnInit {
     this.errorCount = 0;
     this.isLastKeyWrong = false;
     this.streamSizeValue = STREAM_SIZE_MIN;
-  }
-
-  private loadPersistedStreamSize(): number {
-    try {
-      const storedValue = globalThis.localStorage?.getItem(STREAM_SIZE_STORAGE_KEY);
-      return this.coerceStreamSizeValue(Number(storedValue));
-    } catch {
-      return STREAM_SIZE_MIN;
-    }
-  }
-
-  private persistStreamSize(): void {
-    try {
-      globalThis.localStorage?.setItem(STREAM_SIZE_STORAGE_KEY, this.streamSizeValue.toString());
-    } catch {
-      // Ignore storage failures and keep the in-memory value.
-    }
-  }
-
-  private coerceStreamSizeValue(value: number): number {
-    if (!Number.isFinite(value)) {
-      return STREAM_SIZE_MIN;
-    }
-
-    return Math.min(STREAM_SIZE_MAX, Math.max(STREAM_SIZE_MIN, value));
   }
 
   private focusExerciseContent(): void {

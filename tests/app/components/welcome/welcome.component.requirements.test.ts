@@ -5,7 +5,7 @@ import { WelcomeComponent } from '../../../../src/app/components/welcome/welcome
 import { ExerciseCategory, ExerciseConfig } from '../../../../src/app/models/exercise-config.model';
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
 import { ExerciseProgressService } from '../../../../src/app/services/exercise-progress.service';
-import { KeyboardLayoutService } from '../../../../src/app/services/keyboard-layout.service';
+import { SettingsService } from '../../../../src/app/services/settings.service';
 
 const exercises: ExerciseConfig[] = [
   { id: 'a', name: 'A', expectedChars: ['a'], impactedKeys: ['A'] },
@@ -32,8 +32,7 @@ const serviceStub = {
 
 const layoutServiceStub = {
   getChosenLayout: vi.fn(() => 'fr-ch'),
-  getSupportedLayouts: vi.fn(() => ['fr-ch', 'de-ch']),
-  setChosenLayout: vi.fn()
+  getSupportedLayouts: vi.fn(() => ['fr-ch', 'de-ch'])
 };
 
 let progressStub: {
@@ -48,7 +47,6 @@ describe('Welcome Component Requirements', () => {
     serviceStub.listExerciseCategories.mockClear();
     layoutServiceStub.getChosenLayout.mockClear();
     layoutServiceStub.getSupportedLayouts.mockClear();
-    layoutServiceStub.setChosenLayout.mockClear();
     layoutServiceStub.getChosenLayout.mockReturnValue('fr-ch');
     serviceStub.listExerciseCategories.mockImplementation((layout: string) => {
       if (layout === 'de-ch') {
@@ -80,7 +78,7 @@ describe('Welcome Component Requirements', () => {
           useValue: progressStub
         },
         {
-          provide: KeyboardLayoutService,
+          provide: SettingsService,
           useValue: layoutServiceStub
         }
       ]
@@ -94,10 +92,8 @@ describe('Welcome Component Requirements', () => {
     expect(component.exerciseCategories).toEqual(exerciseCategories);
   });
 
-  test('exposes supported layouts and current selection for chooser rendering', () => {
-    expect(layoutServiceStub.getSupportedLayouts).toHaveBeenCalledTimes(1);
-    expect(component.supportedLayouts).toEqual(['fr-ch', 'de-ch']);
-    expect(component.selectedLayout).toBe('fr-ch');
+  test('exposes settings route for gear-button navigation', () => {
+    expect(component.settingsRoute).toBe('/settings');
   });
 
   test('exposes grouped exercise links in category and exercise order without duplication', () => {
@@ -143,20 +139,18 @@ describe('Welcome Component Requirements', () => {
     expect(firstTile.stars).toBe(0);
   });
 
-  test('loads exercise categories using the chosen keyboard layout from KeyboardLayoutService', () => {
+  test('loads exercise categories using the chosen keyboard layout from SettingsService', () => {
     expect(layoutServiceStub.getChosenLayout).toHaveBeenCalledTimes(1);
     expect(serviceStub.listExerciseCategories).toHaveBeenCalledWith('fr-ch');
   });
 
-  test('changing the selected layout updates the service and reloads categories', () => {
+  test('loads categories for current chosen layout from settings service', () => {
     layoutServiceStub.getChosenLayout.mockReturnValue('de-ch');
 
-    component.onLayoutChange({ target: { value: 'de-ch' } } as unknown as Event);
+    const deChComponent = TestBed.runInInjectionContext(() => new WelcomeComponent());
 
-    expect(layoutServiceStub.setChosenLayout).toHaveBeenCalledWith('de-ch');
     expect(serviceStub.listExerciseCategories).toHaveBeenLastCalledWith('de-ch');
-    expect(component.selectedLayout).toBe('de-ch');
-    expect(component.exerciseCategories.map(category => category.name)).toEqual(['German Group']);
-    expect(component.exerciseCategoriesWithProgress[0]?.exercises.map(exercise => exercise.name)).toEqual(['C']);
+    expect(deChComponent.exerciseCategories.map(category => category.name)).toEqual(['German Group']);
+    expect(deChComponent.exerciseCategoriesWithProgress[0]?.exercises.map(exercise => exercise.name)).toEqual(['C']);
   });
 });

@@ -1,12 +1,15 @@
 <main class="welcome-container">
   <div class="welcome-content">
-    <h1>Typing Learning</h1>
+    <a
+      class="settings-link"
+      [routerLink]="settingsRoute"
+      aria-label="Open settings"
+      title="Settings"
+    >
+      &#9881;
+    </a>
 
-    <select id="layout-chooser" class="layout-chooser" (change)="onLayoutChange($event)">
-      @for (layout of supportedLayouts; track layout) {
-        <option [value]="layout" [selected]="layout === selectedLayout">{{ layout }}</option>
-      }
-    </select>
+    <h1>Typing Learning</h1>
 
     <nav class="exercises-nav">
       @for (category of exerciseCategoriesWithProgress; track category.name) {

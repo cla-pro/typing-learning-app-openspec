@@ -8,6 +8,7 @@
 }
 
 .welcome-content {
+  position: relative;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -15,19 +16,32 @@
   text-align: center;
 }
 
+.settings-link {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 1.15rem;
+  border: 1px solid #d5dde4;
+  background-color: #ffffff;
+}
+
+.settings-link:hover {
+  background-color: #eef3f7;
+}
+
 h1 {
   font-size: 3rem;
   margin-bottom: 1.5rem;
   color: #2c3e50;
   font-weight: 700;
-}
-
-.layout-chooser {
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #2c3e50;
-  font: inherit;
 }
 
 .exercises-nav {

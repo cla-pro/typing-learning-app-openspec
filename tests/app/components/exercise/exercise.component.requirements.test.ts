@@ -5,9 +5,8 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { ExerciseComponent } from '../../../../src/app/components/exercise/exercise.component';
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
 import { ExerciseProgressService } from '../../../../src/app/services/exercise-progress.service';
+import { SettingsService } from '../../../../src/app/services/settings.service';
 import { TestBed } from '@angular/core/testing';
-
-const STREAM_SIZE_STORAGE_KEY = 'exercise.streamSizeValue';
 
 describe('Exercise Component Requirements', () => {
   let component: ExerciseComponent;
@@ -15,6 +14,9 @@ describe('Exercise Component Requirements', () => {
   let serviceStub: { getExerciseById: ReturnType<typeof vi.fn> };
   let routerStub: { navigate: ReturnType<typeof vi.fn> };
   let progressStub: { recordCompletion: ReturnType<typeof vi.fn> };
+  let settingsStub: {
+    getStreamSizeValue: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
     globalThis.localStorage?.clear();
@@ -42,6 +44,10 @@ describe('Exercise Component Requirements', () => {
       recordCompletion: vi.fn()
     };
 
+    settingsStub = {
+      getStreamSizeValue: vi.fn(() => 0)
+    };
+
     const routeStub = {
       paramMap: paramMap$.asObservable()
     } as ActivatedRoute;
@@ -63,6 +69,10 @@ describe('Exercise Component Requirements', () => {
         {
           provide: Router,
           useValue: routerStub
+        },
+        {
+          provide: SettingsService,
+          useValue: settingsStub
         }
       ]
     }).compileComponents();
@@ -88,33 +98,24 @@ describe('Exercise Component Requirements', () => {
     expect(routerStub.navigate).not.toHaveBeenCalled();
   });
 
-  test('updates stream size linearly and persists the chosen value', () => {
-    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
-
-    component.handleStreamSizeInput({
-      target: {
-        value: '0.5'
-      }
-    } as unknown as Event);
-
-    expect(component.streamSizeValue).toBe(0.5);
-    expect(component.streamSizeScale).toBe(1.3);
-    expect(globalThis.localStorage?.getItem(STREAM_SIZE_STORAGE_KEY)).toBe('0.5');
-  });
-
-  test('restores persisted stream size and falls back to baseline for invalid values', () => {
-    globalThis.localStorage?.setItem(STREAM_SIZE_STORAGE_KEY, '0.4');
+  test('loads stream size from settings service when exercise opens', () => {
+    settingsStub.getStreamSizeValue.mockReturnValue(0.4);
 
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
 
     expect(component.streamSizeValue).toBe(0.4);
     expect(component.streamSizeScale).toBe(1.24);
+  });
 
-    globalThis.localStorage?.setItem(STREAM_SIZE_STORAGE_KEY, 'invalid');
+  test('applies updated stream size value when next exercise is opened', () => {
+    settingsStub.getStreamSizeValue.mockReturnValueOnce(0.2).mockReturnValueOnce(0.7);
+
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    expect(component.streamSizeValue).toBe(0.2);
 
-    expect(component.streamSizeValue).toBe(0);
-    expect(component.streamSizeScale).toBe(1);
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    expect(component.streamSizeValue).toBe(0.7);
+    expect(component.streamSizeScale).toBe(1.42);
   });
 
   test('transitions runtime state and label on primary toggle', () => {

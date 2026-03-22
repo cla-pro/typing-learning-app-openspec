@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ExerciseCategory } from '../../models/exercise-config.model';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 import { ExerciseProgressService } from '../../services/exercise-progress.service';
-import { KeyboardLayoutService } from '../../services/keyboard-layout.service';
+import { SettingsService } from '../../services/settings.service';
 
 export interface ExerciseTile {
   id: string;
@@ -27,34 +27,20 @@ export interface ExerciseCategoryWithProgress {
 export class WelcomeComponent {
   private readonly exerciseConfigService = inject(ExerciseConfigService);
   private readonly exerciseProgressService = inject(ExerciseProgressService);
-  private readonly keyboardLayoutService = inject(KeyboardLayoutService);
+  private readonly settingsService = inject(SettingsService);
 
-  supportedLayouts: string[];
-  selectedLayout: string;
+  readonly settingsRoute: string = '/settings';
   exerciseCategories: ExerciseCategory[];
   exerciseCategoriesWithProgress: ExerciseCategoryWithProgress[];
 
   constructor() {
-    this.supportedLayouts = this.keyboardLayoutService.getSupportedLayouts();
-    this.selectedLayout = this.keyboardLayoutService.getChosenLayout();
     this.exerciseCategories = [];
     this.exerciseCategoriesWithProgress = [];
-    this.reloadCategories(this.selectedLayout);
+    this.reloadCategories();
   }
 
-  onLayoutChange(event: Event): void {
-    const nextLayout = (event.target as HTMLSelectElement | null)?.value;
-
-    if (!nextLayout) {
-      return;
-    }
-
-    this.keyboardLayoutService.setChosenLayout(nextLayout);
-    this.selectedLayout = this.keyboardLayoutService.getChosenLayout();
-    this.reloadCategories(this.selectedLayout);
-  }
-
-  private reloadCategories(layout: string): void {
+  private reloadCategories(): void {
+    const layout = this.settingsService.getChosenLayout();
     this.exerciseCategories = this.exerciseConfigService.listExerciseCategories(layout);
     this.exerciseCategoriesWithProgress = this.exerciseCategories.map(category => ({
       name: category.name,

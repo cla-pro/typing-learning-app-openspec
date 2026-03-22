@@ -1,8 +1,4 @@
-## Purpose
-
-User-adjustable exercise stream sizing and persistence behavior for the exercise page.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Exercise stream size is user-adjustable
 The system SHALL provide stream-size configuration through the Settings page instead of a slider on the exercise page, and SHALL apply the selected size when an exercise page is opened.

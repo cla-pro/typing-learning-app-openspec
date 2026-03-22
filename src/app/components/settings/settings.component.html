@@ -1,0 +1,37 @@
+<app-home-button></app-home-button>
+
+<main class="settings-container">
+  <div class="settings-content">
+    <h1>Settings</h1>
+
+    <ul class="settings-list">
+      <li class="setting-item">
+        <label for="settings-layout" class="setting-label">Keyboard layout</label>
+        <select
+          id="settings-layout"
+          class="setting-control"
+          (change)="onLayoutChange($event)"
+        >
+          @for (layout of supportedLayouts; track layout) {
+            <option [value]="layout" [selected]="layout === selectedLayout">{{ layout }}</option>
+          }
+        </select>
+      </li>
+
+      <li class="setting-item">
+        <label for="settings-stream-size" class="setting-label">Stream size</label>
+        <input
+          id="settings-stream-size"
+          type="range"
+          class="setting-control"
+          [value]="streamSizeValue"
+          [attr.min]="streamSizeMin"
+          [attr.max]="streamSizeMax"
+          step="any"
+          aria-label="Adjust expected-character stream size"
+          (input)="onStreamSizeInput($event)"
+        >
+      </li>
+    </ul>
+  </div>
+</main>

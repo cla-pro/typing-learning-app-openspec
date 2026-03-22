@@ -1,17 +1,22 @@
 import { routes } from '../../../src/app/routing/app.routes';
 import { ExerciseNotFoundComponent } from '../../../src/app/components/exercise-not-found/exercise-not-found.component';
+import { SettingsComponent } from '../../../src/app/components/settings/settings.component';
 
 import { expect, describe, test } from 'vitest'
 
 describe('Routing Requirements', () => {
-  test('exposes root, exercise, exercise-not-found, and wildcard route behavior through route config', () => {
+  test('exposes root, settings, exercise, exercise-not-found, and wildcard route behavior through route config', () => {
     const rootRoute = routes.find(route => route.path === '');
+    const settingsRoute = routes.find(route => route.path === 'settings');
     const exerciseNotFoundRoute = routes.find(route => route.path === 'exercices/not-found');
     const exerciseRoute = routes.find(route => route.path === 'exercices/:id');
     const wildcardRoute = routes.find(route => route.path === '**');
 
     expect(rootRoute).toBeDefined();
     expect(rootRoute?.component).toBeDefined();
+
+    expect(settingsRoute).toBeDefined();
+    expect(settingsRoute?.component).toBe(SettingsComponent);
 
     expect(exerciseNotFoundRoute).toBeDefined();
     expect(exerciseNotFoundRoute?.component).toBe(ExerciseNotFoundComponent);

@@ -106,17 +106,6 @@
   font-weight: 700;
 }
 
-.size-slider-shell {
-  width: min(100%, 24rem);
-  margin-bottom: 0.25rem;
-}
-
-.size-slider {
-  width: 100%;
-  margin: 0;
-  accent-color: #2c3e50;
-}
-
 .exercise-focus-stack {
   display: flex;
   flex-direction: column;
