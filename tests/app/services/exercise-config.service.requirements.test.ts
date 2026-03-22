@@ -19,29 +19,29 @@ describe('ExerciseConfigService Requirements', () => {
     expect(categories.map(category => category.name))
       .toContain('Lower Line');
     expect(categories[0]?.exercises.map(exercise => exercise.id)).toEqual([
-      'middle-line-fj',
-      'middle-line-dk',
-      'middle-line-sl',
-      'middle-line-gh',
-      'middle-line-all-1',
-      'middle-line-all-2'
+      'fr-ch-middle-line-fj',
+      'fr-ch-middle-line-dk',
+      'fr-ch-middle-line-sl',
+      'fr-ch-middle-line-gh',
+      'fr-ch-middle-line-all-1',
+      'fr-ch-middle-line-all-2'
     ]);
     expect(categories[1]?.exercises.map(exercise => exercise.id)).toEqual([
-      'upper-line-tz',
-      'upper-line-ru',
-      'upper-line-ei',
-      'upper-line-wo',
-      'upper-line-qp',
-      'upper-line-all-1',
-      'upper-line-all-2'
+      'fr-ch-upper-line-tz',
+      'fr-ch-upper-line-ru',
+      'fr-ch-upper-line-ei',
+      'fr-ch-upper-line-wo',
+      'fr-ch-upper-line-qp',
+      'fr-ch-upper-line-all-1',
+      'fr-ch-upper-line-all-2'
     ]);
 
     const flattenedExerciseIds = categories.flatMap(category =>
       category.exercises.map(exercise => exercise.id)
     );
-    expect(flattenedExerciseIds).toContain('middle-line-fj');
-    expect(flattenedExerciseIds).toContain('upper-line-all-1');
-    expect(flattenedExerciseIds).toContain('lower-line-vbn');
+    expect(flattenedExerciseIds).toContain('fr-ch-middle-line-fj');
+    expect(flattenedExerciseIds).toContain('fr-ch-upper-line-all-1');
+    expect(flattenedExerciseIds).toContain('fr-ch-lower-line-vbn');
     expect(new Set(flattenedExerciseIds).size).toBe(flattenedExerciseIds.length);
   });
 
@@ -59,10 +59,10 @@ describe('ExerciseConfigService Requirements', () => {
   });
 
   test('returns exercise configuration by id', () => {
-    const config = service.getExerciseById('middle-line-fj');
+    const config = service.getExerciseById('fr-ch-middle-line-fj');
 
     expect(config).toBeDefined();
-    expect(config?.id).toBe('middle-line-fj');
+    expect(config?.id).toBe('fr-ch-middle-line-fj');
     expect(config?.name).toContain('F / J');
     expect(config?.expectedChars.length).toBeGreaterThan(0);
   });
@@ -87,6 +87,9 @@ describe('ExerciseConfigService Requirements', () => {
     expect(categoriesForUnknown).toEqual([]);
 
     const categoriesForDeCh = service.listExerciseCategories('de-ch');
-    expect(categoriesForDeCh).toEqual([]);
+    expect(categoriesForDeCh.length).toBeGreaterThan(0);
+    for (const category of categoriesForDeCh) {
+      expect(category.keyboardLayouts).toContain('de-ch');
+    }
   });
 });

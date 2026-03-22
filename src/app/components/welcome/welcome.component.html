@@ -2,9 +2,9 @@
   <div class="welcome-content">
     <h1>Typing Learning</h1>
 
-    <select id="layout-chooser" class="layout-chooser" [value]="selectedLayout" (change)="onLayoutChange($event)">
+    <select id="layout-chooser" class="layout-chooser" (change)="onLayoutChange($event)">
       @for (layout of supportedLayouts; track layout) {
-        <option [value]="layout">{{ layout }}</option>
+        <option [value]="layout" [selected]="layout === selectedLayout">{{ layout }}</option>
       }
     </select>
 
