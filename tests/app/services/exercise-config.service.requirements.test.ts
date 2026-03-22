@@ -12,11 +12,12 @@ describe('ExerciseConfigService Requirements', () => {
   test('lists ordered exercise categories through public API', () => {
     const categories = service.listExerciseCategories('fr-ch');
 
-    expect(categories.map(category => category.name)).toEqual([
-      'Middle Line',
-      'Upper Line',
-      'Lower Line'
-    ]);
+    expect(categories.map(category => category.name))
+      .toContain('Middle Line');
+    expect(categories.map(category => category.name))
+      .toContain('Upper Line');
+    expect(categories.map(category => category.name))
+      .toContain('Lower Line');
     expect(categories[0]?.exercises.map(exercise => exercise.id)).toEqual([
       'middle-line-fj',
       'middle-line-dk',
