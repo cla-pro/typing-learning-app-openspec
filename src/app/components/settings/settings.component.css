@@ -57,7 +57,26 @@ h1 {
 input[type='range'].setting-control {
   padding: 0;
   border: none;
+  /* accent-color applies on non-WebKit browsers; WebKit uses the pseudo-elements below */
   accent-color: #2c3e50;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type='range'].setting-control::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #b2bec3;
+}
+
+input[type='range'].setting-control::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  /* Mirrors accent-color (#2c3e50) used for non-WebKit browsers */
+  background: #2c3e50;
+  margin-top: -7px;
 }
 
 @media (max-width: 768px) {
