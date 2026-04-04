@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { SUPPORTED_KEYBOARD_LAYOUT_IDS } from '../data/keyboard-layouts';
+
 const STREAM_SIZE_MIN: number = 0;
 const STREAM_SIZE_MAX: number = 1;
 
@@ -8,7 +10,7 @@ export class SettingsService {
   private static readonly LAYOUT_STORAGE_KEY = 'layout.selected';
   private static readonly STREAM_SIZE_STORAGE_KEY = 'exercise.streamSizeValue';
 
-  private readonly supportedLayouts = ['fr-ch', 'de-ch'];
+  private readonly supportedLayouts = SUPPORTED_KEYBOARD_LAYOUT_IDS;
   private chosenLayout = this.readInitialLayout();
   private streamSizeValue = this.readInitialStreamSize();
 

@@ -57,6 +57,11 @@
         >
           {{ runtimeActionLabel }}
         </button>
+
+        <app-keyboard-display
+          [selectedLayout]="chosenLayout"
+          [impactedKeys]="impactedKeys"
+        ></app-keyboard-display>
       </section>
     </section>
   </div>

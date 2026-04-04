@@ -16,6 +16,7 @@ describe('Exercise Component Requirements', () => {
   let progressStub: { recordCompletion: ReturnType<typeof vi.fn> };
   let settingsStub: {
     getStreamSizeValue: ReturnType<typeof vi.fn>;
+    getChosenLayout: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
@@ -45,7 +46,8 @@ describe('Exercise Component Requirements', () => {
     };
 
     settingsStub = {
-      getStreamSizeValue: vi.fn(() => 0)
+      getStreamSizeValue: vi.fn(() => 0),
+      getChosenLayout: vi.fn(() => 'fr-ch')
     };
 
     const routeStub = {
@@ -105,6 +107,14 @@ describe('Exercise Component Requirements', () => {
 
     expect(component.streamSizeValue).toBe(0.4);
     expect(component.streamSizeScale).toBe(1.24);
+  });
+
+  test('loads selected keyboard layout from settings service when exercise opens', () => {
+    settingsStub.getChosenLayout.mockReturnValue('de-ch');
+
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.chosenLayout).toBe('de-ch');
   });
 
   test('applies updated stream size value when next exercise is opened', () => {
@@ -488,4 +498,5 @@ describe('Exercise Component Requirements', () => {
     component.toggleRuntimeState();
     expect(progressStub.recordCompletion).not.toHaveBeenCalled();
   });
+
 });

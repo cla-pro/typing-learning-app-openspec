@@ -1,97 +1,40 @@
-import { beforeEach, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
-import { SettingsService } from '../../../src/app/services/settings.service';
+import { KeyboardLayoutService } from '../../../src/app/services/keyboard-layout.service';
 
-describe('SettingsService Requirements', () => {
-  let service: SettingsService;
+describe('KeyboardLayoutService Requirements', () => {
+  test('returns fr-ch and de-ch as supported layouts', () => {
+    const service = new KeyboardLayoutService();
 
-  beforeEach(() => {
-    localStorage.clear();
-    service = new SettingsService();
+    expect(service.getSupportedLayouts()).toEqual(['fr-ch', 'de-ch']);
   });
 
-  test('returns fr-ch and de-ch as the initial supported layouts', () => {
-    const layouts = service.getSupportedLayouts();
+  test('returns raw row-and-key keymap data for a supported layout', () => {
+    const service = new KeyboardLayoutService();
 
-    expect(layouts).toEqual(['fr-ch', 'de-ch']);
+    const keymap = service.getKeymap('fr-ch');
+
+    expect(keymap).not.toBeNull();
+    expect(keymap?.id).toBe('fr-ch');
+    expect(Array.isArray(keymap?.rows)).toBe(true);
+    expect(keymap?.rows.length).toBeGreaterThan(0);
+    expect(keymap?.rows[0]?.keys.length).toBeGreaterThan(0);
   });
 
-  test('returns fr-ch as the initial chosen layout', () => {
-    const chosen = service.getChosenLayout();
+  test('returns null for unsupported layout keymap request', () => {
+    const service = new KeyboardLayoutService();
 
-    expect(chosen).toBe('fr-ch');
+    expect(service.getKeymap('unsupported-layout')).toBeNull();
   });
 
-  test('chosen layout is one of the supported layouts', () => {
-    const supported = service.getSupportedLayouts();
-    const chosen = service.getChosenLayout();
+  test('raw keymap includes visible non-typing keys', () => {
+    const service = new KeyboardLayoutService();
+    const keymap = service.getKeymap('de-ch');
+    const values = keymap?.rows.flatMap(row => row.keys.map(key => key.value)) ?? [];
 
-    expect(supported).toContain(chosen);
-  });
-
-  test('restores a persisted supported chosen layout', () => {
-    localStorage.setItem('layout.selected', 'de-ch');
-
-    const restoredService = new SettingsService();
-
-    expect(restoredService.getChosenLayout()).toBe('de-ch');
-  });
-
-  test('falls back to fr-ch for an unsupported persisted layout', () => {
-    localStorage.setItem('layout.selected', 'invalid-layout');
-
-    const restoredService = new SettingsService();
-
-    expect(restoredService.getChosenLayout()).toBe('fr-ch');
-  });
-
-  test('updates and persists the chosen layout for supported values', () => {
-    service.setChosenLayout('de-ch');
-
-    expect(service.getChosenLayout()).toBe('de-ch');
-    expect(localStorage.getItem('layout.selected')).toBe('de-ch');
-  });
-
-  test('ignores unsupported chosen layout updates', () => {
-    service.setChosenLayout('de-ch');
-    service.setChosenLayout('unsupported-layout');
-
-    expect(service.getChosenLayout()).toBe('de-ch');
-    expect(localStorage.getItem('layout.selected')).toBe('de-ch');
-  });
-
-  test('returns baseline stream size by default', () => {
-    expect(service.getStreamSizeValue()).toBe(0);
-  });
-
-  test('restores persisted stream size and keeps existing key name', () => {
-    localStorage.setItem('exercise.streamSizeValue', '0.4');
-
-    const restoredService = new SettingsService();
-
-    expect(restoredService.getStreamSizeValue()).toBe(0.4);
-  });
-
-  test('falls back to baseline for invalid persisted stream size', () => {
-    localStorage.setItem('exercise.streamSizeValue', 'invalid');
-
-    const restoredService = new SettingsService();
-
-    expect(restoredService.getStreamSizeValue()).toBe(0);
-  });
-
-  test('updates and persists stream size for valid values', () => {
-    service.setStreamSizeValue(0.5);
-
-    expect(service.getStreamSizeValue()).toBe(0.5);
-    expect(localStorage.getItem('exercise.streamSizeValue')).toBe('0.5');
-  });
-
-  test('clamps stream size updates to supported range', () => {
-    service.setStreamSizeValue(-1);
-    expect(service.getStreamSizeValue()).toBe(0);
-
-    service.setStreamSizeValue(2);
-    expect(service.getStreamSizeValue()).toBe(1);
+    expect(values).toContain('TAB');
+    expect(values).toContain('SHIFT');
+    expect(values).toContain('ENTER');
+    expect(values).toContain(' ');
   });
 });

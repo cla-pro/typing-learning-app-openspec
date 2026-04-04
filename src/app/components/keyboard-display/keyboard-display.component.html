@@ -1,0 +1,19 @@
+<section class="keyboard-display" aria-label="Keyboard layout display">
+  @if (keymap; as resolvedKeymap) {
+    @for (row of resolvedKeymap.rows; track $index) {
+      <div class="keyboard-row">
+        @for (key of row.keys; track $index) {
+          <span
+            class="keyboard-key"
+            [class.keyboard-key-disabled]="!isKeyEnabled(key)"
+            [class.keyboard-key-wide]="key.width === 'wide'"
+            [class.keyboard-key-extra-wide]="key.width === 'extra-wide'"
+            [attr.data-key-value]="key.value"
+          >
+            {{ key.label }}
+          </span>
+        }
+      </div>
+    }
+  }
+</section>

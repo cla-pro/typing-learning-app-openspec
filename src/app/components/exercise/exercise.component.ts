@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
+import { KeyboardDisplayComponent } from '../keyboard-display/keyboard-display.component';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
 import { ExerciseProgressService } from '../../services/exercise-progress.service';
 import { SettingsService } from '../../services/settings.service';
@@ -13,7 +14,7 @@ const STREAM_SIZE_SCALE_SPAN: number = 0.6;
 
 @Component({
     selector: 'app-exercise',
-  imports: [HomeButtonComponent],
+  imports: [HomeButtonComponent, KeyboardDisplayComponent],
     templateUrl: './exercise.component.html',
     styleUrls: ['./exercise.component.css']
 })
@@ -30,6 +31,7 @@ export class ExerciseComponent implements OnInit {
   expectedCharsToDisplay: string[] = [];
   activeExpectedCharIndex: number = 0;
   impactedKeys: string[] = [];
+  chosenLayout: string = 'fr-ch';
   exerciseRuntimeState: ExerciseRuntimeState = 'opened';
   lastPressedKey: string = '';
   errorCount: number = 0;
@@ -116,6 +118,7 @@ export class ExerciseComponent implements OnInit {
       this.expectedCharsToDisplay = exerciseConfig.expectedChars;
       this.activeExpectedCharIndex = 0;
       this.impactedKeys = exerciseConfig.impactedKeys;
+      this.chosenLayout = this.settingsService.getChosenLayout();
       this.exerciseRuntimeState = 'opened';
       this.lastPressedKey = '';
       this.errorCount = 0;
@@ -172,6 +175,7 @@ export class ExerciseComponent implements OnInit {
     this.expectedCharsToDisplay = [];
     this.activeExpectedCharIndex = 0;
     this.impactedKeys = [];
+    this.chosenLayout = 'fr-ch';
     this.exerciseRuntimeState = 'opened';
     this.lastPressedKey = '';
     this.errorCount = 0;
