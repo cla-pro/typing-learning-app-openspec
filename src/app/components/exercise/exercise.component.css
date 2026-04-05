@@ -113,6 +113,12 @@
   width: 100%;
 }
 
+.control-panel {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .error-counter {
   color: #e74c3c;
   font-weight: 700;

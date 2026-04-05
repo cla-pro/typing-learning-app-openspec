@@ -37,16 +37,17 @@
       </section>
 
       <section class="exercise-focus-stack">
-        <span class="error-counter" aria-live="polite" aria-label="Error count">{{ errorCount }} errors</span>
-
-        <button
-          type="button"
-          class="runtime-button"
-          (click)="toggleRuntimeState()"
-          [disabled]="isRuntimeControlDisabled"
-        >
-          {{ runtimeActionLabel }}
-        </button>
+        <div class="control-panel">
+          <button
+            type="button"
+            class="runtime-button"
+            (click)="toggleRuntimeState()"
+            [disabled]="isRuntimeControlDisabled"
+          >
+            {{ runtimeActionLabel }}
+          </button>
+          <span class="error-counter" aria-live="polite" aria-label="Error count">{{ errorCount }} errors</span>
+        </div>
 
         <app-keyboard-display
           [selectedLayout]="chosenLayout"

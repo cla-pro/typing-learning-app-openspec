@@ -138,11 +138,11 @@ The system SHALL capture keyboard input during the `running` state and display t
 - **THEN** key input does not update the displayed pressed character value
 
 ### Requirement: Exercise page displays runtime error count and error-state feedback
-The system SHALL display a running-state error counter on the exercise page, SHALL render that counter in red text to the right of the pressed-key feedback section, and SHALL visually mark pressed-key feedback as an error state after wrong input until the next correct input.
+The system SHALL display a running-state error counter on the exercise page in the control panel row alongside the start/pause button, SHALL render that counter in red text, and SHALL visually mark pressed-key feedback as an error state after wrong input until the next correct input.
 
-#### Scenario: Error counter is shown to the right of pressed-key feedback
+#### Scenario: Error counter is displayed in the control panel row beside the start/pause button
 - **WHEN** a valid exercise page is rendered
-- **THEN** an error counter is visible in the same feedback row as pressed-key feedback and positioned on its right side
+- **THEN** an error counter is visible in the same row as the start/pause button
 
 #### Scenario: Error counter uses red text styling
 - **WHEN** the error counter is displayed
@@ -169,7 +169,7 @@ The system SHALL include automated tests that verify observable UI and runtime b
 
 #### Scenario: Counter placement and styling are tested
 - **WHEN** exercise component requirements tests are executed
-- **THEN** tests verify the error counter is rendered to the right of pressed-key feedback and uses red text styling
+- **THEN** tests verify the error counter is rendered in the control panel row beside the start/pause button and uses red text styling
 
 #### Scenario: Error feedback style transition is tested
 - **WHEN** exercise component requirements tests are executed
