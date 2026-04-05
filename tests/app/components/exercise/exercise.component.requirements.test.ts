@@ -344,15 +344,25 @@ describe('Exercise Component Requirements', () => {
     expect(component.exerciseRuntimeState).toBe('completed');
   });
 
-  test('exposes a blank pressed-key display until a running key press is captured', () => {
+  test('correct key press sets isLastKeyWrong to false for green keyboard highlight', () => {
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
-
-    expect(component.displayedPressedKey).toBe('\u00A0');
-
     component.toggleRuntimeState();
-    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
 
-    expect(component.displayedPressedKey).toBe('b');
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.isLastKeyWrong).toBe(true);
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    expect(component.isLastKeyWrong).toBe(false);
+    expect(component.lastPressedKey).toBe('a');
+  });
+
+  test('wrong key press sets isLastKeyWrong to true for red keyboard highlight', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    expect(component.isLastKeyWrong).toBe(true);
+    expect(component.lastPressedKey).toBe('x');
   });
 
   test('keeps the runtime control enabled until completion and then disables it', () => {

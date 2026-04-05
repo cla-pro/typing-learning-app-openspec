@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { SUPPORTED_KEYBOARD_LAYOUT_IDS } from '../data/keyboard-layouts';
 
 const STREAM_SIZE_MIN: number = 0;
-const STREAM_SIZE_MAX: number = 1;
+const STREAM_SIZE_MAX: number = 1.5;
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {

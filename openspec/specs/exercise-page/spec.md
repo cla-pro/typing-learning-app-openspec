@@ -27,10 +27,6 @@ The system SHALL render exercise-page content based on configuration resolved fr
 - **WHEN** the exercise page is rendered
 - **THEN** a size slider is displayed between the stream visualization and the pressed-key feedback area
 
-#### Scenario: Last pressed key is displayed as focused feedback beneath the stream visualization
-- **WHEN** the exercise page is rendered
-- **THEN** the last pressed key feedback is displayed beneath the stream and zoomed area as an unlabeled centered focus box
-
 #### Scenario: Single primary runtime control is displayed beneath pressed-key feedback
 - **WHEN** the exercise page is rendered
 - **THEN** exactly one primary runtime control is displayed beneath the pressed-key feedback area
@@ -225,3 +221,17 @@ The system SHALL render keyboard content on the exercise page by composing `Keyb
 #### Scenario: Exercise page uses dedicated keyboard component
 - **WHEN** a valid exercise page is rendered
 - **THEN** the page composes `KeyboardDisplayComponent` to display the layout-aware keyboard beneath the runtime controls
+
+### Requirement: Exercise page passes key-press feedback to keyboard display
+The system SHALL pass the last pressed key value and its correctness state from `ExerciseComponent` to `KeyboardDisplayComponent`, so the keyboard can render the highlight without `ExerciseComponent` duplicating display logic.
+
+#### Scenario: Last pressed key and correctness state are bound to keyboard inputs
+- **WHEN** the exercise page is rendered
+- **THEN** `<app-keyboard-display>` receives `lastPressedKey` and `isLastKeyWrong` bound from `ExerciseComponent` state
+
+### Requirement: Exercise page stream size maximum is increased
+The system SHALL allow the exercise stream to be scaled up to a larger maximum, made possible by the vertical space reclaimed from removing the key-press feedback label.
+
+#### Scenario: Stream size maximum is raised
+- **WHEN** `SettingsService.getStreamSizeMax()` is called
+- **THEN** the returned value is `1.5`

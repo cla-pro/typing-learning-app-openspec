@@ -76,10 +76,6 @@ export class ExerciseComponent implements OnInit {
     return this.exerciseRuntimeState === 'completed';
   }
 
-  get displayedPressedKey(): string {
-    return this.lastPressedKey || '\u00A0';
-  }
-
   get streamSizeScale(): number {
     return 1 + (this.streamSizeValue * STREAM_SIZE_SCALE_SPAN);
   }

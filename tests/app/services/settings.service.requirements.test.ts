@@ -92,6 +92,6 @@ describe('SettingsService Requirements', () => {
     expect(service.getStreamSizeValue()).toBe(0);
 
     service.setStreamSizeValue(2);
-    expect(service.getStreamSizeValue()).toBe(1);
+    expect(service.getStreamSizeValue()).toBe(1.5);
   });
 });

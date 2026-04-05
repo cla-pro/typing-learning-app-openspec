@@ -13,6 +13,8 @@ export class KeyboardDisplayComponent {
 
   @Input() selectedLayout: string = 'fr-ch';
   @Input() impactedKeys: string[] = [];
+  @Input() lastPressedKey: string = '';
+  @Input() isLastKeyWrong: boolean = false;
 
   get keymap(): KeyboardLayoutKeymap | null {
     return this.keyboardLayoutService.getKeymap(this.selectedLayout);
@@ -20,5 +22,9 @@ export class KeyboardDisplayComponent {
 
   isKeyEnabled(key: KeyboardKey): boolean {
     return this.impactedKeys.includes(key.value);
+  }
+
+  isKeyPressed(key: KeyboardKey): boolean {
+    return this.lastPressedKey !== '' && key.value.toLowerCase() === this.lastPressedKey.toLowerCase();
   }
 }

@@ -35,4 +35,29 @@ describe('KeyboardDisplayComponent Requirements', () => {
     expect(component.isKeyEnabled(activeA)).toBe(true);
     expect(component.isKeyEnabled(inactiveQ)).toBe(false);
   });
+
+  test('isKeyPressed returns true for matching key value and false for non-matching', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+
+    component.lastPressedKey = 'a';
+
+    expect(component.isKeyPressed({ value: 'a', label: 'A' })).toBe(true);
+    expect(component.isKeyPressed({ value: 'b', label: 'B' })).toBe(false);
+  });
+
+  test('isKeyPressed matches case-insensitively to handle Shift and Caps Lock modifiers', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+
+    component.lastPressedKey = 'A';
+    expect(component.isKeyPressed({ value: 'a', label: 'A' })).toBe(true);
+
+    component.lastPressedKey = 'a';
+    expect(component.isKeyPressed({ value: 'A', label: 'A' })).toBe(true);
+  });
+
+  test('isKeyPressed returns false when no key has been pressed', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+
+    expect(component.isKeyPressed({ value: 'a', label: 'A' })).toBe(false);
+  });
 });

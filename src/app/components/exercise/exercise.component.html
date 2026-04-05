@@ -37,17 +37,7 @@
       </section>
 
       <section class="exercise-focus-stack">
-        <div class="key-feedback-row">
-          <p
-            class="key-display-box"
-            [class.key-display-error]="isLastKeyWrong"
-            aria-live="polite"
-            aria-label="Last key pressed while running"
-          >
-            {{ displayedPressedKey }}
-          </p>
-          <span class="error-counter" aria-live="polite" aria-label="Error count">{{ errorCount }} errors</span>
-        </div>
+        <span class="error-counter" aria-live="polite" aria-label="Error count">{{ errorCount }} errors</span>
 
         <button
           type="button"
@@ -61,6 +51,8 @@
         <app-keyboard-display
           [selectedLayout]="chosenLayout"
           [impactedKeys]="impactedKeys"
+          [lastPressedKey]="lastPressedKey"
+          [isLastKeyWrong]="isLastKeyWrong"
         ></app-keyboard-display>
       </section>
     </section>

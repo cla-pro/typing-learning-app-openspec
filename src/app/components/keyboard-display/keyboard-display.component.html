@@ -8,6 +8,8 @@
             [class.keyboard-key-disabled]="!isKeyEnabled(key)"
             [class.keyboard-key-wide]="key.width === 'wide'"
             [class.keyboard-key-extra-wide]="key.width === 'extra-wide'"
+            [class.keyboard-key-pressed-correct]="isKeyPressed(key) && !isLastKeyWrong"
+            [class.keyboard-key-pressed-wrong]="isKeyPressed(key) && isLastKeyWrong"
             [attr.data-key-value]="key.value"
           >
             {{ key.label }}
