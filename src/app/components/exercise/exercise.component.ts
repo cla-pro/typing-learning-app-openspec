@@ -11,6 +11,7 @@ type ExerciseRuntimeState = 'opened' | 'running' | 'pending' | 'completed';
 const ZOOM_OFFSETS: readonly number[] = [-2, -1, 0, 1, 2];
 const STREAM_SIZE_MIN: number = 0;
 const STREAM_SIZE_SCALE_SPAN: number = 0.6;
+const MODIFIER_KEYS = new Set(['Shift', 'Control', 'Alt', 'AltGraph', 'CapsLock', 'Meta', 'OS']);
 
 @Component({
     selector: 'app-exercise',
@@ -36,6 +37,8 @@ export class ExerciseComponent implements OnInit {
   lastPressedKey: string = '';
   errorCount: number = 0;
   isLastKeyWrong: boolean = false;
+  isShiftActive: boolean = false;
+  isAltGrActive: boolean = false;
   streamSizeValue: number = STREAM_SIZE_MIN;
   private hasValidExercise: boolean = false;
 
@@ -137,7 +140,14 @@ export class ExerciseComponent implements OnInit {
   }
 
   handleExerciseKeydown(event: KeyboardEvent): void {
+    this.isShiftActive = !!event.shiftKey;
+    this.isAltGrActive = event.getModifierState?.('AltGraph') ?? false;
+
     if (!this.isExerciseRunning) {
+      return;
+    }
+
+    if (MODIFIER_KEYS.has(event.key)) {
       return;
     }
 
@@ -159,6 +169,11 @@ export class ExerciseComponent implements OnInit {
     }
 
     this.activeExpectedCharIndex += 1;
+  }
+
+  handleExerciseKeyup(event: KeyboardEvent): void {
+    this.isShiftActive = !!event.shiftKey;
+    this.isAltGrActive = event.getModifierState?.('AltGraph') ?? false;
   }
 
   private hasValidExpectedChars(expectedChars: string[]): boolean {

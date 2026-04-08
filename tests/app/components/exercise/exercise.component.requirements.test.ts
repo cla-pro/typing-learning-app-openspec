@@ -509,4 +509,53 @@ describe('Exercise Component Requirements', () => {
     expect(progressStub.recordCompletion).not.toHaveBeenCalled();
   });
 
+  test('modifier key press during running state does not increment error counter', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'Shift', shiftKey: true, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.errorCount).toBe(0);
+
+    component.handleExerciseKeydown({ key: 'Control', shiftKey: false, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.errorCount).toBe(0);
+  });
+
+  test('modifier key press during running state does not update lastPressedKey', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+
+    component.handleExerciseKeydown({ key: 'Shift', shiftKey: true, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.lastPressedKey).toBe('a');
+  });
+
+  test('modifier key press during running state does not advance progression', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'Shift', shiftKey: true, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.activeExpectedCharIndex).toBe(0);
+    expect(component.activeExpectedChar).toBe('a');
+  });
+
+  test('isShiftActive becomes true on Shift keydown and false on Shift keyup', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.handleExerciseKeydown({ key: 'Shift', shiftKey: true, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.isShiftActive).toBe(true);
+
+    component.handleExerciseKeyup({ key: 'Shift', shiftKey: false, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.isShiftActive).toBe(false);
+  });
+
+  test('isAltGrActive becomes true on AltGr keydown and false on AltGr keyup', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.handleExerciseKeydown({ key: 'AltGraph', shiftKey: false, getModifierState: (k: string) => k === 'AltGraph' } as unknown as KeyboardEvent);
+    expect(component.isAltGrActive).toBe(true);
+
+    component.handleExerciseKeyup({ key: 'AltGraph', shiftKey: false, getModifierState: () => false } as unknown as KeyboardEvent);
+    expect(component.isAltGrActive).toBe(false);
+  });
+
 });

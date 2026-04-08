@@ -15,6 +15,8 @@ export class KeyboardDisplayComponent {
   @Input() impactedKeys: string[] = [];
   @Input() lastPressedKey: string = '';
   @Input() isLastKeyWrong: boolean = false;
+  @Input() isShiftActive: boolean = false;
+  @Input() isAltGrActive: boolean = false;
 
   get keymap(): KeyboardLayoutKeymap | null {
     return this.keyboardLayoutService.getKeymap(this.selectedLayout);
@@ -24,7 +26,17 @@ export class KeyboardDisplayComponent {
     return this.impactedKeys.includes(key.value);
   }
 
+  getDisplayLabel(key: KeyboardKey): string {
+    if (this.isShiftActive && key.shiftLabel) return key.shiftLabel;
+    if (this.isAltGrActive && key.altGrLabel) return key.altGrLabel;
+    return key.label;
+  }
+
   isKeyPressed(key: KeyboardKey): boolean {
-    return this.lastPressedKey !== '' && key.value.toLowerCase() === this.lastPressedKey.toLowerCase();
+    if (!this.lastPressedKey) return false;
+    const lp = this.lastPressedKey;
+    return key.value.toLowerCase() === lp.toLowerCase()
+      || (!!key.shiftValue && key.shiftValue === lp)
+      || (!!key.altGrValue && key.altGrValue === lp);
   }
 }

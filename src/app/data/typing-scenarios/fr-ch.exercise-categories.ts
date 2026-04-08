@@ -204,5 +204,29 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
         impactedKeys: ['Q', 'È', 'A', 'É']
       }
     ]
+  },
+  {
+    name: 'Mix Caps',
+    keyboardLayouts: ['fr-ch'],
+    exercises: [
+      {
+        id: 'fr-ch-mix-caps-fj',
+        name: 'F / J',
+        expectedChars: ['f', 'J', 'f', 'J', 'J', 'f', 'J', 'f', 'f', 'J', 'J', 'f', 'f', 'J', 'f', 'J', 'J', 'f', 'f', 'J', 'J', 'f', 'J', 'f', 'J', 'f', 'f', 'J', 'J', 'J', 'f', 'f'],
+        impactedKeys: ['F', 'J']
+      },
+      {
+        id: 'fr-ch-mix-caps-home-row',
+        name: 'Home Row',
+        expectedChars: ['A', 's', 'D', 'f', 'G', 'h', 'J', 'k', 'L', 'a', 'S', 'd', 'F', 'g', 'H', 'j', 'K', 'l', 'A', 'S', 'd', 'f', 'G', 'H', 'j', 'k', 'L', 'a', 'D', 'F', 'g', 'J'],
+        impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L']
+      },
+      {
+        id: 'fr-ch-mix-caps-all',
+        name: 'All',
+        expectedChars: ['A', 'b', 'C', 'd', 'E', 'f', 'G', 'h', 'I', 'j', 'K', 'l', 'M', 'n', 'O', 'p', 'Q', 'r', 'S', 't', 'U', 'v', 'W', 'x', 'Y', 'z', 'A', 'b', 'D', 'e', 'F', 'g'],
+        impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+      }
+    ]
   }
 ];

@@ -1,26 +1,4 @@
-## Purpose
-
-Keyboard display rendering for the exercise page: exposes raw keymap data through `KeyboardLayoutService` and provides a pluggable `KeyboardDisplayComponent` for layout-aware key visualization with enabled/disabled state derived from exercise impacted keys.
-
-## Requirements
-
-### Requirement: Layout keymaps are exposed for supported keyboard layouts
-The system SHALL expose raw keyboard keymap data for each supported keyboard layout through `KeyboardLayoutService`.
-
-#### Scenario: Raw keymap is returned for a supported layout
-- **WHEN** a consumer requests the keymap for `fr-ch`
-- **THEN** `KeyboardLayoutService` returns raw row-and-key data for that layout
-
-#### Scenario: Raw keymap includes non-typing keys
-- **WHEN** a consumer requests a supported layout keymap
-- **THEN** the returned keymap includes visible non-typing and modifier keys such as Tab, Shift, and Enter
-
-### Requirement: Keyboard rendering is provided by a pluggable reusable component
-The system SHALL provide keyboard rendering through a dedicated `KeyboardDisplayComponent` that can be used by multiple parent components.
-
-#### Scenario: Reusable keyboard component can be composed by different parents
-- **WHEN** a parent component needs to display a keyboard layout
-- **THEN** it composes `KeyboardDisplayComponent` with layout and impacted-key inputs instead of duplicating keyboard markup
+## MODIFIED Requirements
 
 ### Requirement: Key labels reflect the active modifier layer
 The system SHALL render each key's label based on the currently active modifier state: the shift layer label when Shift is active, the AltGr layer label when AltGr is active, or the primary label otherwise. Keys with no layer-specific label SHALL fall back to the primary label regardless of modifier state. Letter keys display their conventional uppercase primary label at all times, as their key cap already reflects the uppercase form.
@@ -37,27 +15,7 @@ The system SHALL render each key's label based on the currently active modifier 
 - **WHEN** a supported layout keymap is rendered with AltGr active
 - **THEN** keys that have an `altGrLabel` show their AltGr layer label, and keys without an `altGrLabel` display their primary label
 
-### Requirement: Keyboard key state is derived from exercise impacted keys
-The system SHALL determine keyboard key enabled-state from the current exercise configuration's `impactedKeys`, with impacted keys enabled and all other visible keys disabled.
-
-#### Scenario: Impacted keys are enabled
-- **WHEN** the keyboard is rendered for an exercise with impacted keys
-- **THEN** keys whose labels are in `impactedKeys` are rendered with enabled state
-
-#### Scenario: Non-impacted keys are disabled
-- **WHEN** the keyboard is rendered for an exercise with impacted keys
-- **THEN** all other visible keys are rendered with disabled state
-
-### Requirement: Enabled and disabled keys use distinct coloring
-The system SHALL render enabled keys in a distinct blue color and disabled keys in a greyed-out color, making impacted (enabled) keys immediately distinguishable from non-impacted (disabled) keys.
-
-#### Scenario: Enabled keys are rendered in blue
-- **WHEN** enabled keys are rendered
-- **THEN** they use a blue fill and text color that is clearly distinguishable from the disabled grey style
-
-#### Scenario: Disabled keys are greyed out
-- **WHEN** disabled keys are rendered
-- **THEN** they use a greyed-out disabled visual style
+---
 
 ### Requirement: Last pressed key is highlighted on the keyboard
 The system SHALL highlight the last pressed key on the rendered keyboard, using green for a correct press and red for a wrong press, independently of the key's enabled or disabled state. The highlight SHALL persist after a modifier key is released, because `lastPressedKey` is only updated by non-modifier key presses.
@@ -96,19 +54,10 @@ The system SHALL highlight the last pressed key on the rendered keyboard, using 
 - **WHEN** a key has been highlighted and the user subsequently releases a modifier key (e.g. releases Shift)
 - **THEN** the highlight on the previously pressed key remains unchanged
 
-### Requirement: Key-press highlight state is passed to the keyboard component via inputs
-The system SHALL accept the last pressed key value and its correctness flag as inputs to `KeyboardDisplayComponent`. The correctness determination (whether the pressed key is correct or wrong) SHALL be the responsibility of the parent component, not of `KeyboardDisplayComponent`.
-
-#### Scenario: Component receives lastPressedKey and isLastKeyWrong inputs
-- **WHEN** a parent composes `KeyboardDisplayComponent`
-- **THEN** the component exposes `lastPressedKey: string` and `isLastKeyWrong: boolean` as `@Input()` properties
-
-#### Scenario: KeyboardDisplayComponent does not determine correctness
-- **WHEN** highlighting a pressed key
-- **THEN** `KeyboardDisplayComponent` uses the `isLastKeyWrong` value received from its parent without re-evaluating it against any expected character
+## ADDED Requirements
 
 ### Requirement: Keyboard display component accepts modifier-state inputs
-The system SHALL accept active modifier state as inputs to `KeyboardDisplayComponent`. These inputs drive the active layer label rendering and are the responsibility of the parent component to compute and pass in.
+The system SHALL accept active modifier state as inputs to `KeyboardDisplayComponent`. These inputs drive the active layer label rendering (Decision 4 in design) and are the responsibility of the parent component to compute and pass in.
 
 #### Scenario: Component exposes isShiftActive input
 - **WHEN** a parent composes `KeyboardDisplayComponent`

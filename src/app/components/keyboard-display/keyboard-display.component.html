@@ -12,7 +12,7 @@
             [class.keyboard-key-pressed-wrong]="isKeyPressed(key) && isLastKeyWrong"
             [attr.data-key-value]="key.value"
           >
-            {{ key.label }}
+            {{ getDisplayLabel(key) }}
           </span>
         }
       </div>

@@ -60,4 +60,41 @@ describe('KeyboardDisplayComponent Requirements', () => {
 
     expect(component.isKeyPressed({ value: 'a', label: 'A' })).toBe(false);
   });
+
+  test('getDisplayLabel returns shiftLabel when isShiftActive and key has shiftLabel', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+    component.isShiftActive = true;
+
+    expect(component.getDisplayLabel({ value: '1', label: '1', shiftValue: '+', shiftLabel: '+' })).toBe('+');
+  });
+
+  test('getDisplayLabel returns altGrLabel when isAltGrActive and key has altGrLabel', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+    component.isAltGrActive = true;
+
+    expect(component.getDisplayLabel({ value: '2', label: '2', altGrValue: '@', altGrLabel: '@' })).toBe('@');
+  });
+
+  test('getDisplayLabel falls back to primary label when modifier is active but key has no layer label', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+    component.isShiftActive = true;
+
+    expect(component.getDisplayLabel({ value: 'A', label: 'A' })).toBe('A');
+  });
+
+  test('isKeyPressed matches lastPressedKey against shiftValue', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+    component.lastPressedKey = '+';
+
+    expect(component.isKeyPressed({ value: '1', label: '1', shiftValue: '+', shiftLabel: '+' })).toBe(true);
+    expect(component.isKeyPressed({ value: '2', label: '2', shiftValue: '"', shiftLabel: '"' })).toBe(false);
+  });
+
+  test('isKeyPressed matches lastPressedKey against altGrValue', () => {
+    const component = TestBed.runInInjectionContext(() => new KeyboardDisplayComponent());
+    component.lastPressedKey = '@';
+
+    expect(component.isKeyPressed({ value: '2', label: '2', altGrValue: '@', altGrLabel: '@' })).toBe(true);
+    expect(component.isKeyPressed({ value: '1', label: '1', altGrValue: '¦', altGrLabel: '¦' })).toBe(false);
+  });
 });

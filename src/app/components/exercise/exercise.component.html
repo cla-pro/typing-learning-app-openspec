@@ -6,6 +6,7 @@
     class="exercise-content"
     tabindex="0"
     (keydown)="handleExerciseKeydown($event)"
+    (keyup)="handleExerciseKeyup($event)"
   >
     <section
       class="exercise-body"
@@ -54,6 +55,8 @@
           [impactedKeys]="impactedKeys"
           [lastPressedKey]="lastPressedKey"
           [isLastKeyWrong]="isLastKeyWrong"
+          [isShiftActive]="isShiftActive"
+          [isAltGrActive]="isAltGrActive"
         ></app-keyboard-display>
       </section>
     </section>
