@@ -2,7 +2,7 @@ import { ExerciseCategory } from '../../models/exercise-config.model';
 
 export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
   {
-    name: 'Middle Line',
+    name: 'Mittlere Reihe',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
@@ -31,20 +31,20 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       },
       {
         id: 'de-ch-middle-line-all-1',
-        name: 'All 1',
+        name: 'Alle 1',
         expectedChars: ['l', ' ', 'h', 'j', 'd', 'a', 'h', 'f', 'e', 'k', 'k', 'l', 'j', 'ö', 'l', 'd', 'f', 'd', 'j', 'l', ' ', 's', 's', 'a', 'e', 's', 'a', 'd', 'd', 'ö', 'g', ' ', 'g', 'f', 'h', 's', 'j', 'g', 'j', 'g', 'ö', 'f', 'd', 'ö', 'f', 'd', ' ', 'h', 's', ' ', 'k', ' ', 'ö', 'l', 'k', 'h'],
         impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ö', ' ']
       },
       {
         id: 'de-ch-middle-line-all-2',
-        name: 'All 2',
+        name: 'Alle 2',
         expectedChars: ['l', 's', 's', 'f', ' ', 'h', 'j', 'ö', 'h', 'g', 'k', 'g', 'g', ' ', ' ', 'l', ' ', 'k', 'g', 'l', 'g', 'f', 'd', ' ', 'l', 'k', 'ö', 'k', 'j', 'ö', 'g', 'd', 'f', ' ', 's', ' ', 'd', 'j', 'f', 'a', 'l', 'ö', 'l', 'h', 'ö', 'k', 's', 'd', 's', 'a', 'f', 'f', 'd', 'a'],
         impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ö', ' ']
       }
     ]
   },
   {
-    name: 'Upper Line',
+    name: 'Obere Reihe',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
@@ -79,20 +79,20 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       },
       {
         id: 'de-ch-upper-line-all-1',
-        name: 'All 1',
+        name: 'Alle 1',
         expectedChars: ['o', 't', 't', 'z', 'z', 'r', 'e', 'e', 'w', ' ', 'z', 'w', 'w', 'q', 'o', 'ü', 'i', 'r', 't', 'i', 'q', ' ', 'p', 'o', 'q', 'w', 'ü', 'z', 'u', 'p', 'q', 't', 'z', ' ', 'w', 'z', 'p', 'r', 'o', 'ü', 'ü', 'w', 'z', 'u', ' ', 'w', 'u', 'p', 'w', 'i', 't', 'i', 'q', 't', 'i'],
         impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Ü', ' ']
       },
       {
         id: 'de-ch-upper-line-all-2',
-        name: 'All 2',
+        name: 'Alle 2',
         expectedChars: ['q', 'z', 'p', ' ', 'o', 'ü', 'r', 'ü', 'q', 'w', 'i', 'w', 'p', 'z', 't', 'o', 'p', 'o', 'q', 'ü', 'ü', 'o', 'r', 'q', ' ', 'u', 't', 'i', 'r', 'ü', 'z', 'o', 'i', 'z', 'u', ' ', 'z', 'ü', 'q', 't', 'i', 'w', 'p', 'i', 'u', 'u', 'u', 't', 't', 'z', ' ', 't', 'r', 'o'],
         impactedKeys: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Ü', ' ']
       }
     ]
   },
   {
-    name: 'Lower Line',
+    name: 'Untere Reihe',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
@@ -121,20 +121,20 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       },
       {
         id: 'de-ch-lower-line-all-1',
-        name: 'All 1',
+        name: 'Alle 1',
         expectedChars: ['n', ',', '.', 'c', ',', 'a', 'm', 'm', 'y', ' ', 'x', 'n', ',', 'x', 'ö', '.', ' ', 'x', 'c', 'n', 'n', ',', 'b', 'm', 'v', 'y', 'y', ' ', '.', '.', 'x', 'c', 'b', 'm', 'y', 'v', 'v', ' ', 'c', 'v', 'ö', 'n', 'n', 'v', 'm', 'c', 'x', 'b', ' ', 'b', 'c', 'y', 'x'],
         impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
       },
       {
         id: 'de-ch-lower-line-all-2',
-        name: 'All 2',
+        name: 'Alle 2',
         expectedChars: ['v', ',', 'y', 'c', 'y', 'v', ',', ' ', 'y', 'b', 'c', 'm', 'y', 'm', ',', 'c', 'x', 'x', 'x', 'b', 'c', 'v', 'n', 'm', 'n', 'x', 'y', 'n', ',', ' ', 'x', 'm', 'c', 'm', 'm', '.', 'n', ',', 'b', 'v', ',', 'b', 'm', '.', 'x', '.', 'y', ',', ',', ' ', 'n', ' ', 'b'],
         impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
       }
     ]
   },
   {
-    name: 'Index Finger',
+    name: 'Zeigefinger',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
@@ -145,68 +145,68 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       },
       {
         id: 'de-ch-index-finger-up-and-down',
-        name: 'Up and Down',
+        name: 'Rauf und Runter',
         expectedChars: ['n', 'u', 'm', 'n', 'm', 'v', 'u', 'n', 'r', 'c', 'r', 'b', 'z', 'v', 'b', 'r', 'u', 't', 'b', 'r', 'r', 'n', 't', 'b', 'r', 'z', 'b', 'v', 'n', 'b', 'u', 'z'],
         impactedKeys: ['R', 'T', 'Z', 'U', 'V', 'B', 'N', 'C', 'M']
       },
       {
         id: 'de-ch-index-finger-all',
-        name: 'All',
+        name: 'Alle',
         expectedChars: ['t', 't', 'u', 'r', 'h', 'f', 'n', 'z', 'b', 'h', 'c', 'j', 'm', 'r', 'f', 'g', 't', 'm', 'n', 'g', 'r', 'g', 'j', 'j', 'v', 't', 'f', 'f', 't', 'g', 'h', 'n'],
         impactedKeys: ['R', 'T', 'Z', 'U', 'F', 'G', 'H', 'J', 'V', 'B', 'N', 'C', 'M']
       }
     ]
   },
   {
-    name: 'Middle Finger',
+    name: 'Mittelfinger',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
         id: 'de-ch-middle-finger-up-and-down',
-        name: 'Up and Down',
+        name: 'Rauf und Runter',
         expectedChars: ['x', ',', 'i', 'x', 'x', 'i', 'i', ',', 'e', 'i', 'e', ',', 'x', 'x', 'x', 'i', ',', 'e', 'i', ',', 'e', ',', 'x', 'x', 'e', 'x', 'x', 'e', ',', 'e', 'e', 'i'],
         impactedKeys: ['E', 'I', 'X', ',']
       },
       {
         id: 'de-ch-middle-finger-all',
-        name: 'All',
+        name: 'Alle',
         expectedChars: ['k', 'i', 'x', 'd', 'e', 'd', 'e', ',', 'd', 'i', 'x', 'k', 'i', 'd', 'd', 'x', 'd', ',', 'e', 'i', ',', 'i', 'x', 'e', 'e', 'd', ',', 'x', 'x', 'e', 'x', 'k'],
         impactedKeys: ['E', 'I', 'D', 'K', 'X', ',']
       }
     ]
   },
   {
-    name: 'Ring Finger',
+    name: 'Ringfinger',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
         id: 'de-ch-ring-finger-up-and-down',
-        name: 'Up and Down',
+        name: 'Rauf und Runter',
         expectedChars: ['o', 'w', 'w', 'o', '.', '.', 'w', 'o', 'o', 'w', 'w', '.', '.', 'y', 'w', 'y', '.', 'w', '.', 'y', 'o', 'y', 'w', 'y', 'y', 'w', 'y', '.', 'y', 'o', 'y', 'w'],
         impactedKeys: ['W', 'O', 'Y', '.']
       },
       {
         id: 'de-ch-ring-finger-all',
-        name: 'All',
+        name: 'Alle',
         expectedChars: ['y', 'l', '.', 'o', 'l', 's', 's', 'w', 'y', 'l', 'o', 'l', 'o', '.', 'w', 'y', 's', 'o', 'l', 'w', 's', 's', 'y', 'w', 'w', '.', 'l', 'l', 'y', 'o', 's', 'o'],
         impactedKeys: ['W', 'O', 'S', 'L', 'Y', '.']
       }
     ]
   },
   {
-    name: 'Little Finger',
+    name: 'Kleiner Finger',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
         id: 'de-ch-little-finger-all',
-        name: 'All',
+        name: 'Alle',
         expectedChars: ['ü', 'q', 'q', 'ü', 'ö', 'a', 'ö', 'ü', 'ü', 'a', 'ö', 'q', 'ö', 'ö', 'a', 'ö', 'q', 'q', 'ü', 'a', 'ö', 'a', 'ü', 'ü', 'q', 'ü', 'ü', 'q', 'ö', 'a', 'a', 'ö'],
         impactedKeys: ['Q', 'Ü', 'A', 'Ö']
       }
     ]
   },
   {
-    name: 'Mix Caps',
+    name: 'Gross und Klein',
     keyboardLayouts: ['de-ch'],
     exercises: [
       {
@@ -217,13 +217,13 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       },
       {
         id: 'de-ch-mix-caps-home-row',
-        name: 'Home Row',
+        name: 'Grundreihe',
         expectedChars: ['A', 's', 'D', 'f', 'G', 'h', 'J', 'k', 'L', 'a', 'S', 'd', 'F', 'g', 'H', 'j', 'K', 'l', 'A', 'S', 'd', 'f', 'G', 'H', 'j', 'k', 'L', 'a', 'D', 'F', 'g', 'J'],
         impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L']
       },
       {
         id: 'de-ch-mix-caps-all',
-        name: 'All',
+        name: 'Alle',
         expectedChars: ['A', 'b', 'C', 'd', 'E', 'f', 'G', 'h', 'I', 'j', 'K', 'l', 'M', 'n', 'O', 'p', 'Q', 'r', 'S', 't', 'U', 'v', 'W', 'x', 'Y', 'z', 'A', 'b', 'D', 'e', 'F', 'g'],
         impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
       }

@@ -10,7 +10,7 @@ describe('ExerciseConfigService Requirements', () => {
   });
 
   test('lists ordered exercise categories through public API', () => {
-    const categories = service.listExerciseCategories('fr-ch');
+    const categories = service.listExerciseCategories('en-us');
 
     expect(categories.map(category => category.name))
       .toContain('Middle Line');
@@ -19,29 +19,29 @@ describe('ExerciseConfigService Requirements', () => {
     expect(categories.map(category => category.name))
       .toContain('Lower Line');
     expect(categories[0]?.exercises.map(exercise => exercise.id)).toEqual([
-      'fr-ch-middle-line-fj',
-      'fr-ch-middle-line-dk',
-      'fr-ch-middle-line-sl',
-      'fr-ch-middle-line-gh',
-      'fr-ch-middle-line-all-1',
-      'fr-ch-middle-line-all-2'
+      'en-us-middle-line-fj',
+      'en-us-middle-line-dk',
+      'en-us-middle-line-sl',
+      'en-us-middle-line-gh',
+      'en-us-middle-line-all-1',
+      'en-us-middle-line-all-2'
     ]);
     expect(categories[1]?.exercises.map(exercise => exercise.id)).toEqual([
-      'fr-ch-upper-line-tz',
-      'fr-ch-upper-line-ru',
-      'fr-ch-upper-line-ei',
-      'fr-ch-upper-line-wo',
-      'fr-ch-upper-line-qp',
-      'fr-ch-upper-line-all-1',
-      'fr-ch-upper-line-all-2'
+      'en-us-upper-line-tz',
+      'en-us-upper-line-ru',
+      'en-us-upper-line-ei',
+      'en-us-upper-line-wo',
+      'en-us-upper-line-qp',
+      'en-us-upper-line-all-1',
+      'en-us-upper-line-all-2'
     ]);
 
     const flattenedExerciseIds = categories.flatMap(category =>
       category.exercises.map(exercise => exercise.id)
     );
-    expect(flattenedExerciseIds).toContain('fr-ch-middle-line-fj');
-    expect(flattenedExerciseIds).toContain('fr-ch-upper-line-all-1');
-    expect(flattenedExerciseIds).toContain('fr-ch-lower-line-vbn');
+    expect(flattenedExerciseIds).toContain('en-us-middle-line-fj');
+    expect(flattenedExerciseIds).toContain('en-us-upper-line-all-1');
+    expect(flattenedExerciseIds).toContain('en-us-lower-line-vbn');
     expect(new Set(flattenedExerciseIds).size).toBe(flattenedExerciseIds.length);
   });
 
