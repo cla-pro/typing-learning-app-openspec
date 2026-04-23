@@ -3,13 +3,13 @@
     <a
       class="settings-link"
       [routerLink]="settingsRoute"
-      aria-label="Open settings"
-      title="Settings"
+      [attr.aria-label]="'welcome.openSettings' | translate"
+      [title]="'welcome.settingsTitle' | translate"
     >
       &#9881;
     </a>
 
-    <h1>Typing Learning</h1>
+    <h1>{{ 'welcome.title' | translate }}</h1>
 
     <nav class="exercises-nav">
       @for (category of exerciseCategoriesWithProgress; track category.name) {

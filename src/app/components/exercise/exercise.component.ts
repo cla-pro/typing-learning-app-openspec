@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
 import { KeyboardDisplayComponent } from '../keyboard-display/keyboard-display.component';
@@ -15,7 +16,7 @@ const MODIFIER_KEYS = new Set(['Shift', 'Control', 'Alt', 'AltGraph', 'CapsLock'
 
 @Component({
     selector: 'app-exercise',
-  imports: [HomeButtonComponent, KeyboardDisplayComponent],
+  imports: [HomeButtonComponent, KeyboardDisplayComponent, TranslateModule],
     templateUrl: './exercise.component.html',
     styleUrls: ['./exercise.component.css']
 })

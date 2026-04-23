@@ -45,9 +45,13 @@
             (click)="toggleRuntimeState()"
             [disabled]="isRuntimeControlDisabled"
           >
-            {{ runtimeActionLabel }}
+            {{ (isExerciseRunning ? 'exercise.pause' : 'exercise.start') | translate }}
           </button>
-          <span class="error-counter" aria-live="polite" aria-label="Error count">{{ errorCount }} errors</span>
+          <span
+            class="error-counter"
+            aria-live="polite"
+            [attr.aria-label]="'exercise.errorCountAria' | translate"
+          >{{ 'exercise.errorCount' | translate:{ count: errorCount } }}</span>
         </div>
 
         <app-keyboard-display

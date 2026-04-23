@@ -1,0 +1,34 @@
+{
+  "exercise": {
+    "errorCount": "{{count}} Fehler",
+    "errorCountAria": "Fehleranzahl",
+    "pause": "pausieren",
+    "start": "starten"
+  },
+  "exerciseNotFound": {
+    "description": "Verwende die Home-Schaltfläche, um zur Startseite zurückzukehren.",
+    "message": "Für diese Anfrage ist keine Übung verfügbar.",
+    "title": "Übung nicht gefunden"
+  },
+  "homeButton": {
+    "label": "Startseite",
+    "title": "Zur Startseite zurückkehren"
+  },
+  "settings": {
+    "languageLabel": "Sprache",
+    "languages": {
+      "de-ch": "Deutsch (Schweiz)",
+      "en-us": "Englisch (USA)",
+      "fr-ch": "Französisch (Schweiz)"
+    },
+    "layoutLabel": "Tastaturlayout",
+    "streamSizeAria": "Größe des erwarteten Zeichenstroms anpassen",
+    "streamSizeLabel": "Stromgröße",
+    "title": "Einstellungen"
+  },
+  "welcome": {
+    "openSettings": "Einstellungen öffnen",
+    "settingsTitle": "Einstellungen",
+    "title": "Typing Learning"
+  }
+}

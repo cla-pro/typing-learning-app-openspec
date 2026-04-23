@@ -60,6 +60,45 @@ describe('SettingsService Requirements', () => {
     expect(localStorage.getItem('layout.selected')).toBe('de-ch');
   });
 
+  test('returns supported UI languages in configured order', () => {
+    expect(service.getSupportedLanguages()).toEqual(['en-us', 'fr-ch', 'de-ch']);
+  });
+
+  test('returns fr-ch as the initial chosen UI language', () => {
+    expect(service.getChosenLanguage()).toBe('fr-ch');
+  });
+
+  test('restores a persisted supported UI language', () => {
+    localStorage.setItem('language.selected', 'de-ch');
+
+    const restoredService = new SettingsService();
+
+    expect(restoredService.getChosenLanguage()).toBe('de-ch');
+  });
+
+  test('falls back to fr-ch for an unsupported persisted UI language', () => {
+    localStorage.setItem('language.selected', 'it-ch');
+
+    const restoredService = new SettingsService();
+
+    expect(restoredService.getChosenLanguage()).toBe('fr-ch');
+  });
+
+  test('updates and persists the chosen UI language for supported values', () => {
+    service.setChosenLanguage('en-us');
+
+    expect(service.getChosenLanguage()).toBe('en-us');
+    expect(localStorage.getItem('language.selected')).toBe('en-us');
+  });
+
+  test('ignores unsupported chosen UI language updates', () => {
+    service.setChosenLanguage('de-ch');
+    service.setChosenLanguage('it-ch');
+
+    expect(service.getChosenLanguage()).toBe('de-ch');
+    expect(localStorage.getItem('language.selected')).toBe('de-ch');
+  });
+
   test('returns baseline stream size by default', () => {
     expect(service.getStreamSizeValue()).toBe(0);
   });

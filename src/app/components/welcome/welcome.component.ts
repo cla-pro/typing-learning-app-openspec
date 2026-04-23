@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ExerciseCategory } from '../../models/exercise-config.model';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
@@ -20,7 +21,7 @@ export interface ExerciseCategoryWithProgress {
 
 @Component({
     selector: 'app-welcome',
-    imports: [RouterLink],
+  imports: [RouterLink, TranslateModule],
     templateUrl: './welcome.component.html',
     styleUrls: ['./welcome.component.css']
 })

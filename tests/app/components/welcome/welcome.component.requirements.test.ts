@@ -1,11 +1,37 @@
+import { importProvidersFrom, ɵresolveComponentResources as resolveComponentResources } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { TranslateLoader, TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
+import { Observable, firstValueFrom, of } from 'rxjs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { TestBed } from '@angular/core/testing';
+import { readFile } from 'node:fs/promises';
 
 import { WelcomeComponent } from '../../../../src/app/components/welcome/welcome.component';
 import { ExerciseCategory, ExerciseConfig } from '../../../../src/app/models/exercise-config.model';
 import { ExerciseConfigService } from '../../../../src/app/services/exercise-config.service';
 import { ExerciseProgressService } from '../../../../src/app/services/exercise-progress.service';
 import { SettingsService } from '../../../../src/app/services/settings.service';
+
+const translations = {
+  'de-ch': {
+    welcome: {
+      openSettings: 'Einstellungen öffnen',
+      settingsTitle: 'Einstellungen',
+      title: 'Tipptraining'
+    }
+  }
+};
+
+class TestTranslateLoader implements TranslateLoader {
+  getTranslation(lang: string): Observable<TranslationObject> {
+    return of(translations[lang as keyof typeof translations] ?? {});
+  }
+}
+
+const resourceMap: Record<string, string> = {
+  './welcome.component.html': 'src/app/components/welcome/welcome.component.html',
+  './welcome.component.css': 'src/app/components/welcome/welcome.component.css'
+};
 
 const exercises: ExerciseConfig[] = [
   { id: 'a', name: 'A', expectedChars: ['a'], impactedKeys: ['A'] },
@@ -42,6 +68,7 @@ let progressStub: {
 
 describe('Welcome Component Requirements', () => {
   let component: WelcomeComponent;
+  let fixture: ComponentFixture<WelcomeComponent>;
 
   beforeEach(async () => {
     serviceStub.listExerciseCategories.mockClear();
@@ -152,5 +179,50 @@ describe('Welcome Component Requirements', () => {
     expect(serviceStub.listExerciseCategories).toHaveBeenLastCalledWith('de-ch');
     expect(deChComponent.exerciseCategories.map(category => category.name)).toEqual(['German Group']);
     expect(deChComponent.exerciseCategoriesWithProgress[0]?.exercises.map(exercise => exercise.name)).toEqual(['C']);
+  });
+
+  test('renders translated heading and localized settings action text metadata', async () => {
+    TestBed.resetTestingModule();
+    await resolveComponentResources(async (url: string) => readFile(resourceMap[url] ?? url, 'utf8'));
+
+    await TestBed.configureTestingModule({
+      imports: [WelcomeComponent],
+      providers: [
+        provideRouter([]),
+        importProvidersFrom(
+          TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useClass: TestTranslateLoader
+            },
+            fallbackLang: 'en-us'
+          })
+        ),
+        {
+          provide: ExerciseConfigService,
+          useValue: serviceStub
+        },
+        {
+          provide: ExerciseProgressService,
+          useValue: progressStub
+        },
+        {
+          provide: SettingsService,
+          useValue: layoutServiceStub
+        }
+      ]
+    }).compileComponents();
+
+    await firstValueFrom(TestBed.inject(TranslateService).use('de-ch'));
+
+    fixture = TestBed.createComponent(WelcomeComponent);
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const settingsLink = element.querySelector('.settings-link');
+
+    expect(element.querySelector('h1')?.textContent?.trim()).toBe('Tipptraining');
+    expect(settingsLink?.getAttribute('aria-label')).toBe('Einstellungen öffnen');
+    expect(settingsLink?.getAttribute('title')).toBe('Einstellungen');
   });
 });

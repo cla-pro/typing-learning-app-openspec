@@ -2,11 +2,11 @@
 
 <main class="settings-container">
   <div class="settings-content">
-    <h1>Settings</h1>
+    <h1>{{ 'settings.title' | translate }}</h1>
 
     <ul class="settings-list">
       <li class="setting-item">
-        <label for="settings-layout" class="setting-label">Keyboard layout</label>
+        <label for="settings-layout" class="setting-label">{{ 'settings.layoutLabel' | translate }}</label>
         <select
           id="settings-layout"
           class="setting-control"
@@ -19,7 +19,20 @@
       </li>
 
       <li class="setting-item">
-        <label for="settings-stream-size" class="setting-label">Stream size</label>
+        <label for="settings-language" class="setting-label">{{ 'settings.languageLabel' | translate }}</label>
+        <select
+          id="settings-language"
+          class="setting-control"
+          (change)="onLanguageChange($event)"
+        >
+          @for (language of supportedLanguages; track language) {
+            <option [value]="language" [selected]="language === selectedLanguage">{{ ('settings.languages.' + language) | translate }}</option>
+          }
+        </select>
+      </li>
+
+      <li class="setting-item">
+        <label for="settings-stream-size" class="setting-label">{{ 'settings.streamSizeLabel' | translate }}</label>
         <input
           id="settings-stream-size"
           type="range"
@@ -28,7 +41,7 @@
           [attr.min]="streamSizeMin"
           [attr.max]="streamSizeMax"
           step="any"
-          aria-label="Adjust expected-character stream size"
+          [attr.aria-label]="'settings.streamSizeAria' | translate"
           (input)="onStreamSizeInput($event)"
         >
       </li>

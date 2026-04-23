@@ -1,8 +1,4 @@
-## Purpose
-
-Dedicated settings page that centralizes user-adjustable application preferences.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Settings page presents centralized app preferences
 The system SHALL provide a dedicated Settings page with a centered title resolved from the active UI language and SHALL render configurable app preferences as a labeled list.
@@ -37,10 +33,3 @@ The system SHALL allow users to configure keyboard layout, UI language, and expe
 #### Scenario: Stream size range input thumb is visible on Safari iOS
 - **WHEN** the Settings page is rendered in Safari on iOS (iPad)
 - **THEN** the stream-size range input displays a visible, draggable thumb
-
-### Requirement: Settings page follows welcome-page visual style direction
-The system SHALL style the Settings page consistently with the welcome page visual language.
-
-#### Scenario: Settings page styling is consistent
-- **WHEN** the Settings page is viewed in a browser
-- **THEN** spacing, card/container treatment, and typography style are visually consistent with the welcome page
