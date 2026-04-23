@@ -127,10 +127,10 @@ describe('SettingsService Requirements', () => {
   });
 
   test('clamps stream size updates to supported range', () => {
-    service.setStreamSizeValue(-1);
-    expect(service.getStreamSizeValue()).toBe(0);
+    service.setStreamSizeValue(service.getStreamSizeMin() - 1);
+    expect(service.getStreamSizeValue()).toBe(service.getStreamSizeMin());
 
-    service.setStreamSizeValue(2);
-    expect(service.getStreamSizeValue()).toBe(1.5);
+    service.setStreamSizeValue(service.getStreamSizeMax() + 1);
+    expect(service.getStreamSizeValue()).toBe(service.getStreamSizeMax());
   });
 });

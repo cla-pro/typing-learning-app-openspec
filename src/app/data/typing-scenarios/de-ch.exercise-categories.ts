@@ -32,7 +32,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       {
         id: 'de-ch-middle-line-all-1',
         name: 'Alle 1',
-        expectedChars: ['l', ' ', 'h', 'j', 'd', 'a', 'h', 'f', 'e', 'k', 'k', 'l', 'j', 'ö', 'l', 'd', 'f', 'd', 'j', 'l', ' ', 's', 's', 'a', 'e', 's', 'a', 'd', 'd', 'ö', 'g', ' ', 'g', 'f', 'h', 's', 'j', 'g', 'j', 'g', 'ö', 'f', 'd', 'ö', 'f', 'd', ' ', 'h', 's', ' ', 'k', ' ', 'ö', 'l', 'k', 'h'],
+        expectedChars: ['l', ' ', 'h', 'j', 'd', 'a', 'h', 'f', 'k', 'k', 'l', 'j', 'ö', 'l', 'd', 'f', 'd', 'j', 'l', ' ', 's', 's', 'a', 's', 'a', 'd', 'd', 'ö', 'g', ' ', 'g', 'f', 'h', 's', 'j', 'g', 'j', 'g', 'ö', 'f', 'd', 'ö', 'f', 'd', ' ', 'h', 's', ' ', 'k', ' ', 'ö', 'l', 'k', 'h'],
         impactedKeys: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ö', ' ']
       },
       {
@@ -122,7 +122,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
       {
         id: 'de-ch-lower-line-all-1',
         name: 'Alle 1',
-        expectedChars: ['n', ',', '.', 'c', ',', 'a', 'm', 'm', 'y', ' ', 'x', 'n', ',', 'x', 'ö', '.', ' ', 'x', 'c', 'n', 'n', ',', 'b', 'm', 'v', 'y', 'y', ' ', '.', '.', 'x', 'c', 'b', 'm', 'y', 'v', 'v', ' ', 'c', 'v', 'ö', 'n', 'n', 'v', 'm', 'c', 'x', 'b', ' ', 'b', 'c', 'y', 'x'],
+        expectedChars: ['n', ',', '.', 'c', ',', 'a', 'm', 'm', 'y', ' ', 'x', 'n', ',', 'x', '.', ' ', 'x', 'c', 'n', 'n', ',', 'b', 'm', 'v', 'y', 'y', ' ', '.', '.', 'x', 'c', 'b', 'm', 'y', 'v', 'v', ' ', 'c', 'v', 'n', 'n', 'v', 'm', 'c', 'x', 'b', ' ', 'b', 'c', 'y', 'x'],
         impactedKeys: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', ' ']
       },
       {
