@@ -228,5 +228,17 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
         impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
       }
     ]
+  },
+  {
+    name: 'Histoires',
+    keyboardLayouts: ['fr-ch'],
+    exercises: [
+      {
+        id: 'fr-ch-histoires-lina-se-presente',
+        name: 'Lina se presente',
+        expectedChars: ['B', 'o', 'n', 'j', 'o', 'u', 'r', ' ', 'j', 'e', ' ', 'm', ' ', 'a', 'p', 'p', 'e', 'l', 'l', 'e', ' ', 'L', 'i', 'n', 'a', ' ', 'e', 't', ' ', 'j', ' ', 'a', 'i', ' ', 'h', 'u', 'i', 't', ' ', 'a', 'n', 's', '.', ' ', 'J', 'e', ' ', 'v', 'i', 's', ' ', 'a', ' ', 'L', 'a', 'u', 's', 'a', 'n', 'n', 'e', ' ', 'a', 'v', 'e', 'c', ' ', 'm', 'a', ' ', 'm', 'a', 'm', 'a', 'n', ' ', 'e', 't', ' ', 'm', 'o', 'n', ' ', 'p', 'a', 'p', 'a', '.', ' ', 'J', 'e', ' ', 'd', 'e', 's', 's', 'i', 'n', 'e', ' ', 's', 'o', 'u', 'v', 'e', 'n', 't', ' ', 'd', 'e', 's', ' ', 'a', 'n', 'i', 'm', 'a', 'u', 'x', ' ', 'c', 'o', 'l', 'o', 'r', 'e', 's', ' ', 'e', 't', ' ', 'a', 'p', 'r', 'e', 's', ' ', 'l', ' ', 'e', 'c', 'o', 'l', 'e', ' ', 'j', 'e', ' ', 'j', 'o', 'u', 'e', ' ', 'a', 'v', 'e', 'c', ' ', 'm', 'o', 'n', ' ', 'c', 'h', 'a', 't', ' ', 'N', 'i', 'n', 'o', '.'],
+        impactedKeys: ['A', 'B', 'C', 'D', 'E', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'X', ' ', '.']
+      }
+    ]
   }
 ];

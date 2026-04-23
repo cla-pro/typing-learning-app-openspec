@@ -228,5 +228,17 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
         impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
       }
     ]
+  },
+  {
+    name: 'Geschichten',
+    keyboardLayouts: ['de-ch'],
+    exercises: [
+      {
+        id: 'de-ch-stories-mia-stellt-sich-vor',
+        name: 'Mia stellt sich vor',
+        expectedChars: ['H', 'a', 'l', 'l', 'o', ' ', 'i', 'c', 'h', ' ', 'h', 'e', 'i', 's', 's', 'e', ' ', 'M', 'i', 'a', ' ', 'u', 'n', 'd', ' ', 'i', 'c', 'h', ' ', 'b', 'i', 'n', ' ', 'a', 'c', 'h', 't', ' ', 'J', 'a', 'h', 'r', 'e', ' ', 'a', 'l', 't', '.', ' ', 'I', 'c', 'h', ' ', 'w', 'o', 'h', 'n', 'e', ' ', 'm', 'i', 't', ' ', 'm', 'e', 'i', 'n', 'e', 'r', ' ', 'M', 'a', 'm', 'a', ' ', 'u', 'n', 'd', ' ', 'm', 'e', 'i', 'n', 'e', 'm', ' ', 'P', 'a', 'p', 'a', ' ', 'i', 'n', ' ', 'B', 'e', 'r', 'n', '.', ' ', 'I', 'c', 'h', ' ', 'm', 'a', 'l', 'e', ' ', 'g', 'e', 'r', 'n', ' ', 'b', 'u', 'n', 't', 'e', ' ', 'T', 'i', 'e', 'r', 'e', ' ', 'u', 'n', 'd', ' ', 's', 'p', 'i', 'e', 'l', 'e', ' ', 'n', 'a', 'c', 'h', ' ', 'd', 'e', 'r', ' ', 'S', 'c', 'h', 'u', 'l', 'e', ' ', 'o', 'f', 't', ' ', 'm', 'i', 't', ' ', 'm', 'e', 'i', 'n', 'e', 'r', ' ', 'K', 'a', 't', 'z', 'e', ' ', 'L', 'i', 'l', 'i', '.'],
+        impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'W', 'Z', ' ', '.']
+      }
+    ]
   }
 ];
