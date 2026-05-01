@@ -1,3 +1,18 @@
 {
-  "exceptions": {}
+  "exceptions": {
+    "jsdom": {
+      "pinnedVersion": "^28.1.0",
+      "latestVersion": "29.1.1",
+      "reason": "jsdom 29 is a major version bump; compatibility with the current Angular 21 / vitest 4 test stack has not been validated.",
+      "owner": "dev",
+      "reviewTrigger": "Next Angular major upgrade window"
+    },
+    "typescript": {
+      "pinnedVersion": "^5.9.3",
+      "latestVersion": "6.0.3",
+      "reason": "TypeScript 6 is a major version; Angular 21 is not yet validated against TypeScript 6.",
+      "owner": "dev",
+      "reviewTrigger": "Next Angular major upgrade window"
+    }
+  }
 }
