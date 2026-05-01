@@ -41,6 +41,7 @@ export class ExerciseComponent implements OnInit {
   isShiftActive: boolean = false;
   isAltGrActive: boolean = false;
   streamSizeValue: number = STREAM_SIZE_MIN;
+  isShufflable: boolean = false;
   private hasValidExercise: boolean = false;
 
   get activeExpectedChar(): string {
@@ -80,6 +81,10 @@ export class ExerciseComponent implements OnInit {
     return this.exerciseRuntimeState === 'completed';
   }
 
+  get isShuffleAvailable(): boolean {
+    return this.isShufflable && this.exerciseRuntimeState === 'opened';
+  }
+
   get streamSizeScale(): number {
     return 1 + (this.streamSizeValue * STREAM_SIZE_SCALE_SPAN);
   }
@@ -115,9 +120,10 @@ export class ExerciseComponent implements OnInit {
         return;
       }
 
-      this.expectedCharsToDisplay = exerciseConfig.expectedChars;
+      this.expectedCharsToDisplay = [...exerciseConfig.expectedChars];
       this.activeExpectedCharIndex = 0;
       this.impactedKeys = exerciseConfig.impactedKeys;
+      this.isShufflable = exerciseConfig.shufflable ?? false;
       this.chosenLayout = this.settingsService.getChosenLayout();
       this.exerciseRuntimeState = 'opened';
       this.lastPressedKey = '';
@@ -125,6 +131,14 @@ export class ExerciseComponent implements OnInit {
       this.isLastKeyWrong = false;
       this.streamSizeValue = this.settingsService.getStreamSizeValue();
     });
+  }
+
+  shuffleExpectedChars(): void {
+    for (let i = this.expectedCharsToDisplay.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.expectedCharsToDisplay[i], this.expectedCharsToDisplay[j]] =
+        [this.expectedCharsToDisplay[j], this.expectedCharsToDisplay[i]];
+    }
   }
 
   toggleRuntimeState(): void {
@@ -187,6 +201,7 @@ export class ExerciseComponent implements OnInit {
     this.expectedCharsToDisplay = [];
     this.activeExpectedCharIndex = 0;
     this.impactedKeys = [];
+    this.isShufflable = false;
     this.chosenLayout = 'fr-ch';
     this.exerciseRuntimeState = 'opened';
     this.lastPressedKey = '';

@@ -558,4 +558,137 @@ describe('Exercise Component Requirements', () => {
     expect(component.isAltGrActive).toBe(false);
   });
 
+  test('isShuffleAvailable is true when exercise is shufflable and state is opened', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a', 'b', 'c'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.isShufflable).toBe(true);
+    expect(component.exerciseRuntimeState).toBe('opened');
+    expect(component.isShuffleAvailable).toBe(true);
+  });
+
+  test('isShuffleAvailable is false when exercise has no shufflable property', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.isShufflable).toBe(false);
+    expect(component.isShuffleAvailable).toBe(false);
+  });
+
+  test('isShuffleAvailable is false when state is pending (paused)', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a', 'b', 'c'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.toggleRuntimeState(); // start
+    component.toggleRuntimeState(); // pause
+
+    expect(component.exerciseRuntimeState).toBe('pending');
+    expect(component.isShuffleAvailable).toBe(false);
+  });
+
+  test('isShuffleAvailable is false when state is running', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a', 'b', 'c'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.toggleRuntimeState();
+
+    expect(component.exerciseRuntimeState).toBe('running');
+    expect(component.isShuffleAvailable).toBe(false);
+  });
+
+  test('isShuffleAvailable is false when state is completed', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+
+    expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.isShuffleAvailable).toBe(false);
+  });
+
+  test('shuffleExpectedChars reorders expectedCharsToDisplay', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    const originalSequence = [...component.expectedCharsToDisplay];
+    let shuffled = false;
+    for (let attempt = 0; attempt < 10; attempt++) {
+      component.shuffleExpectedChars();
+      if (component.expectedCharsToDisplay.join('') !== originalSequence.join('')) {
+        shuffled = true;
+        break;
+      }
+    }
+    expect(shuffled).toBe(true);
+    expect([...component.expectedCharsToDisplay].sort()).toEqual([...originalSequence].sort());
+  });
+
+  test('shuffleExpectedChars can be called multiple times before starting', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a', 'b', 'c', 'd'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.exerciseRuntimeState).toBe('opened');
+    component.shuffleExpectedChars();
+    component.shuffleExpectedChars();
+    component.shuffleExpectedChars();
+
+    expect(component.exerciseRuntimeState).toBe('opened');
+    expect(component.expectedCharsToDisplay).toHaveLength(4);
+  });
+
+  test('expectedCharsToDisplay resets to canonical sequence on route re-activation', () => {
+    serviceStub.getExerciseById.mockReturnValue({
+      id: 'basic-typing',
+      name: 'Basic Typing',
+      expectedChars: ['a', 'b', 'c', 'd'],
+      impactedKeys: [],
+      shufflable: true
+    });
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    const canonical = ['a', 'b', 'c', 'd'];
+    component.shuffleExpectedChars();
+
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.expectedCharsToDisplay).toEqual(canonical);
+  });
+
 });
+

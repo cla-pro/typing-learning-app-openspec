@@ -3,6 +3,7 @@ export interface ExerciseConfig {
   name: string;
   expectedChars: string[];
   impactedKeys: string[];
+  shufflable?: boolean;
 }
 
 export interface ExerciseCategory {

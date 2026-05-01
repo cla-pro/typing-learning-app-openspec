@@ -39,6 +39,15 @@
 
       <section class="exercise-focus-stack">
         <div class="control-panel">
+          @if (isShuffleAvailable) {
+            <button
+              type="button"
+              class="shuffle-button"
+              (click)="shuffleExpectedChars()"
+            >
+              {{ 'exercise.shuffle' | translate }}
+            </button>
+          }
           <button
             type="button"
             class="runtime-button"

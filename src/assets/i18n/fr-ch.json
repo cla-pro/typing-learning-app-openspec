@@ -3,6 +3,7 @@
     "errorCount": "{{count}} erreurs",
     "errorCountAria": "Nombre d'erreurs",
     "pause": "pause",
+    "shuffle": "Mélanger",
     "start": "démarrer"
   },
   "exerciseNotFound": {

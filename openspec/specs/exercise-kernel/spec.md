@@ -46,7 +46,7 @@ The system SHALL compare keyboard input and active expected character values usi
 - **THEN** progression advances to the next expected character or completes if it is the last one
 
 ### Requirement: Exercise configuration uses non-empty expectedChars
-The system SHALL use `expectedChars` as the canonical exercise configuration field, and valid exercise configurations MUST include at least one expected character.
+The system SHALL use `expectedChars` as the canonical exercise configuration field, and valid exercise configurations MUST include at least one expected character. Exercise configurations MAY include an optional `shufflable` boolean property. When `shufflable` is absent or `false`, the canonical sequence is always used as-is. When `shufflable` is `true`, the exercise supports pre-start randomization of the character sequence for the current play session.
 
 #### Scenario: Config exposes expectedChars field
 - **WHEN** exercise configurations are loaded through the shared configuration service
@@ -55,6 +55,10 @@ The system SHALL use `expectedChars` as the canonical exercise configuration fie
 #### Scenario: Empty expectedChars is invalid
 - **WHEN** an exercise configuration has an empty `expectedChars` collection
 - **THEN** that configuration is treated as invalid for runtime progression
+
+#### Scenario: shufflable property is optional
+- **WHEN** an exercise configuration does not declare `shufflable`
+- **THEN** the exercise behaves as non-shufflable and the canonical sequence is always used
 
 ### Requirement: Running-state wrong-key presses are counted
 The system SHALL maintain an error counter for each opened exercise session and SHALL increment that counter by exactly one for each wrong key press received during `running` state.
