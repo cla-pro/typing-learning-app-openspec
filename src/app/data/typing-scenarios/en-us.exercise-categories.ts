@@ -228,5 +228,23 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
         impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
       }
     ]
+  },
+  {
+    name: 'Stories',
+    keyboardLayouts: ['en-us'],
+    exercises: [
+      {
+        id: 'en-us-stories-unicorn-by-the-lake',
+        name: 'Unicorn by the Lake',
+        expectedChars: ['L', 'u', 'n', 'a', ' ', 't', 'h', 'e', ' ', 'u', 'n', 'i', 'c', 'o', 'r', 'n', ' ', 'w', 'e', 'n', 't', ' ', 'f', 'o', 'r', ' ', 'a', ' ', 'w', 'a', 'l', 'k', ' ', 'a', 'l', 'o', 'n', 'g', ' ', 't', 'h', 'e', ' ', 'l', 'a', 'k', 'e', '.', ' ', 'T', 'h', 'e', ' ', 'w', 'a', 't', 'e', 'r', ' ', 'w', 'a', 's', ' ', 'b', 'l', 'u', 'e', ' ', 'a', 'n', 'd', ' ', 's', 't', 'i', 'l', 'l', '.', ' ', 'S', 'h', 'e', ' ', 's', 'a', 'w', ' ', 's', 'm', 'a', 'l', 'l', ' ', 'f', 'i', 's', 'h', ' ', 'a', 'n', 'd', ' ', 'p', 'r', 'e', 't', 't', 'y', ' ', 'f', 'l', 'o', 'w', 'e', 'r', 's', ' ', 'n', 'e', 'a', 'r', ' ', 't', 'h', 'e', ' ', 's', 'h', 'o', 'r', 'e', '.', ' ', 'L', 'u', 'n', 'a', ' ', 'f', 'e', 'l', 't', ' ', 'h', 'a', 'p', 'p', 'y', ' ', 'a', 'n', 'd', ' ', 'c', 'a', 'l', 'm', '.'],
+        impactedKeys: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'W', 'Y', ' ', '.']
+      },
+      {
+        id: 'en-us-stories-dinosaur-drives-a-car',
+        name: 'Dinosaur Drives a Car',
+        expectedChars: ['R', 'e', 'x', ' ', 't', 'h', 'e', ' ', 'd', 'i', 'n', 'o', 's', 'a', 'u', 'r', ' ', 'g', 'o', 't', ' ', 'i', 'n', 't', 'o', ' ', 'h', 'i', 's', ' ', 'r', 'e', 'd', ' ', 'c', 'a', 'r', ' ', 'a', 'n', 'd', ' ', 'd', 'r', 'o', 'v', 'e', ' ', 'd', 'o', 'w', 'n', ' ', 't', 'h', 'e', ' ', 'r', 'o', 'a', 'd', '.', ' ', 'H', 'e', ' ', 'b', 'e', 'e', 'p', 'e', 'd', ' ', 'h', 'i', 's', ' ', 'h', 'o', 'r', 'n', ' ', 'a', 't', ' ', 'a', ' ', 's', 'h', 'e', 'e', 'p', ' ', 'a', 'n', 'd', ' ', 'w', 'a', 'v', 'e', 'd', ' ', 't', 'o', ' ', 'a', ' ', 'c', 'o', 'w', '.', ' ', 'T', 'h', 'e', ' ', 'b', 'i', 'g', ' ', 'd', 'i', 'n', 'o', 's', 'a', 'u', 'r', ' ', 's', 'm', 'i', 'l', 'e', 'd', ' ', 'a', 'n', 'd', ' ', 'd', 'r', 'o', 'v', 'e', ' ', 'o', 'n', '.'],
+        impactedKeys: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', ' ', '.']
+      }
+    ]
   }
 ];
