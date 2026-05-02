@@ -31,6 +31,36 @@ export class ExerciseProgressService {
     }
   }
 
+  getTotalStars(): number {
+    try {
+      const storage = globalThis.localStorage;
+
+      if (!storage) {
+        return 0;
+      }
+
+      let total = 0;
+
+      for (let index = 0; index < storage.length; index += 1) {
+        const key = storage.key(index);
+
+        if (!key || !key.endsWith('_stars')) {
+          continue;
+        }
+
+        const value = Number(storage.getItem(key));
+
+        if (Number.isFinite(value)) {
+          total += value;
+        }
+      }
+
+      return total;
+    } catch {
+      return 0;
+    }
+  }
+
   private computeStars(errorCount: number, totalChars: number): number {
     if (totalChars === 0) {
       return 3;

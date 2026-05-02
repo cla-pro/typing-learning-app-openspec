@@ -16,10 +16,15 @@
   text-align: center;
 }
 
-.settings-link {
+.welcome-actions {
   position: absolute;
   top: 0.65rem;
   right: 0.8rem;
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.welcome-action-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +38,7 @@
   background-color: #ffffff;
 }
 
-.settings-link:hover {
+.welcome-action-link:hover {
   background-color: #eef3f7;
 }
 

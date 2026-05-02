@@ -1,0 +1,24 @@
+<app-home-button></app-home-button>
+
+<main class="reward-games-container">
+  <div class="reward-games-content">
+    <h1>{{ 'rewardGames.title' | translate }}</h1>
+    <p class="reward-games-intro">{{ 'rewardGames.lockedIntro' | translate }}</p>
+
+    <ul class="reward-games-list">
+      @for (game of rewardGames; track game.id) {
+        <li class="reward-games-card" [class.reward-games-card--locked]="game.locked">
+          <div class="reward-games-icon-wrap">
+            <span class="reward-games-icon" aria-hidden="true">{{ game.icon }}</span>
+            @if (game.locked) {
+              <span class="reward-games-lock" aria-hidden="true">🔒</span>
+            }
+          </div>
+
+          <span class="reward-games-name">{{ game.nameKey | translate }}</span>
+          <span class="reward-games-status">{{ 'rewardGames.lockedStatus' | translate }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</main>

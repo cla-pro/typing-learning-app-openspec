@@ -15,6 +15,16 @@
     "label": "Accueil",
     "title": "Retour à l'accueil"
   },
+  "rewardGames": {
+    "games": {
+      "bubbleSorter": "Trieur de bulles",
+      "keyGarden": "Jardin des touches",
+      "meteorDash": "Course de météores"
+    },
+    "lockedIntro": "Gagnez plus d'étoiles pour débloquer ces jeux bonus.",
+    "lockedStatus": "Verrouillé",
+    "title": "Jeux bonus"
+  },
   "settings": {
     "languageLabel": "Langue",
     "languages": {
@@ -28,7 +38,9 @@
     "title": "Paramètres"
   },
   "welcome": {
+    "openRewardGames": "Ouvrir les jeux bonus",
     "openSettings": "Ouvrir les paramètres",
+    "rewardGamesTitle": "Jeux bonus",
     "settingsTitle": "Paramètres",
     "title": "Typing Learning"
   }

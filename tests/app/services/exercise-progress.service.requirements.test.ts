@@ -76,4 +76,20 @@ describe('ExerciseProgressService Requirements', () => {
     expect(service.getStars('ex')).toBe(0);
     expect(service.isCompleted('ex')).toBe(true);
   });
+
+  test('getTotalStars sums star values across completed exercises', () => {
+    service.recordCompletion('exercise-a', 0, 10);
+    service.recordCompletion('exercise-b', 1, 10);
+    service.recordCompletion('exercise-c', 5, 20);
+
+    expect(service.getTotalStars()).toBe(5);
+  });
+
+  test('getTotalStars ignores unrelated keys and malformed stored values', () => {
+    service.recordCompletion('exercise-a', 0, 10);
+    globalThis.localStorage?.setItem('not-a-star-key', '99');
+    globalThis.localStorage?.setItem('broken_stars', 'oops');
+
+    expect(service.getTotalStars()).toBe(3);
+  });
 });

@@ -15,6 +15,16 @@
     "label": "Home",
     "title": "Return to home"
   },
+  "rewardGames": {
+    "games": {
+      "bubbleSorter": "Bubble Sorter",
+      "keyGarden": "Key Garden",
+      "meteorDash": "Meteor Dash"
+    },
+    "lockedIntro": "Earn more stars to unlock these bonus games.",
+    "lockedStatus": "Locked",
+    "title": "Reward Games"
+  },
   "settings": {
     "languageLabel": "Language",
     "languages": {
@@ -28,7 +38,9 @@
     "title": "Settings"
   },
   "welcome": {
+    "openRewardGames": "Open reward games",
     "openSettings": "Open settings",
+    "rewardGamesTitle": "Reward games",
     "settingsTitle": "Settings",
     "title": "Typing Learning"
   }

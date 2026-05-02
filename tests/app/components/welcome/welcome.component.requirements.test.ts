@@ -16,6 +16,8 @@ const translations = {
   'de-ch': {
     welcome: {
       openSettings: 'Einstellungen öffnen',
+      openRewardGames: 'Belohnungsspiele öffnen',
+      rewardGamesTitle: 'Belohnungsspiele',
       settingsTitle: 'Einstellungen',
       title: 'Tipptraining'
     }
@@ -64,6 +66,7 @@ const layoutServiceStub = {
 let progressStub: {
   isCompleted: ReturnType<typeof vi.fn>;
   getStars: ReturnType<typeof vi.fn>;
+  getTotalStars: ReturnType<typeof vi.fn>;
 };
 
 describe('Welcome Component Requirements', () => {
@@ -91,7 +94,8 @@ describe('Welcome Component Requirements', () => {
 
     progressStub = {
       isCompleted: vi.fn(() => false),
-      getStars: vi.fn(() => 0)
+      getStars: vi.fn(() => 0),
+      getTotalStars: vi.fn(() => 0)
     };
 
     await TestBed.configureTestingModule({
@@ -121,6 +125,10 @@ describe('Welcome Component Requirements', () => {
 
   test('exposes settings route for gear-button navigation', () => {
     expect(component.settingsRoute).toBe('/settings');
+  });
+
+  test('exposes reward-games route for fun-button navigation', () => {
+    expect(component.rewardGamesRoute).toBe('/reward-games');
   });
 
   test('exposes grouped exercise links in category and exercise order without duplication', () => {
@@ -171,6 +179,21 @@ describe('Welcome Component Requirements', () => {
     expect(serviceStub.listExerciseCategories).toHaveBeenCalledWith('fr-ch');
   });
 
+  test('hides reward-games entry when total stars is zero', () => {
+    expect(component.totalStars).toBe(0);
+    expect(component.showRewardGamesEntry).toBe(false);
+    expect(progressStub.getTotalStars).toHaveBeenCalledTimes(1);
+  });
+
+  test('shows reward-games entry when total stars is greater than zero', () => {
+    progressStub.getTotalStars.mockReturnValue(1);
+
+    const enrichedComponent = TestBed.runInInjectionContext(() => new WelcomeComponent());
+
+    expect(enrichedComponent.totalStars).toBe(1);
+    expect(enrichedComponent.showRewardGamesEntry).toBe(true);
+  });
+
   test('loads categories for current chosen layout from settings service', () => {
     layoutServiceStub.getChosenLayout.mockReturnValue('de-ch');
 
@@ -181,9 +204,11 @@ describe('Welcome Component Requirements', () => {
     expect(deChComponent.exerciseCategoriesWithProgress[0]?.exercises.map(exercise => exercise.name)).toEqual(['C']);
   });
 
-  test('renders translated heading and localized settings action text metadata', async () => {
+  test('renders translated heading and localized welcome action text metadata', async () => {
     TestBed.resetTestingModule();
     await resolveComponentResources(async (url: string) => readFile(resourceMap[url] ?? url, 'utf8'));
+
+    progressStub.getTotalStars.mockReturnValue(2);
 
     await TestBed.configureTestingModule({
       imports: [WelcomeComponent],
@@ -220,9 +245,13 @@ describe('Welcome Component Requirements', () => {
 
     const element = fixture.nativeElement as HTMLElement;
     const settingsLink = element.querySelector('.settings-link');
+    const rewardGamesLink = element.querySelector('.reward-games-link');
 
     expect(element.querySelector('h1')?.textContent?.trim()).toBe('Tipptraining');
     expect(settingsLink?.getAttribute('aria-label')).toBe('Einstellungen öffnen');
     expect(settingsLink?.getAttribute('title')).toBe('Einstellungen');
+    expect(rewardGamesLink?.getAttribute('aria-label')).toBe('Belohnungsspiele öffnen');
+    expect(rewardGamesLink?.getAttribute('title')).toBe('Belohnungsspiele');
+    expect(rewardGamesLink?.textContent?.trim()).toBe('🎮');
   });
 });

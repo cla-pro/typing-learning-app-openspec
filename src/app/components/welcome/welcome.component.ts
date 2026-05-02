@@ -31,18 +31,26 @@ export class WelcomeComponent {
   private readonly settingsService = inject(SettingsService);
 
   readonly settingsRoute: string = '/settings';
+  readonly rewardGamesRoute: string = '/reward-games';
+  totalStars: number;
   exerciseCategories: ExerciseCategory[];
   exerciseCategoriesWithProgress: ExerciseCategoryWithProgress[];
 
   constructor() {
+    this.totalStars = 0;
     this.exerciseCategories = [];
     this.exerciseCategoriesWithProgress = [];
     this.reloadCategories();
   }
 
+  get showRewardGamesEntry(): boolean {
+    return this.totalStars > 0;
+  }
+
   private reloadCategories(): void {
     const layout = this.settingsService.getChosenLayout();
     this.exerciseCategories = this.exerciseConfigService.listExerciseCategories(layout);
+    this.totalStars = this.exerciseProgressService.getTotalStars();
     this.exerciseCategoriesWithProgress = this.exerciseCategories.map(category => ({
       name: category.name,
       exercises: category.exercises.map(exercise => {

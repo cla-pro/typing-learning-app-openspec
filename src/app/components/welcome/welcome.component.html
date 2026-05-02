@@ -1,13 +1,26 @@
 <main class="welcome-container">
   <div class="welcome-content">
-    <a
-      class="settings-link"
-      [routerLink]="settingsRoute"
-      [attr.aria-label]="'welcome.openSettings' | translate"
-      [title]="'welcome.settingsTitle' | translate"
-    >
-      &#9881;
-    </a>
+    <div class="welcome-actions">
+      @if (showRewardGamesEntry) {
+        <a
+          class="welcome-action-link reward-games-link"
+          [routerLink]="rewardGamesRoute"
+          [attr.aria-label]="'welcome.openRewardGames' | translate"
+          [title]="'welcome.rewardGamesTitle' | translate"
+        >
+          🎮
+        </a>
+      }
+
+      <a
+        class="welcome-action-link settings-link"
+        [routerLink]="settingsRoute"
+        [attr.aria-label]="'welcome.openSettings' | translate"
+        [title]="'welcome.settingsTitle' | translate"
+      >
+        &#9881;
+      </a>
+    </div>
 
     <h1>{{ 'welcome.title' | translate }}</h1>
 

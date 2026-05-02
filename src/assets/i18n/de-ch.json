@@ -15,6 +15,16 @@
     "label": "Startseite",
     "title": "Zur Startseite zurückkehren"
   },
+  "rewardGames": {
+    "games": {
+      "bubbleSorter": "Blasensortierer",
+      "keyGarden": "Tastengarten",
+      "meteorDash": "Meteorflug"
+    },
+    "lockedIntro": "Verdiene mehr Sterne, um diese Bonusspiele freizuschalten.",
+    "lockedStatus": "Gesperrt",
+    "title": "Belohnungsspiele"
+  },
   "settings": {
     "languageLabel": "Sprache",
     "languages": {
@@ -28,7 +38,9 @@
     "title": "Einstellungen"
   },
   "welcome": {
+    "openRewardGames": "Belohnungsspiele öffnen",
     "openSettings": "Einstellungen öffnen",
+    "rewardGamesTitle": "Belohnungsspiele",
     "settingsTitle": "Einstellungen",
     "title": "Typing Learning"
   }
