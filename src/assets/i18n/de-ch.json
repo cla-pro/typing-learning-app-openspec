@@ -7,19 +7,20 @@
     "start": "starten"
   },
   "exerciseNotFound": {
-    "description": "Verwende die Home-Schaltfläche, um zur Startseite zurückzukehren.",
+    "description": "Verwende die Zurück-Schaltfläche, um zur Startseite zurückzukehren.",
     "message": "Für diese Anfrage ist keine Übung verfügbar.",
     "title": "Übung nicht gefunden"
   },
   "homeButton": {
-    "label": "Startseite",
-    "title": "Zur Startseite zurückkehren"
+    "label": "Zurück",
+    "title": "Zurückgehen"
   },
   "rewardGames": {
     "games": {
       "bubbleSorter": "Blasensortierer",
       "keyGarden": "Tastengarten",
-      "meteorDash": "Meteorflug"
+      "meteorDash": "Meteorflug",
+      "tortoiseForestPath": "Schildkröten-Waldpfad"
     },
     "lockedIntro": "Verdiene mehr Sterne, um diese Bonusspiele freizuschalten.",
     "lockedStatus": "Gesperrt",

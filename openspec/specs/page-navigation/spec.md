@@ -5,11 +5,11 @@ Client-side navigation system for the typing learning application, including rou
 ## Requirements
 
 ### Requirement: Angular application routing
-The system SHALL implement Angular Router for client-side navigation between pages without full page reloads, including a dedicated route for the exercise-not-found page, a dedicated route for the Settings page, and a dedicated route for the reward games page.
+The system SHALL implement Angular Router for client-side navigation between pages without full page reloads, including a dedicated route for the exercise-not-found page, a dedicated route for the Settings page, a dedicated route for the reward games page, and a typed parameterised route for reward game instances following the pattern `/reward-games/:gameType/:gameId`.
 
 #### Scenario: Angular routing module configured
 - **WHEN** the application initializes
-- **THEN** Angular Router is configured with routes for welcome page, settings page, reward games page, exercise pages, dedicated exercise-not-found page, and wildcard redirect
+- **THEN** Angular Router is configured with routes for welcome page, settings page, reward games page, reward game typed instance pages, exercise pages, dedicated exercise-not-found page, and wildcard redirect
 
 #### Scenario: Navigation between pages without reload
 - **WHEN** a user clicks a navigation link
@@ -42,7 +42,7 @@ The system SHALL redirect any unrecognized URLs to the root page automatically.
 - **THEN** the Angular host serves the app shell and Angular Router handles the route
 
 ### Requirement: Home navigation component
-The system SHALL provide a reusable home button component that navigates back to the root page from any location where recovery to home is required.
+The system SHALL provide a reusable home button component that navigates to a configurable target route from any location where recovery navigation is required, with the default target being the root page.
 
 #### Scenario: Home button on exercise pages
 - **WHEN** viewing an exercise page
@@ -55,6 +55,14 @@ The system SHALL provide a reusable home button component that navigates back to
 #### Scenario: Home button uses Angular routing
 - **WHEN** the home button is clicked
 - **THEN** navigation occurs via Angular Router without full page reload
+
+#### Scenario: Home button with custom destination navigates to that destination
+- **WHEN** the home button component is configured with a custom target route
+- **THEN** activating the button navigates to the configured target route via Angular Router without a full page reload
+
+#### Scenario: Home button default destination is root when no custom target is configured
+- **WHEN** the home button component is rendered without a custom target route
+- **THEN** activating the button navigates to the root URL
 
 ### Requirement: Navigation links on welcome page
 The system SHALL display navigation links on the welcome page that allow users to navigate to exercise pages, SHALL source those links from the shared exercise configuration service, SHALL expose a settings navigation action from the welcome page top-right area, and SHALL expose a reward-games navigation action from the welcome page only after the user has earned at least one total star.
@@ -76,8 +84,8 @@ The system SHALL display navigation links on the welcome page that allow users t
 - **THEN** the browser navigates to the reward games page URL without full page reload
 
 ### Requirement: Automated test coverage for navigation integration
-The system SHALL include automated tests for navigation behavior introduced or changed by service-driven exercise links, settings-page navigation entry, reward-games navigation entry, reward-games route rendering, and error-state recovery.
+The system SHALL include automated tests for navigation behavior introduced or changed by service-driven exercise links, settings-page navigation entry, reward-games navigation entry, reward-games route rendering, reward-game typed instance route rendering, customised home button destination, and error-state recovery.
 
 #### Scenario: Navigation test coverage
 - **WHEN** test suites are executed
-- **THEN** tests verify navigation from welcome-page service-driven links, welcome-page navigation to settings page, welcome-page navigation to the reward games page when available, dedicated reward-games route rendering, dedicated exercise-not-found route rendering, and home recovery navigation from the exercise-not-found page
+- **THEN** tests verify navigation from welcome-page service-driven links, welcome-page navigation to settings page, welcome-page navigation to the reward games page when available, dedicated reward-games route rendering, reward-game typed instance route rendering for a valid game type, dedicated exercise-not-found route rendering, home recovery navigation from the exercise-not-found page, and home button navigation to a custom configured destination

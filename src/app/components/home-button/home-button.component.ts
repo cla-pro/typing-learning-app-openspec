@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -8,5 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './home-button.component.html',
     styleUrls: ['./home-button.component.css']
 })
-export class HomeButtonComponent {}
+export class HomeButtonComponent {
+  @Input() destination: string = '/';
+}
 

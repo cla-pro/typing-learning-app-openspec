@@ -7,19 +7,20 @@
     "start": "start"
   },
   "exerciseNotFound": {
-    "description": "Use the home button to go back to the welcome page.",
+    "description": "Use the back button to go back to the welcome page.",
     "message": "No exercise is available for this request.",
     "title": "Exercise Not Found"
   },
   "homeButton": {
-    "label": "Home",
-    "title": "Return to home"
+    "label": "Back",
+    "title": "Go back"
   },
   "rewardGames": {
     "games": {
       "bubbleSorter": "Bubble Sorter",
       "keyGarden": "Key Garden",
-      "meteorDash": "Meteor Dash"
+      "meteorDash": "Meteor Dash",
+      "tortoiseForestPath": "Tortoise Forest Path"
     },
     "lockedIntro": "Earn more stars to unlock these bonus games.",
     "lockedStatus": "Locked",

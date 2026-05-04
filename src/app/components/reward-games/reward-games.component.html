@@ -7,17 +7,25 @@
 
     <ul class="reward-games-list">
       @for (game of rewardGames; track game.id) {
-        <li class="reward-games-card" [class.reward-games-card--locked]="game.locked">
-          <div class="reward-games-icon-wrap">
-            <span class="reward-games-icon" aria-hidden="true">{{ game.icon }}</span>
-            @if (game.locked) {
+        @if (game.routePath) {
+          <li class="reward-games-card">
+            <a class="reward-games-card-link" [routerLink]="[game.routePath]">
+              <div class="reward-games-icon-wrap">
+                <span class="reward-games-icon" aria-hidden="true">{{ game.icon }}</span>
+              </div>
+              <span class="reward-games-name">{{ game.nameKey | translate }}</span>
+            </a>
+          </li>
+        } @else {
+          <li class="reward-games-card reward-games-card--locked">
+            <div class="reward-games-icon-wrap">
+              <span class="reward-games-icon" aria-hidden="true">{{ game.icon }}</span>
               <span class="reward-games-lock" aria-hidden="true">🔒</span>
-            }
-          </div>
-
-          <span class="reward-games-name">{{ game.nameKey | translate }}</span>
-          <span class="reward-games-status">{{ 'rewardGames.lockedStatus' | translate }}</span>
-        </li>
+            </div>
+            <span class="reward-games-name">{{ game.nameKey | translate }}</span>
+            <span class="reward-games-status">{{ 'rewardGames.lockedStatus' | translate }}</span>
+          </li>
+        }
       }
     </ul>
   </div>

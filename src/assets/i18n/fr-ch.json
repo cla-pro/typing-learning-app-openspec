@@ -7,19 +7,20 @@
     "start": "démarrer"
   },
   "exerciseNotFound": {
-    "description": "Utilisez le bouton d'accueil pour revenir à la page d'accueil.",
+    "description": "Utilisez le bouton retour pour revenir à la page d'accueil.",
     "message": "Aucun exercice n'est disponible pour cette demande.",
     "title": "Exercice introuvable"
   },
   "homeButton": {
-    "label": "Accueil",
-    "title": "Retour à l'accueil"
+    "label": "Retour",
+    "title": "Revenir en arrière"
   },
   "rewardGames": {
     "games": {
       "bubbleSorter": "Trieur de bulles",
       "keyGarden": "Jardin des touches",
-      "meteorDash": "Course de météores"
+      "meteorDash": "Course de météores",
+      "tortoiseForestPath": "Sentier de la tortue"
     },
     "lockedIntro": "Gagnez plus d'étoiles pour débloquer ces jeux bonus.",
     "lockedStatus": "Verrouillé",

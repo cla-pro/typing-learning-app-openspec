@@ -1,0 +1,7 @@
+<app-home-button [destination]="'/reward-games'"></app-home-button>
+
+<main class="tortoise-game-host-container">
+  @if (config) {
+    <p class="tortoise-game-host-placeholder">Game: {{ config.gameId }}</p>
+  }
+</main>
