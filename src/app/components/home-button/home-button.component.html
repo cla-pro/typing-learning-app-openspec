@@ -1,3 +1,8 @@
-<button class="home-button" [routerLink]="[destination]" [title]="'homeButton.title' | translate">
+<button
+  class="home-button"
+  [class.home-button--inline]="!floating"
+  [routerLink]="[destination]"
+  [title]="'homeButton.title' | translate"
+>
   🏠 {{ 'homeButton.label' | translate }}
 </button>

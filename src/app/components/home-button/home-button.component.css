@@ -18,6 +18,13 @@
   gap: 0.5rem;
 }
 
+.home-button--inline {
+  position: static;
+  top: auto;
+  left: auto;
+  z-index: auto;
+}
+
 .home-button:hover {
   background-color: #2980b9;
   transform: translateY(-2px);

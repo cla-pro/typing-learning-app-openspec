@@ -2,12 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
+import { TortoiseVisualizationComponent } from '../tortoise-visualization/tortoise-visualization.component';
 import { RewardGamesConfigService } from '../../services/reward-games-config.service';
 import { TortoiseGameConfig } from '../../models/tortoise-game-config.model';
 
 @Component({
   selector: 'app-tortoise-game-host',
-  imports: [HomeButtonComponent],
+  imports: [HomeButtonComponent, TortoiseVisualizationComponent],
   templateUrl: './tortoise-game-host.component.html',
   styleUrls: ['./tortoise-game-host.component.css']
 })

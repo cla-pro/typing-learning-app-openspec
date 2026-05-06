@@ -5,11 +5,11 @@ Base routing, host component, configuration service, and generic grid primitives
 ## Requirements
 
 ### Requirement: Tortoise game host component resolves game configuration
-The system SHALL provide a tortoise game host component that extracts the `gameId` route parameter, requests the corresponding configuration from `RewardGamesConfigService`, and renders a not-found state when no configuration is found.
+The system SHALL provide a tortoise game host component that extracts the `gameId` route parameter, requests the corresponding configuration from `RewardGamesConfigService`, renders the tortoise visualization when a configuration is found, and renders a not-found state when no configuration is found.
 
-#### Scenario: Valid game ID loads configuration
+#### Scenario: Valid game ID loads configuration and renders visualization
 - **WHEN** the tortoise game host component is activated with a `gameId` that exists in `RewardGamesConfigService`
-- **THEN** the component loads the tortoise game configuration and makes it available for rendering
+- **THEN** the component loads the tortoise game configuration and provides it to the tortoise visualization for rendering
 
 #### Scenario: Unknown game ID redirects to not-found
 - **WHEN** the tortoise game host component is activated with a `gameId` that does not exist in `RewardGamesConfigService`
@@ -53,11 +53,11 @@ The system SHALL provide a `RewardGamesConfigService` that holds static in-app t
 - **THEN** the service returns a falsy value
 
 ### Requirement: Automated test coverage for reward-game-tortoise-base
-The system SHALL include automated tests that verify tortoise host component configuration loading and not-found redirection, generic grid primitive reusability, and `RewardGamesConfigService` lookup behaviour.
+The system SHALL include automated tests that verify tortoise host component configuration loading and not-found redirection, generic grid primitive reusability, `RewardGamesConfigService` lookup behaviour, and host integration with the tortoise visualization component.
 
 #### Scenario: Tortoise host component tests are executed
 - **WHEN** the test suite runs
-- **THEN** tests verify that the host component loads config for a known `gameId` and redirects to not-found for an unknown `gameId`
+- **THEN** tests verify that the host component loads config for a known `gameId`, passes it to the tortoise visualization, and redirects to not-found for an unknown `gameId`
 
 #### Scenario: RewardGamesConfigService tests are executed
 - **WHEN** the test suite runs

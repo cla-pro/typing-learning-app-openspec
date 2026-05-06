@@ -10,5 +10,6 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class HomeButtonComponent {
   @Input() destination: string = '/';
+  @Input() floating: boolean = true;
 }
 

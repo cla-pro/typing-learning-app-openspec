@@ -2,12 +2,14 @@ import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { Component, importProvidersFrom, ɵresolveComponentResources as resolveComponentResources } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { readFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { TortoiseGameHostComponent } from '../../../../src/app/components/tortoise-game-host/tortoise-game-host.component';
+import { HomeButtonComponent } from '../../../../src/app/components/home-button/home-button.component';
 import { RewardGamesConfigService } from '../../../../src/app/services/reward-games-config.service';
 import { TORTOISE_GAME_CONFIGS } from '../../../../src/app/data/tortoise-game-configs';
 
@@ -23,7 +25,9 @@ const resourceMap: Record<string, string> = {
   './tortoise-game-host.component.html': 'src/app/components/tortoise-game-host/tortoise-game-host.component.html',
   './tortoise-game-host.component.css': 'src/app/components/tortoise-game-host/tortoise-game-host.component.css',
   './home-button.component.html': 'src/app/components/home-button/home-button.component.html',
-  './home-button.component.css': 'src/app/components/home-button/home-button.component.css'
+  './home-button.component.css': 'src/app/components/home-button/home-button.component.css',
+  './tortoise-visualization.component.html': 'src/app/components/tortoise-visualization/tortoise-visualization.component.html',
+  './tortoise-visualization.component.css': 'src/app/components/tortoise-visualization/tortoise-visualization.component.css'
 };
 
 describe('Tortoise Game Host Component Requirements', () => {
@@ -83,7 +87,17 @@ describe('Tortoise Game Host Component Requirements', () => {
     paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
     fixture.detectChanges();
 
-    const homeButtonEl = fixture.debugElement.children[0];
+    const homeButtonEl = fixture.debugElement.query(By.directive(HomeButtonComponent));
+
     expect(homeButtonEl?.componentInstance?.destination).toBe('/reward-games');
+  });
+
+  test('passes loaded configuration to the tortoise visualization component', async () => {
+    paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const vizEl = fixture.nativeElement.querySelector('app-tortoise-visualization');
+    expect(vizEl).not.toBeNull();
   });
 });

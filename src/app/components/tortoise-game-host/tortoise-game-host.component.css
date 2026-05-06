@@ -1,0 +1,34 @@
+.tortoise-game-host-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: 100vh;
+	padding: 5rem 2rem 2rem;
+	background-color: #f5f5f5;
+}
+
+.tortoise-game-host-content {
+	width: min(92vw, 980px);
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 1.25rem 1.5rem 1.75rem;
+}
+
+.tortoise-game-host-render-area {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	min-height: 16rem;
+}
+
+@media (max-width: 768px) {
+	.tortoise-game-host-container {
+		padding: 4rem 1rem 2rem;
+	}
+
+	.tortoise-game-host-content {
+		padding: 1rem;
+	}
+}

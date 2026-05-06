@@ -1,0 +1,44 @@
+<div class="tortoise-board" [style.width.px]="boardWidth" [style.height.px]="boardHeight">
+
+  <!-- Layer 1: Path -->
+  <svg class="tortoise-layer tortoise-layer--path"
+       [attr.viewBox]="viewBox"
+       [attr.width]="boardWidth"
+       [attr.height]="boardHeight">
+    <polyline class="tortoise-path" [attr.points]="pathPoints" fill="none" />
+  </svg>
+
+  <!-- Layer 2: Objects (tortoise + obstacles) -->
+  <div class="tortoise-layer tortoise-layer--objects">
+    @for (obstacle of config.obstacles; track obstacle.position.col + '-' + obstacle.position.row) {
+      <div class="tortoise-object tortoise-object--obstacle"
+           [style.transform]="obstacleTransform(obstacle.position)"></div>
+    }
+    <div class="tortoise-object tortoise-object--tortoise"
+         [style.transform]="tortoiseTransform"
+         [style.transition]="'transform ' + moveDurationMs + 'ms linear'"
+         (transitionend)="onTortoiseTransitionEnd()">🐢</div>
+  </div>
+
+  <!-- Layer 3: Debug grid -->
+  @if (debugGrid) {
+    <svg class="tortoise-layer tortoise-layer--debug-grid"
+         [attr.viewBox]="viewBox"
+         [attr.width]="boardWidth"
+         [attr.height]="boardHeight">
+      @for (line of debugGridLines; track $index) {
+        <line class="tortoise-debug-line"
+              [attr.x1]="line.x1" [attr.y1]="line.y1"
+              [attr.x2]="line.x2" [attr.y2]="line.y2" />
+      }
+      @for (cellLabel of debugCellLabels; track cellLabel.label) {
+        <text class="tortoise-debug-label"
+              [attr.x]="cellLabel.x"
+              [attr.y]="cellLabel.y"
+              text-anchor="middle"
+              dominant-baseline="middle">{{ cellLabel.label }}</text>
+      }
+    </svg>
+  }
+
+</div>
