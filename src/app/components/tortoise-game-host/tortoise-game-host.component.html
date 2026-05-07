@@ -4,8 +4,25 @@
   <section class="tortoise-game-host-content">
     <div class="tortoise-game-host-render-area">
       @if (config) {
-        <app-tortoise-visualization [config]="config" [debugGrid]="true" />
+        <app-tortoise-visualization
+          [config]="config"
+          [debugGrid]="true"
+          (moveCompleted)="onMoveCompleted()"
+        />
       }
     </div>
+
+    @if (config) {
+      <div class="tortoise-game-host-controls">
+        <button
+          type="button"
+          class="runtime-button"
+          [disabled]="isStartDisabled"
+          (click)="startGame()"
+        >
+          {{ 'exercise.start' | translate }}
+        </button>
+      </div>
+    }
   </section>
 </main>

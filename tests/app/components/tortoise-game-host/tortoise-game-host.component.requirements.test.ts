@@ -11,9 +11,37 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { TortoiseGameHostComponent } from '../../../../src/app/components/tortoise-game-host/tortoise-game-host.component';
 import { HomeButtonComponent } from '../../../../src/app/components/home-button/home-button.component';
 import { RewardGamesConfigService } from '../../../../src/app/services/reward-games-config.service';
-import { TORTOISE_GAME_CONFIGS } from '../../../../src/app/data/tortoise-game-configs';
+import { TortoiseVisualizationComponent } from '../../../../src/app/components/tortoise-visualization/tortoise-visualization.component';
+import { TortoiseGameConfig } from '../../../../src/app/models/tortoise-game-config.model';
 
-const KNOWN_GAME_ID = TORTOISE_GAME_CONFIGS[0].gameId;
+const KNOWN_GAME_ID = 'tortoise-test-game';
+
+const DEFAULT_CONFIG: TortoiseGameConfig = {
+  gameId: KNOWN_GAME_ID,
+  start: { col: 0, row: 4 },
+  end: { col: 3, row: 4 },
+  waypoints: [
+    { col: 0, row: 4 },
+    { col: 3, row: 4 }
+  ],
+  obstacles: [
+    {
+      position: { col: 2, row: 4 },
+      clearCharacters: ['a']
+    }
+  ]
+};
+
+const CLEAR_CONFIG: TortoiseGameConfig = {
+  gameId: 'tortoise-clear-game',
+  start: { col: 0, row: 0 },
+  end: { col: 2, row: 0 },
+  waypoints: [
+    { col: 0, row: 0 },
+    { col: 2, row: 0 }
+  ],
+  obstacles: []
+};
 
 class TestTranslateLoader implements TranslateLoader {
   getTranslation(_lang: string): Observable<TranslationObject> {
@@ -34,10 +62,12 @@ describe('Tortoise Game Host Component Requirements', () => {
   let fixture: ComponentFixture<TortoiseGameHostComponent>;
   let paramMap$: ReplaySubject<ReturnType<typeof convertToParamMap>>;
   let routerStub: { navigateByUrl: ReturnType<typeof vi.fn> };
+  let rewardGamesConfigServiceStub: { getTortoiseConfig: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     paramMap$ = new ReplaySubject(1);
     routerStub = { navigateByUrl: vi.fn() };
+    rewardGamesConfigServiceStub = { getTortoiseConfig: vi.fn(() => DEFAULT_CONFIG) };
 
     TestBed.resetTestingModule();
     await resolveComponentResources(async (url: string) => readFile(resourceMap[url] ?? url, 'utf8'));
@@ -52,7 +82,7 @@ describe('Tortoise Game Host Component Requirements', () => {
         ),
         { provide: ActivatedRoute, useValue: { paramMap: paramMap$.asObservable() } },
         { provide: Router, useValue: routerStub },
-        RewardGamesConfigService
+        { provide: RewardGamesConfigService, useValue: rewardGamesConfigServiceStub }
       ]
     }).compileComponents();
 
@@ -69,6 +99,7 @@ describe('Tortoise Game Host Component Requirements', () => {
   });
 
   test('redirects to exercise-not-found for an unknown gameId', () => {
+    rewardGamesConfigServiceStub.getTortoiseConfig.mockReturnValueOnce(undefined);
     paramMap$.next(convertToParamMap({ gameId: 'unknown-game-id' }));
     fixture.detectChanges();
 
@@ -99,5 +130,82 @@ describe('Tortoise Game Host Component Requirements', () => {
 
     const vizEl = fixture.nativeElement.querySelector('app-tortoise-visualization');
     expect(vizEl).not.toBeNull();
+  });
+
+  test('renders the start button under the game field and keeps it enabled while idle', async () => {
+    paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const renderArea = fixture.nativeElement.querySelector('.tortoise-game-host-render-area') as HTMLElement;
+    const controls = fixture.nativeElement.querySelector('.tortoise-game-host-controls') as HTMLElement;
+    const startButton = fixture.nativeElement.querySelector('.runtime-button') as HTMLButtonElement;
+
+    expect(renderArea).not.toBeNull();
+    expect(controls).not.toBeNull();
+    expect(startButton).not.toBeNull();
+    expect(startButton.disabled).toBe(false);
+    expect(renderArea.compareDocumentPosition(controls) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+  });
+
+  test('clicking start disables the button and moves the visualization to the first clear cell', async () => {
+    paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const startButton = fixture.nativeElement.querySelector('.runtime-button') as HTMLButtonElement;
+    const visualization = fixture.debugElement.query(By.directive(TortoiseVisualizationComponent))
+      .componentInstance as TortoiseVisualizationComponent;
+
+    startButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(startButton.disabled).toBe(true);
+    expect(fixture.componentInstance.gameState).toBe('running');
+    expect(fixture.componentInstance.movementState).toBe('moving');
+    expect(visualization.tortoiseDisplayX).toBe(96);
+    expect(visualization.tortoiseDisplayY).toBe(288);
+  });
+
+  test('animation completion refreshes host state and blocks when the next cell contains an obstacle', async () => {
+    paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const visualization = fixture.debugElement.query(By.directive(TortoiseVisualizationComponent))
+      .componentInstance as TortoiseVisualizationComponent;
+
+    fixture.componentInstance.startGame();
+    await fixture.whenStable();
+
+    visualization.onTortoiseTransitionEnd();
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.gameState).toBe('running');
+    expect(fixture.componentInstance.movementState).toBe('blocked');
+    expect(fixture.componentInstance.currentPosition).toEqual({ col: 1, row: 4 });
+    expect(fixture.componentInstance.targetPosition).toBeNull();
+  });
+
+  test('reaching the end leaves the host in completed state without extra navigation', async () => {
+    rewardGamesConfigServiceStub.getTortoiseConfig.mockReturnValueOnce(CLEAR_CONFIG);
+    paramMap$.next(convertToParamMap({ gameId: CLEAR_CONFIG.gameId }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const visualization = fixture.debugElement.query(By.directive(TortoiseVisualizationComponent))
+      .componentInstance as TortoiseVisualizationComponent;
+
+    fixture.componentInstance.startGame();
+    await fixture.whenStable();
+    visualization.onTortoiseTransitionEnd();
+    await fixture.whenStable();
+    visualization.onTortoiseTransitionEnd();
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.gameState).toBe('completed');
+    expect(fixture.componentInstance.movementState).toBe('idle');
+    expect(routerStub.navigateByUrl).not.toHaveBeenCalledWith('/reward-games');
   });
 });
