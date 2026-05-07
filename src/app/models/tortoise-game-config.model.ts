@@ -2,7 +2,7 @@ import { GridPosition } from './grid.model';
 
 export interface TortoiseObstacle {
   position: GridPosition;
-  clearCharacters: string[];
+  clearCharactersByLayout: Record<string, string[]>;
 }
 
 export interface TortoiseGameConfig {

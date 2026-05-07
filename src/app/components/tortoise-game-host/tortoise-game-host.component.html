@@ -1,11 +1,17 @@
 <app-home-button [destination]="'/reward-games'"></app-home-button>
 
 <main class="tortoise-game-host-container">
-  <section class="tortoise-game-host-content">
+  <section
+    #tortoiseGameContent
+    class="tortoise-game-host-content"
+    tabindex="0"
+    (keydown)="onGameKeydown($event)"
+  >
     <div class="tortoise-game-host-render-area">
       @if (config) {
         <app-tortoise-visualization
           [config]="config"
+          [clearedObstacleKeys]="clearedObstacleKeys"
           [debugGrid]="true"
           (moveCompleted)="onMoveCompleted()"
         />
@@ -13,6 +19,15 @@
     </div>
 
     @if (config) {
+      <div class="tortoise-game-host-obstacle-box" [style.font-size.rem]="streamSizeScale">
+        @for (item of obstacleCharItems; track item.index) {
+          <span
+            class="obstacle-char"
+            [class.obstacle-char--typed]="item.typed"
+          >{{ item.char }}</span>
+        }
+      </div>
+
       <div class="tortoise-game-host-controls">
         <button
           type="button"

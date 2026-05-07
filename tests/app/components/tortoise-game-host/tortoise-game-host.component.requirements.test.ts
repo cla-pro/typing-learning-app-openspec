@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { Component, importProvidersFrom, ɵresolveComponentResources as resolveComponentResources } from '@angular/core';
+import { importProvidersFrom, ɵresolveComponentResources as resolveComponentResources } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
@@ -13,6 +13,7 @@ import { HomeButtonComponent } from '../../../../src/app/components/home-button/
 import { RewardGamesConfigService } from '../../../../src/app/services/reward-games-config.service';
 import { TortoiseVisualizationComponent } from '../../../../src/app/components/tortoise-visualization/tortoise-visualization.component';
 import { TortoiseGameConfig } from '../../../../src/app/models/tortoise-game-config.model';
+import { SettingsService } from '../../../../src/app/services/settings.service';
 
 const KNOWN_GAME_ID = 'tortoise-test-game';
 
@@ -27,7 +28,29 @@ const DEFAULT_CONFIG: TortoiseGameConfig = {
   obstacles: [
     {
       position: { col: 2, row: 4 },
-      clearCharacters: ['a']
+      clearCharactersByLayout: {
+        'fr-ch': ['a'],
+        'de-ch': ['a']
+      }
+    }
+  ]
+};
+
+const BLOCKED_CONFIG: TortoiseGameConfig = {
+  gameId: 'tortoise-blocked-game',
+  start: { col: 0, row: 0 },
+  end: { col: 2, row: 0 },
+  waypoints: [
+    { col: 0, row: 0 },
+    { col: 2, row: 0 }
+  ],
+  obstacles: [
+    {
+      position: { col: 1, row: 0 },
+      clearCharactersByLayout: {
+        'fr-ch': ['a', 'b'],
+        'de-ch': ['a', 'b']
+      }
     }
   ]
 };
@@ -82,7 +105,14 @@ describe('Tortoise Game Host Component Requirements', () => {
         ),
         { provide: ActivatedRoute, useValue: { paramMap: paramMap$.asObservable() } },
         { provide: Router, useValue: routerStub },
-        { provide: RewardGamesConfigService, useValue: rewardGamesConfigServiceStub }
+        { provide: RewardGamesConfigService, useValue: rewardGamesConfigServiceStub },
+        {
+          provide: SettingsService,
+          useValue: {
+            getStreamSizeValue: () => 0,
+            getChosenLayout: () => 'fr-ch'
+          }
+        }
       ]
     }).compileComponents();
 
@@ -148,44 +178,48 @@ describe('Tortoise Game Host Component Requirements', () => {
     expect(renderArea.compareDocumentPosition(controls) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
   });
 
-  test('clicking start disables the button and moves the visualization to the first clear cell', async () => {
-    paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
+  test('shows obstacle characters only while running and never shows status words', async () => {
+    rewardGamesConfigServiceStub.getTortoiseConfig.mockReturnValueOnce(BLOCKED_CONFIG);
+    paramMap$.next(convertToParamMap({ gameId: BLOCKED_CONFIG.gameId }));
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const startButton = fixture.nativeElement.querySelector('.runtime-button') as HTMLButtonElement;
-    const visualization = fixture.debugElement.query(By.directive(TortoiseVisualizationComponent))
-      .componentInstance as TortoiseVisualizationComponent;
-
-    startButton.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(startButton.disabled).toBe(true);
-    expect(fixture.componentInstance.gameState).toBe('running');
-    expect(fixture.componentInstance.movementState).toBe('moving');
-    expect(visualization.tortoiseDisplayX).toBe(96);
-    expect(visualization.tortoiseDisplayY).toBe(288);
-  });
-
-  test('animation completion refreshes host state and blocks when the next cell contains an obstacle', async () => {
-    paramMap$.next(convertToParamMap({ gameId: KNOWN_GAME_ID }));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const visualization = fixture.debugElement.query(By.directive(TortoiseVisualizationComponent))
-      .componentInstance as TortoiseVisualizationComponent;
+    const obstacleBoxIdle = fixture.nativeElement.querySelector('.tortoise-game-host-obstacle-box') as HTMLElement;
+    expect(obstacleBoxIdle).not.toBeNull();
 
     fixture.componentInstance.startGame();
+    fixture.detectChanges();
     await fixture.whenStable();
 
-    visualization.onTortoiseTransitionEnd();
+    const obstacleBox = fixture.nativeElement.querySelector('.tortoise-game-host-obstacle-box') as HTMLElement;
+    expect(obstacleBox).not.toBeNull();
+    expect(obstacleBox.textContent?.replace(/\s+/g, '')).toBe('ab');
+    expect((obstacleBox.textContent ?? '').toLowerCase()).not.toContain('blocked');
+    expect((obstacleBox.textContent ?? '').toLowerCase()).not.toContain('running');
+  });
+
+  test('typing clears a blocking obstacle without using virtual keyboard UI', async () => {
+    rewardGamesConfigServiceStub.getTortoiseConfig.mockReturnValueOnce(BLOCKED_CONFIG);
+    paramMap$.next(convertToParamMap({ gameId: BLOCKED_CONFIG.gameId }));
+    fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.componentInstance.gameState).toBe('running');
+    fixture.componentInstance.startGame();
+    fixture.detectChanges();
+
     expect(fixture.componentInstance.movementState).toBe('blocked');
-    expect(fixture.componentInstance.currentPosition).toEqual({ col: 1, row: 4 });
-    expect(fixture.componentInstance.targetPosition).toBeNull();
+    expect(fixture.nativeElement.querySelector('.keyboard-display')).toBeNull();
+
+    const gameContent = fixture.nativeElement.querySelector('.tortoise-game-host-content') as HTMLElement;
+    gameContent.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.typedObstacleChars).toEqual(['a']);
+
+    gameContent.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.movementState).toBe('moving');
+    expect(fixture.componentInstance.clearedObstacleKeys).toContain('1,0');
   });
 
   test('reaching the end leaves the host in completed state without extra navigation', async () => {
@@ -206,6 +240,7 @@ describe('Tortoise Game Host Component Requirements', () => {
 
     expect(fixture.componentInstance.gameState).toBe('completed');
     expect(fixture.componentInstance.movementState).toBe('idle');
+    expect(fixture.nativeElement.querySelector('.tortoise-game-host-obstacle-box')).not.toBeNull();
     expect(routerStub.navigateByUrl).not.toHaveBeenCalledWith('/reward-games');
   });
 });

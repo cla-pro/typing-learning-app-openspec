@@ -1,19 +1,4 @@
-## Purpose
-
-Dedicated settings page that centralizes user-adjustable application preferences.
-
-## Requirements
-
-### Requirement: Settings page presents centralized app preferences
-The system SHALL provide a dedicated Settings page with a centered title resolved from the active UI language and SHALL render configurable app preferences as a labeled list.
-
-#### Scenario: Settings title is centered
-- **WHEN** a user navigates to the Settings page
-- **THEN** the page displays the localized settings title in a centered position at the top
-
-#### Scenario: Settings are rendered as labeled list items
-- **WHEN** the Settings page is rendered
-- **THEN** each setting appears as a list item with a visible label and control
+## MODIFIED Requirements
 
 ### Requirement: Settings page includes keyboard layout, UI language, and stream size settings
 The system SHALL allow users to configure keyboard layout, UI language, and expected-character stream size from the Settings page. The stream-size range input SHALL render with a visible, draggable thumb on all supported browsers, including Safari on iOS (iPad). The stream-size value SHALL be reused by tortoise obstacle-character display for typography scaling.
@@ -41,10 +26,3 @@ The system SHALL allow users to configure keyboard layout, UI language, and expe
 #### Scenario: Stream size value applies to tortoise obstacle-character display
 - **WHEN** the user changes stream size in Settings and then opens a tortoise game with obstacle character display
 - **THEN** the obstacle-character display uses the configured stream-size value for character scaling
-
-### Requirement: Settings page follows welcome-page visual style direction
-The system SHALL style the Settings page consistently with the welcome page visual language.
-
-#### Scenario: Settings page styling is consistent
-- **WHEN** the Settings page is viewed in a browser
-- **THEN** spacing, card/container treatment, and typography style are visually consistent with the welcome page

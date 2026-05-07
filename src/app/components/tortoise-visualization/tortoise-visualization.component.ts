@@ -14,6 +14,7 @@ const MOVE_DURATION_MS = 400;
 })
 export class TortoiseVisualizationComponent implements OnChanges {
   @Input({ required: true }) config!: TortoiseGameConfig;
+  @Input() clearedObstacleKeys: string[] = [];
   @Input() debugGrid = false;
   @Output() moveCompleted = new EventEmitter<void>();
 
@@ -76,6 +77,10 @@ export class TortoiseVisualizationComponent implements OnChanges {
     return `translate(${center.x}px, ${center.y}px) translate(-50%, -50%)`;
   }
 
+  get visibleObstacles() {
+    return this.config.obstacles.filter(obstacle => !this.isObstacleCleared(obstacle.position));
+  }
+
   moveTortoiseTo(target: GridPosition): void {
     const center = this.cellCenter(target);
     this.tortoiseDisplayX = center.x;
@@ -109,5 +114,10 @@ export class TortoiseVisualizationComponent implements OnChanges {
         return `${center.x},${center.y}`;
       })
       .join(' ');
+  }
+
+  private isObstacleCleared(position: GridPosition): boolean {
+    const key = `${position.col},${position.row}`;
+    return this.clearedObstacleKeys.includes(key);
   }
 }

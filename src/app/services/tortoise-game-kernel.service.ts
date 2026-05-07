@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
+import { SUPPORTED_KEYBOARD_LAYOUT_IDS } from '../data/keyboard-layouts';
 import { GridPosition } from '../models/grid.model';
-import { TortoiseGameConfig } from '../models/tortoise-game-config.model';
+import { TortoiseGameConfig, TortoiseObstacle } from '../models/tortoise-game-config.model';
+import { SettingsService } from './settings.service';
 
 export type TortoiseGameState = 'idle' | 'running' | 'completed';
 export type TortoiseMovementState = 'idle' | 'moving' | 'blocked';
@@ -11,10 +13,15 @@ export interface TortoiseGameKernelSnapshot {
   movementState: TortoiseMovementState;
   currentPosition: GridPosition;
   targetPosition: GridPosition | null;
+  nextObstacleChars: string[];
+  typedObstacleChars: string[];
+  clearedObstacleKeys: string[];
 }
 
 @Injectable({ providedIn: 'root' })
 export class TortoiseGameKernelService {
+  settingsService: Pick<SettingsService, 'getChosenLayout'> = inject(SettingsService);
+
   private config: TortoiseGameConfig | null = null;
   private route: GridPosition[] = [];
   private routeIndex = 0;
@@ -22,8 +29,14 @@ export class TortoiseGameKernelService {
   private movementState: TortoiseMovementState = 'idle';
   private currentPosition: GridPosition = { col: 0, row: 0 };
   private targetPosition: GridPosition | null = null;
+  private readonly clearedObstacleKeys = new Set<string>();
+  private typedObstacleIndex = 0;
 
   initialize(config: TortoiseGameConfig): void {
+    if (!this.hasFullLayoutCoverage(config)) {
+      throw new Error('Every obstacle must define character sequences for all supported keyboard layouts.');
+    }
+
     this.config = config;
     this.route = this.expandRoute(config.waypoints);
     this.routeIndex = this.findStartIndex(config.start);
@@ -31,6 +44,8 @@ export class TortoiseGameKernelService {
     this.movementState = 'idle';
     this.currentPosition = this.clonePosition(config.start);
     this.targetPosition = null;
+    this.clearedObstacleKeys.clear();
+    this.typedObstacleIndex = 0;
   }
 
   start(): void {
@@ -43,12 +58,51 @@ export class TortoiseGameKernelService {
   }
 
   getSnapshot(): TortoiseGameKernelSnapshot {
+    const nextObstacle = this.gameState === 'running' ? this.getNextObstacle() : undefined;
+    const nextObstacleChars = nextObstacle ? this.getObstacleCharsForCurrentLayout(nextObstacle) : [];
+
     return {
       gameState: this.gameState,
       movementState: this.movementState,
       currentPosition: this.clonePosition(this.currentPosition),
-      targetPosition: this.targetPosition ? this.clonePosition(this.targetPosition) : null
+      targetPosition: this.targetPosition ? this.clonePosition(this.targetPosition) : null,
+      nextObstacleChars,
+      typedObstacleChars: nextObstacleChars.slice(0, this.typedObstacleIndex),
+      clearedObstacleKeys: [...this.clearedObstacleKeys]
     };
+  }
+
+  typeObstacleChar(char: string): void {
+    if (this.gameState !== 'running') {
+      return;
+    }
+
+    const nextObstacle = this.getNextObstacle();
+    if (!nextObstacle) {
+      return;
+    }
+
+    const chars = this.getObstacleCharsForCurrentLayout(nextObstacle);
+    if (chars.length === 0 || this.typedObstacleIndex >= chars.length) {
+      return;
+    }
+
+    if (char !== chars[this.typedObstacleIndex]) {
+      return;
+    }
+
+    this.typedObstacleIndex += 1;
+
+    if (this.typedObstacleIndex < chars.length) {
+      return;
+    }
+
+    this.clearedObstacleKeys.add(this.obstacleKey(nextObstacle));
+    this.typedObstacleIndex = 0;
+
+    if (this.movementState === 'blocked') {
+      this.scheduleNextMove();
+    }
   }
 
   completeMovement(): void {
@@ -93,11 +147,51 @@ export class TortoiseGameKernelService {
   }
 
   private isBlocked(position: GridPosition): boolean {
-    if (!this.config) {
+    const blockingObstacle = this.findObstacleAt(position);
+
+    if (!blockingObstacle) {
       return false;
     }
 
-    return this.config.obstacles.some(obstacle => this.positionsEqual(obstacle.position, position));
+    return !this.clearedObstacleKeys.has(this.obstacleKey(blockingObstacle));
+  }
+
+  private findObstacleAt(position: GridPosition): TortoiseObstacle | undefined {
+    return this.config?.obstacles.find(obstacle => this.positionsEqual(obstacle.position, position));
+  }
+
+  private getNextObstacle(): TortoiseObstacle | undefined {
+    if (!this.config) {
+      return undefined;
+    }
+
+    for (let index = this.routeIndex + 1; index < this.route.length; index++) {
+      const obstacle = this.findObstacleAt(this.route[index]);
+      if (!obstacle) {
+        continue;
+      }
+
+      if (this.clearedObstacleKeys.has(this.obstacleKey(obstacle))) {
+        continue;
+      }
+
+      return obstacle;
+    }
+
+    return undefined;
+  }
+
+  private getObstacleCharsForCurrentLayout(obstacle: TortoiseObstacle): string[] {
+    const layout = this.settingsService.getChosenLayout();
+    return [...(obstacle.clearCharactersByLayout[layout] ?? [])];
+  }
+
+  private obstacleKey(obstacle: TortoiseObstacle): string {
+    return this.positionKey(obstacle.position);
+  }
+
+  private positionKey(position: GridPosition): string {
+    return `${position.col},${position.row}`;
   }
 
   private findStartIndex(start: GridPosition): number {
@@ -135,6 +229,15 @@ export class TortoiseGameKernelService {
     }
 
     return expanded;
+  }
+
+  private hasFullLayoutCoverage(config: TortoiseGameConfig): boolean {
+    return config.obstacles.every(obstacle => {
+      return SUPPORTED_KEYBOARD_LAYOUT_IDS.every(layout => {
+        const chars = obstacle.clearCharactersByLayout[layout];
+        return Array.isArray(chars) && chars.length > 0;
+      });
+    });
   }
 
   private positionsEqual(left: GridPosition, right: GridPosition): boolean {

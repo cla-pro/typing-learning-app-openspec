@@ -14,15 +14,27 @@ export const TORTOISE_GAME_CONFIGS: TortoiseGameConfig[] = [
     obstacles: [
       {
         position: { col: 2, row: 4 },
-        clearCharacters: ['a', 's', 'd']
+        clearCharactersByLayout: {
+          'fr-ch': ['a', 's', 'd'],
+          'de-ch': ['a', 's', 'd'],
+          'en-us': ['a', 's', 'd']
+        }
       },
       {
         position: { col: 4, row: 2 },
-        clearCharacters: ['f', 'g']
+        clearCharactersByLayout: {
+          'fr-ch': ['f', 'g'],
+          'de-ch': ['f', 'g'],
+          'en-us': ['f', 'g']
+        }
       },
       {
         position: { col: 6, row: 0 },
-        clearCharacters: ['j', 'k', 'l']
+        clearCharactersByLayout: {
+          'fr-ch': ['j', 'k', 'l'],
+          'de-ch': ['j', 'k', 'l'],
+          'en-us': ['j', 'k', 'l']
+        }
       }
     ]
   }

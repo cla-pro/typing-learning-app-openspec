@@ -90,6 +90,18 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     });
   });
 
+  test('hides obstacles whose position keys are marked as cleared', () => {
+    const firstObstacle = TEST_CONFIG.obstacles[0];
+    fixture.componentRef.setInput('clearedObstacleKeys', [`${firstObstacle.position.col},${firstObstacle.position.row}`]);
+    fixture.detectChanges();
+
+    const obstacleEls = Array.from(
+      fixture.nativeElement.querySelectorAll('.tortoise-object--obstacle')
+    ) as HTMLElement[];
+
+    expect(obstacleEls).toHaveLength(Math.max(0, TEST_CONFIG.obstacles.length - 1));
+  });
+
   test('polyline points are placed at waypoint cell centers', () => {
     const polyline = fixture.nativeElement.querySelector('polyline') as SVGPolylineElement;
     const expectedPoints = TEST_CONFIG.waypoints.map(wp => {
