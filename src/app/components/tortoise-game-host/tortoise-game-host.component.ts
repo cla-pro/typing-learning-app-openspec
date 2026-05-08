@@ -118,11 +118,10 @@ export class TortoiseGameHostComponent implements OnInit {
     if (!this.targetPosition) {
       this.lastAnimatedTargetKey = null;
       this.cdr.markForCheck();
-      return;
+    } else {
+      this.cdr.markForCheck();
+      this.syncVisualizationTarget();
     }
-
-    this.cdr.markForCheck();
-    this.syncVisualizationTarget();
   }
 
   private syncVisualizationTarget(): void {
@@ -139,11 +138,9 @@ export class TortoiseGameHostComponent implements OnInit {
     const nextTarget = { ...this.targetPosition };
 
     queueMicrotask(() => {
-      if (!this.visualizationComponent || this.lastAnimatedTargetKey !== targetKey) {
-        return;
+      if (this.visualizationComponent && this.lastAnimatedTargetKey === targetKey) {
+        this.visualizationComponent.moveTortoiseTo(nextTarget);
       }
-
-      this.visualizationComponent.moveTortoiseTo(nextTarget);
     });
   }
 

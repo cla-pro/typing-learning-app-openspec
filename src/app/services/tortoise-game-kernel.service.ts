@@ -22,7 +22,7 @@ export interface TortoiseGameKernelSnapshot {
 export class TortoiseGameKernelService {
   settingsService: Pick<SettingsService, 'getChosenLayout'> = inject(SettingsService);
 
-  private config: TortoiseGameConfig | null = null;
+  private config!: TortoiseGameConfig;
   private route: GridPosition[] = [];
   private routeIndex = 0;
   private gameState: TortoiseGameState = 'idle';
@@ -39,7 +39,7 @@ export class TortoiseGameKernelService {
 
     this.config = config;
     this.route = this.expandRoute(config.waypoints);
-    this.routeIndex = this.findStartIndex(config.start);
+    this.routeIndex = 0;
     this.gameState = 'idle';
     this.movementState = 'idle';
     this.currentPosition = this.clonePosition(config.start);
@@ -49,12 +49,10 @@ export class TortoiseGameKernelService {
   }
 
   start(): void {
-    if (!this.config || this.gameState !== 'idle') {
-      return;
+    if (this.gameState === 'idle') {
+      this.gameState = 'running';
+      this.scheduleNextMove();
     }
-
-    this.gameState = 'running';
-    this.scheduleNextMove();
   }
 
   getSnapshot(): TortoiseGameKernelSnapshot {
@@ -93,15 +91,13 @@ export class TortoiseGameKernelService {
 
     this.typedObstacleIndex += 1;
 
-    if (this.typedObstacleIndex < chars.length) {
-      return;
-    }
+    if (this.typedObstacleIndex >= chars.length) {
+      this.clearedObstacleKeys.add(this.obstacleKey(nextObstacle));
+      this.typedObstacleIndex = 0;
 
-    this.clearedObstacleKeys.add(this.obstacleKey(nextObstacle));
-    this.typedObstacleIndex = 0;
-
-    if (this.movementState === 'blocked') {
-      this.scheduleNextMove();
+      if (this.movementState === 'blocked') {
+        this.scheduleNextMove();
+      }
     }
   }
 
@@ -113,22 +109,20 @@ export class TortoiseGameKernelService {
     this.currentPosition = this.clonePosition(this.targetPosition);
     this.targetPosition = null;
     this.routeIndex = Math.min(this.routeIndex + 1, Math.max(this.route.length - 1, 0));
-
-    if (this.config && this.positionsEqual(this.currentPosition, this.config.end)) {
-      this.gameState = 'completed';
-      this.movementState = 'idle';
-      return;
-    }
-
     this.movementState = 'idle';
-    this.scheduleNextMove();
+
+    if (this.positionsEqual(this.currentPosition, this.config.end)) {
+      this.gameState = 'completed';
+    } else {
+      this.scheduleNextMove();
+    }
   }
 
   private scheduleNextMove(): void {
     const nextPosition = this.route[this.routeIndex + 1];
 
-    if (!this.config || !nextPosition) {
-      if (this.config && this.positionsEqual(this.currentPosition, this.config.end)) {
+    if (!nextPosition) {
+      if (this.positionsEqual(this.currentPosition, this.config.end)) {
         this.gameState = 'completed';
       }
       this.movementState = 'idle';
@@ -139,11 +133,10 @@ export class TortoiseGameKernelService {
     if (this.isBlocked(nextPosition)) {
       this.movementState = 'blocked';
       this.targetPosition = null;
-      return;
+    } else {
+      this.targetPosition = this.clonePosition(nextPosition);
+      this.movementState = 'moving';
     }
-
-    this.targetPosition = this.clonePosition(nextPosition);
-    this.movementState = 'moving';
   }
 
   private isBlocked(position: GridPosition): boolean {
@@ -157,25 +150,19 @@ export class TortoiseGameKernelService {
   }
 
   private findObstacleAt(position: GridPosition): TortoiseObstacle | undefined {
-    return this.config?.obstacles.find(obstacle => this.positionsEqual(obstacle.position, position));
+    return this.config.obstacles.find(obstacle => this.positionsEqual(obstacle.position, position));
   }
 
   private getNextObstacle(): TortoiseObstacle | undefined {
-    if (!this.config) {
-      return undefined;
-    }
-
     for (let index = this.routeIndex + 1; index < this.route.length; index++) {
       const obstacle = this.findObstacleAt(this.route[index]);
       if (!obstacle) {
         continue;
       }
 
-      if (this.clearedObstacleKeys.has(this.obstacleKey(obstacle))) {
-        continue;
+      if (!this.clearedObstacleKeys.has(this.obstacleKey(obstacle))) {
+        return obstacle;
       }
-
-      return obstacle;
     }
 
     return undefined;
@@ -192,11 +179,6 @@ export class TortoiseGameKernelService {
 
   private positionKey(position: GridPosition): string {
     return `${position.col},${position.row}`;
-  }
-
-  private findStartIndex(start: GridPosition): number {
-    const matchedIndex = this.route.findIndex(position => this.positionsEqual(position, start));
-    return matchedIndex >= 0 ? matchedIndex : 0;
   }
 
   private expandRoute(waypoints: GridPosition[]): GridPosition[] {
