@@ -54,6 +54,7 @@ describe('Reward Games Component Requirements', () => {
   let fixture: ComponentFixture<RewardGamesComponent>;
 
   beforeEach(async () => {
+    globalThis.localStorage?.clear();
     TestBed.resetTestingModule();
     await resolveComponentResources(async (url: string) => readFile(resourceMap[url] ?? url, 'utf8'));
 
@@ -136,5 +137,42 @@ describe('Reward Games Component Requirements', () => {
 
     expect(homeButton?.textContent?.trim()).toBe('🏠 Accueil');
     expect(router.url).toBe('/');
+  });
+
+  test('shows a crown marker when localStorage completion for the tortoise game is true', async () => {
+    fixture.destroy();
+    globalThis.localStorage?.setItem(`reward-game-${TORTOISE_GAME_ID}-completion`, 'true');
+
+    fixture = TestBed.createComponent(RewardGamesComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const launchableCard = fixture.nativeElement.querySelector('.reward-games-card:not(.reward-games-card--locked)') as HTMLElement;
+    const crown = launchableCard.querySelector('.reward-games-crown') as HTMLElement | null;
+
+    expect(crown).not.toBeNull();
+    expect(crown?.textContent?.trim()).toBe('👑');
+  });
+
+  test('reads persisted completion on initial render and keeps lock overlay behavior for locked entries', async () => {
+    fixture.destroy();
+    globalThis.localStorage?.setItem(`reward-game-${TORTOISE_GAME_ID}-completion`, 'true');
+    globalThis.localStorage?.setItem('reward-game-meteor-dash-completion', 'true');
+
+    fixture = TestBed.createComponent(RewardGamesComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const launchableCard = element.querySelector('.reward-games-card:not(.reward-games-card--locked)') as HTMLElement;
+    const lockedCards = Array.from(element.querySelectorAll('.reward-games-card--locked'));
+    const lockedMeteorCard = lockedCards.find(card =>
+      (card.querySelector('.reward-games-name')?.textContent ?? '').includes('Course de météores')
+    ) as HTMLElement | undefined;
+
+    expect(launchableCard.querySelector('.reward-games-crown')).not.toBeNull();
+    expect(lockedMeteorCard?.querySelector('.reward-games-lock')).not.toBeNull();
+    expect(lockedMeteorCard?.querySelector('.reward-games-crown')).not.toBeNull();
+    expect(lockedMeteorCard?.querySelector('a, button')).toBeNull();
   });
 });

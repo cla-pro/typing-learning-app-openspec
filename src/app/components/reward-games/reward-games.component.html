@@ -12,6 +12,9 @@
             <a class="reward-games-card-link" [routerLink]="[game.routePath]">
               <div class="reward-games-icon-wrap">
                 <span class="reward-games-icon" aria-hidden="true">{{ game.icon }}</span>
+                @if (game.isCompleted) {
+                  <span class="reward-games-crown" aria-hidden="true">👑</span>
+                }
               </div>
               <span class="reward-games-name">{{ game.nameKey | translate }}</span>
             </a>
@@ -20,6 +23,9 @@
           <li class="reward-games-card reward-games-card--locked">
             <div class="reward-games-icon-wrap">
               <span class="reward-games-icon" aria-hidden="true">{{ game.icon }}</span>
+              @if (game.isCompleted) {
+                <span class="reward-games-crown" aria-hidden="true">👑</span>
+              }
               <span class="reward-games-lock" aria-hidden="true">🔒</span>
             </div>
             <span class="reward-games-name">{{ game.nameKey | translate }}</span>

@@ -74,6 +74,14 @@ h1 {
   line-height: 1;
 }
 
+.reward-games-crown {
+  position: absolute;
+  top: -0.3rem;
+  left: -0.55rem;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
 .reward-games-name {
   font-weight: 700;
   color: #2c3e50;

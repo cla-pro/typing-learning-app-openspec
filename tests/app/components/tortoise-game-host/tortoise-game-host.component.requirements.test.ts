@@ -14,6 +14,7 @@ import { RewardGamesConfigService } from '../../../../src/app/services/reward-ga
 import { TortoiseVisualizationComponent } from '../../../../src/app/components/tortoise-visualization/tortoise-visualization.component';
 import { TortoiseGameConfig } from '../../../../src/app/models/tortoise-game-config.model';
 import { SettingsService } from '../../../../src/app/services/settings.service';
+import { RewardGameCompletionService } from '../../../../src/app/services/reward-game-completion.service';
 
 const KNOWN_GAME_ID = 'tortoise-test-game';
 
@@ -86,11 +87,13 @@ describe('Tortoise Game Host Component Requirements', () => {
   let paramMap$: ReplaySubject<ReturnType<typeof convertToParamMap>>;
   let routerStub: { navigateByUrl: ReturnType<typeof vi.fn> };
   let rewardGamesConfigServiceStub: { getTortoiseConfig: ReturnType<typeof vi.fn> };
+  let rewardGameCompletionServiceStub: { markCompleted: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     paramMap$ = new ReplaySubject(1);
     routerStub = { navigateByUrl: vi.fn() };
     rewardGamesConfigServiceStub = { getTortoiseConfig: vi.fn(() => DEFAULT_CONFIG) };
+    rewardGameCompletionServiceStub = { markCompleted: vi.fn() };
 
     TestBed.resetTestingModule();
     await resolveComponentResources(async (url: string) => readFile(resourceMap[url] ?? url, 'utf8'));
@@ -112,7 +115,8 @@ describe('Tortoise Game Host Component Requirements', () => {
             getStreamSizeValue: () => 0,
             getChosenLayout: () => 'fr-ch'
           }
-        }
+        },
+        { provide: RewardGameCompletionService, useValue: rewardGameCompletionServiceStub }
       ]
     }).compileComponents();
 
@@ -242,5 +246,7 @@ describe('Tortoise Game Host Component Requirements', () => {
     expect(fixture.componentInstance.movementState).toBe('idle');
     expect(fixture.nativeElement.querySelector('.tortoise-game-host-obstacle-box')).not.toBeNull();
     expect(routerStub.navigateByUrl).not.toHaveBeenCalledWith('/reward-games');
+    expect(rewardGameCompletionServiceStub.markCompleted).toHaveBeenCalledWith(CLEAR_CONFIG.gameId);
+    expect(rewardGameCompletionServiceStub.markCompleted).toHaveBeenCalledTimes(1);
   });
 });

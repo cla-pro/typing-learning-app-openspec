@@ -13,6 +13,7 @@ import {
 } from '../../services/tortoise-game-kernel.service';
 import { GridPosition } from '../../models/grid.model';
 import { SettingsService } from '../../services/settings.service';
+import { RewardGameCompletionService } from '../../services/reward-game-completion.service';
 
 const MODIFIER_KEYS = new Set(['Shift', 'Control', 'Alt', 'AltGraph', 'CapsLock', 'Meta', 'OS']);
 const STREAM_SIZE_SCALE_SPAN = 0.6;
@@ -31,6 +32,7 @@ export class TortoiseGameHostComponent implements OnInit {
   private readonly rewardGamesConfigService = inject(RewardGamesConfigService);
   private readonly tortoiseGameKernelService = inject(TortoiseGameKernelService);
   private readonly settingsService = inject(SettingsService);
+  private readonly rewardGameCompletionService = inject(RewardGameCompletionService);
 
   @ViewChild('tortoiseGameContent')
   private tortoiseGameContentRef?: ElementRef<HTMLElement>;
@@ -100,6 +102,7 @@ export class TortoiseGameHostComponent implements OnInit {
   }
 
   private refreshKernelSnapshot(): void {
+    const previousGameState = this.gameState;
     const snapshot = this.tortoiseGameKernelService.getSnapshot();
     this.gameState = snapshot.gameState;
     this.movementState = snapshot.movementState;
@@ -114,6 +117,10 @@ export class TortoiseGameHostComponent implements OnInit {
       index: i
     }));
     this.streamSizeScale = 1 + (this.settingsService.getStreamSizeValue() * STREAM_SIZE_SCALE_SPAN);
+
+    if (previousGameState !== 'completed' && this.gameState === 'completed' && this.config) {
+      this.rewardGameCompletionService.markCompleted(this.config.gameId);
+    }
 
     if (!this.targetPosition) {
       this.lastAnimatedTargetKey = null;

@@ -1,34 +1,4 @@
-## Purpose
-
-Runtime movement kernel for the tortoise reward game, including user-triggered start, step-by-step progression, obstacle blocking, and completed-state handling.
-
-## Requirements
-
-### Requirement: Tortoise movement kernel exposes a minimal imperative API
-The system SHALL provide a tortoise game kernel service that owns tortoise movement logic and exposes a minimal imperative API consisting of `initialize(config)`, `start()`, `getSnapshot()`, `typeObstacleChar(char)`, and `completeMovement()`.
-
-#### Scenario: Kernel initializes stable game state from configuration
-- **WHEN** the host initializes the tortoise game kernel with a tortoise game configuration
-- **THEN** the kernel snapshot reports `gameState` as `idle`, `movementState` as `idle`, and the current tortoise grid position as the configured start position
-
-#### Scenario: Kernel snapshot exposes current runtime state
-- **WHEN** the host requests the current kernel snapshot
-- **THEN** the returned snapshot includes the game state, movement state, current tortoise grid position, current target grid position, next-obstacle characters for the active layout, typed obstacle progress, and cleared-obstacle state
-
-#### Scenario: Typing command updates obstacle progress state
-- **WHEN** the host invokes `typeObstacleChar(char)` while a next obstacle exists
-- **THEN** the kernel updates obstacle typing progress according to selected-layout sequence rules
-
-### Requirement: Tortoise movement starts only from explicit user action
-The system SHALL keep the tortoise game idle until the user activates the start control, and SHALL begin progression only after the host invokes the kernel start action.
-
-#### Scenario: Game remains idle before start action
-- **WHEN** the tortoise game is displayed and the user has not clicked the start button
-- **THEN** the kernel keeps `gameState` as `idle` and does not advance the tortoise from the configured start position
-
-#### Scenario: Start action begins progression
-- **WHEN** the user clicks the start button and the host invokes `start()` while the kernel is idle
-- **THEN** the kernel transitions `gameState` to `running` and computes the first eligible movement step
+## MODIFIED Requirements
 
 ### Requirement: Tortoise movement progresses stepwise until blocked or completed
 The system SHALL evaluate only the immediate next waypoint on each step, SHALL stop before entering a cell occupied by an uncleared obstacle, SHALL mark the game as completed when the tortoise reaches the configured end position, and SHALL persist completion state for the current `gameId` as localStorage key `reward-game-<gameId>-completion` with value `true`.
