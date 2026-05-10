@@ -4,7 +4,7 @@ import { GridPosition } from '../../models/grid.model';
 import { TortoiseGameConfig } from '../../models/tortoise-game-config.model';
 
 const CELL_SIZE_PX = 64;
-const MOVE_DURATION_MS = 400;
+const MOVE_DURATION_MS = 800;
 
 @Component({
   selector: 'app-tortoise-visualization',
