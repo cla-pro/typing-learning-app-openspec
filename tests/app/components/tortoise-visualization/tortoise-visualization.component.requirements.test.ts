@@ -62,9 +62,9 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     expect(el.querySelector('.tortoise-layer--objects')).not.toBeNull();
   });
 
-  test('path layer contains a polyline and no waypoint marker elements', () => {
+  test('path layer contains a dual-stroke SVG path and no waypoint marker elements', () => {
     const pathLayer = fixture.nativeElement.querySelector('.tortoise-layer--path') as SVGElement;
-    expect(pathLayer.querySelector('polyline')).not.toBeNull();
+    expect(pathLayer.querySelectorAll('path.tortoise-path').length).toBe(2);
     // No circles or polygons that would constitute waypoint markers
     expect(pathLayer.querySelectorAll('circle').length).toBe(0);
     expect(pathLayer.querySelectorAll('polygon').length).toBe(0);
@@ -76,6 +76,11 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     const tortoiseEl = fixture.nativeElement.querySelector('.tortoise-object--tortoise') as HTMLElement;
     const center = expectedCenter(TEST_CONFIG.start);
     expect(tortoiseEl.style.transform).toContain(`translate(${center.x}px, ${center.y}px)`);
+
+    const tortoiseImg = fixture.nativeElement.querySelector('.tortoise-texture--tortoise') as HTMLImageElement;
+    expect(tortoiseImg).not.toBeNull();
+    expect(tortoiseImg.src).toContain('assets/reward-game/tortoise/tortoise.png');
+    expect(tortoiseImg.alt).toBe('Tortoise character');
   });
 
   test('each obstacle is centered in its configured grid cell', () => {
@@ -87,6 +92,19 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     obstacleEls.forEach((el, i) => {
       const center = expectedCenter(TEST_CONFIG.obstacles[i].position);
       expect(el.style.transform).toContain(`translate(${center.x}px, ${center.y}px)`);
+    });
+  });
+
+  test('renders obstacles as image elements with texture source and alt text', () => {
+    const obstacleEls = Array.from(
+      fixture.nativeElement.querySelectorAll('.tortoise-object--obstacle')
+    ) as HTMLImageElement[];
+
+    expect(obstacleEls).toHaveLength(TEST_CONFIG.obstacles.length);
+    obstacleEls.forEach(obstacle => {
+      expect(obstacle.tagName).toBe('IMG');
+      expect(obstacle.src).toContain('assets/reward-game/obstacles/rock.png');
+      expect(obstacle.alt).toBe('Obstacle on the tortoise path');
     });
   });
 
@@ -102,14 +120,14 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     expect(obstacleEls).toHaveLength(Math.max(0, TEST_CONFIG.obstacles.length - 1));
   });
 
-  test('polyline points are placed at waypoint cell centers', () => {
-    const polyline = fixture.nativeElement.querySelector('polyline') as SVGPolylineElement;
-    const expectedPoints = TEST_CONFIG.waypoints.map(wp => {
+  test('path geometry follows waypoint cell centers', () => {
+    const path = fixture.nativeElement.querySelector('.tortoise-path--inner') as SVGPathElement;
+    const expectedSegments = TEST_CONFIG.waypoints.map(wp => {
       const c = expectedCenter(wp);
       return `${c.x},${c.y}`;
     });
-    const actualPoints = (polyline.getAttribute('points') ?? '').trim().split(/\s+/);
-    expect(actualPoints).toEqual(expectedPoints);
+    const expectedData = `M ${expectedSegments[0]}${expectedSegments.slice(1).map(point => ` L ${point}`).join('')}`;
+    expect(path.getAttribute('d')).toBe(expectedData);
   });
 
   // ─── Debug grid ───────────────────────────────────────────────────────────
@@ -155,6 +173,20 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     expect(fixture.componentInstance.tortoiseDisplayY).toBe(targetCenter.y);
     // Position differs from source — display pixel state updated, not kept at source
     expect(fixture.componentInstance.tortoiseDisplayX).not.toBe(startCenter.x);
+  });
+
+  test('applies expected rotation angles for cardinal movement directions', () => {
+    fixture.componentInstance.moveTortoiseTo({ col: TEST_CONFIG.start.col + 1, row: TEST_CONFIG.start.row });
+    expect(fixture.componentInstance.tortoiseRotationAngle).toBe(0);
+
+    fixture.componentInstance.moveTortoiseTo({ col: TEST_CONFIG.start.col + 1, row: TEST_CONFIG.start.row + 1 });
+    expect(fixture.componentInstance.tortoiseRotationAngle).toBe(90);
+
+    fixture.componentInstance.moveTortoiseTo({ col: TEST_CONFIG.start.col, row: TEST_CONFIG.start.row + 1 });
+    expect(fixture.componentInstance.tortoiseRotationAngle).toBe(180);
+
+    fixture.componentInstance.moveTortoiseTo({ col: TEST_CONFIG.start.col, row: TEST_CONFIG.start.row });
+    expect(fixture.componentInstance.tortoiseRotationAngle).toBe(270);
   });
 
   test('moveCompleted is emitted when the move transition ends, not immediately on moveTortoiseTo', () => {

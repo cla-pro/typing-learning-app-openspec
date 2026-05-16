@@ -5,19 +5,27 @@
        [attr.viewBox]="viewBox"
        [attr.width]="boardWidth"
        [attr.height]="boardHeight">
-    <polyline class="tortoise-path" [attr.points]="pathPoints" fill="none" />
+    <path class="tortoise-path tortoise-path--outer" [attr.d]="pathData" fill="none" />
+    <path class="tortoise-path tortoise-path--inner" [attr.d]="pathData" fill="none" />
   </svg>
 
   <!-- Layer 2: Objects (tortoise + obstacles) -->
   <div class="tortoise-layer tortoise-layer--objects">
     @for (obstacle of visibleObstacles; track obstacle.position.col + '-' + obstacle.position.row) {
-      <div class="tortoise-object tortoise-object--obstacle"
-           [style.transform]="obstacleTransform(obstacle.position)"></div>
+      <img class="tortoise-object tortoise-object--obstacle"
+           [src]="getObstacleAssetUrl('rock')"
+           [style.transform]="obstacleTransform(obstacle.position)"
+           alt="Obstacle on the tortoise path" />
     }
     <div class="tortoise-object tortoise-object--tortoise"
          [style.transform]="tortoiseTransform"
          [style.transition]="'transform ' + moveDurationMs + 'ms linear'"
-         (transitionend)="onTortoiseTransitionEnd()">🐢</div>
+         (transitionend)="onTortoiseTransitionEnd()">
+      <img class="tortoise-texture tortoise-texture--tortoise"
+           [src]="tortoiseAssetUrl"
+           [style.transform]="'rotate(' + tortoiseRotationAngle + 'deg)'"
+           alt="Tortoise character" />
+    </div>
   </div>
 
   <!-- Layer 3: Debug grid -->

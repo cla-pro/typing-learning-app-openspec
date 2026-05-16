@@ -1,3 +1,8 @@
+:host {
+  --path-border: #000000;
+  --path-fill: #8b6f47;
+}
+
 .tortoise-board {
   position: relative;
   overflow: hidden;
@@ -23,10 +28,19 @@
 }
 
 .tortoise-path {
-  stroke: #6b7280;
-  stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.tortoise-path--outer {
+  stroke: var(--path-border);
+  stroke-width: 58px;
+}
+
+.tortoise-path--inner {
+  stroke: var(--path-fill);
+  stroke-opacity: 0.8;
+  stroke-width: 50px;
 }
 
 .tortoise-object {
@@ -36,16 +50,26 @@
 }
 
 .tortoise-object--tortoise {
-  font-size: 36px;
-  line-height: 1;
+  width: 56px;
+  height: 56px;
   user-select: none;
 }
 
 .tortoise-object--obstacle {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background-color: #dc2626;
+  object-fit: contain;
+}
+
+.tortoise-texture {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.tortoise-texture--tortoise {
+  transform-origin: center;
+  transition: transform 120ms linear;
 }
 
 .tortoise-debug-line {

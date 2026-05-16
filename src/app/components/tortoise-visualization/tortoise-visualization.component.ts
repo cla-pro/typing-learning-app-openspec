@@ -1,10 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
 
 import { GridPosition } from '../../models/grid.model';
 import { TortoiseGameConfig } from '../../models/tortoise-game-config.model';
+import { TortoiseTextureService } from '../../services/tortoise-texture.service';
 
 const CELL_SIZE_PX = 64;
 const MOVE_DURATION_MS = 800;
+
+type TortoiseDirection = 'right' | 'down' | 'left' | 'up';
 
 @Component({
   selector: 'app-tortoise-visualization',
@@ -13,6 +16,8 @@ const MOVE_DURATION_MS = 800;
   styleUrls: ['./tortoise-visualization.component.css']
 })
 export class TortoiseVisualizationComponent implements OnChanges {
+  private readonly tortoiseTextureService = inject(TortoiseTextureService);
+
   @Input({ required: true }) config!: TortoiseGameConfig;
   @Input() clearedObstacleKeys: string[] = [];
   @Input() debugGrid = false;
@@ -23,11 +28,13 @@ export class TortoiseVisualizationComponent implements OnChanges {
   boardWidth = 0;
   boardHeight = 0;
   viewBox = '';
-  pathPoints = '';
+  pathData = '';
 
   tortoiseDisplayX = 0;
   tortoiseDisplayY = 0;
+  tortoiseDirection: TortoiseDirection = 'right';
   moveDurationMs = MOVE_DURATION_MS;
+  private tortoiseGridPosition: GridPosition | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['config'] && this.config) {
@@ -36,11 +43,30 @@ export class TortoiseVisualizationComponent implements OnChanges {
       const startCenter = this.cellCenter(this.config.start);
       this.tortoiseDisplayX = startCenter.x;
       this.tortoiseDisplayY = startCenter.y;
+      this.tortoiseGridPosition = { ...this.config.start };
+      this.tortoiseDirection = 'right';
     }
   }
 
   get tortoiseTransform(): string {
     return `translate(${this.tortoiseDisplayX}px, ${this.tortoiseDisplayY}px) translate(-50%, -50%)`;
+  }
+
+  get tortoiseRotationAngle(): number {
+    if (this.tortoiseDirection === 'down') {
+      return 90;
+    }
+    if (this.tortoiseDirection === 'left') {
+      return 180;
+    }
+    if (this.tortoiseDirection === 'up') {
+      return 270;
+    }
+    return 0;
+  }
+
+  get tortoiseAssetUrl(): string {
+    return this.tortoiseTextureService.getTortoiseAssetUrl();
   }
 
   get debugGridLines(): { x1: number; y1: number; x2: number; y2: number }[] {
@@ -81,10 +107,16 @@ export class TortoiseVisualizationComponent implements OnChanges {
     return this.config.obstacles.filter(obstacle => !this.isObstacleCleared(obstacle.position));
   }
 
+  getObstacleAssetUrl(type: string): string {
+    return this.tortoiseTextureService.getObstacleAssetUrl(type);
+  }
+
   moveTortoiseTo(target: GridPosition): void {
+    this.updateDirectionForTarget(target);
     const center = this.cellCenter(target);
     this.tortoiseDisplayX = center.x;
     this.tortoiseDisplayY = center.y;
+    this.tortoiseGridPosition = { ...target };
   }
 
   onTortoiseTransitionEnd(): void {
@@ -108,16 +140,39 @@ export class TortoiseVisualizationComponent implements OnChanges {
   }
 
   private computePathPoints(): void {
-    this.pathPoints = this.config.waypoints
+    const points = this.config.waypoints
       .map(wp => {
         const center = this.cellCenter(wp);
         return `${center.x},${center.y}`;
-      })
-      .join(' ');
+      });
+
+    if (points.length === 0) {
+      this.pathData = '';
+      return;
+    }
+
+    this.pathData = `M ${points[0]}${points.slice(1).map(point => ` L ${point}`).join('')}`;
   }
 
   private isObstacleCleared(position: GridPosition): boolean {
     const key = `${position.col},${position.row}`;
     return this.clearedObstacleKeys.includes(key);
+  }
+
+  private updateDirectionForTarget(target: GridPosition): void {
+    if (!this.tortoiseGridPosition) {
+      return;
+    }
+
+    // Movement route is orthogonal, so one axis delta determines heading.
+    if (target.col > this.tortoiseGridPosition.col) {
+      this.tortoiseDirection = 'right';
+    } else if (target.col < this.tortoiseGridPosition.col) {
+      this.tortoiseDirection = 'left';
+    } else if (target.row > this.tortoiseGridPosition.row) {
+      this.tortoiseDirection = 'down';
+    } else if (target.row < this.tortoiseGridPosition.row) {
+      this.tortoiseDirection = 'up';
+    }
   }
 }
