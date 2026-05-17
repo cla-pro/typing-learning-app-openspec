@@ -103,7 +103,7 @@ describe('TortoiseVisualizationComponent Requirements', () => {
     expect(obstacleEls).toHaveLength(TEST_CONFIG.obstacles.length);
     obstacleEls.forEach(obstacle => {
       expect(obstacle.tagName).toBe('IMG');
-      expect(obstacle.src).toContain('assets/reward-game/obstacles/rock.png');
+      expect(obstacle.src).toContain('assets/reward-game/tortoise/rock.png');
       expect(obstacle.alt).toBe('Obstacle on the tortoise path');
     });
   });

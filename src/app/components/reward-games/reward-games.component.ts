@@ -3,8 +3,10 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { HomeButtonComponent } from '../home-button/home-button.component';
-import { TORTOISE_GAME_CONFIGS } from '../../data/tortoise-game-configs';
+import { RewardGameSetup } from '../../models/reward-game-setup.model';
+import { RewardGamesConfigService } from '../../services/reward-games-config.service';
 import { RewardGameCompletionService } from '../../services/reward-game-completion.service';
+import { RewardGameUnlockService } from '../../services/reward-game-unlock.service';
 
 interface RewardGameItem {
   id: string;
@@ -22,37 +24,25 @@ interface RewardGameItem {
   styleUrls: ['./reward-games.component.css']
 })
 export class RewardGamesComponent {
+  private readonly rewardGamesConfigService = inject(RewardGamesConfigService);
+  private readonly rewardGameUnlockService = inject(RewardGameUnlockService);
   private readonly rewardGameCompletionService = inject(RewardGameCompletionService);
 
-  readonly rewardGames: RewardGameItem[] = [
-    {
-      id: TORTOISE_GAME_CONFIGS[0].gameId,
-      nameKey: 'rewardGames.games.tortoiseForestPath',
-      icon: '🐢',
-      locked: false,
-      routePath: `/reward-games/tortoise/${TORTOISE_GAME_CONFIGS[0].gameId}`,
-      isCompleted: this.rewardGameCompletionService.isCompleted(TORTOISE_GAME_CONFIGS[0].gameId)
-    },
-    {
-      id: 'meteor-dash',
-      nameKey: 'rewardGames.games.meteorDash',
-      icon: '☄️',
-      locked: true,
-      isCompleted: this.rewardGameCompletionService.isCompleted('meteor-dash')
-    },
-    {
-      id: 'bubble-sorter',
-      nameKey: 'rewardGames.games.bubbleSorter',
-      icon: '🫧',
-      locked: true,
-      isCompleted: this.rewardGameCompletionService.isCompleted('bubble-sorter')
-    },
-    {
-      id: 'key-garden',
-      nameKey: 'rewardGames.games.keyGarden',
-      icon: '🌱',
-      locked: true,
-      isCompleted: this.rewardGameCompletionService.isCompleted('key-garden')
-    }
-  ];
+  readonly rewardGames: RewardGameItem[] = this.rewardGamesConfigService
+    .listRewardGameSetups()
+    .map((setup: RewardGameSetup) => {
+      const routePath = this.rewardGamesConfigService.getRoutePath(setup);
+      const isImplemented = typeof routePath === 'string';
+      const isUnlocked = this.rewardGameUnlockService.isUnlocked(setup);
+      const launchable = isImplemented && isUnlocked;
+
+      return {
+        id: setup.id,
+        nameKey: setup.nameKey,
+        icon: setup.icon,
+        locked: !launchable,
+        routePath: launchable ? routePath : undefined,
+        isCompleted: this.rewardGameCompletionService.isCompleted(setup.id)
+      };
+    });
 }

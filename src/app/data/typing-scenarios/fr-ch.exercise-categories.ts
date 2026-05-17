@@ -2,6 +2,7 @@ import { ExerciseCategory } from '../../models/exercise-config.model';
 
 export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
   {
+    id: 'middle-line',
     name: 'Rangée du milieu',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -50,6 +51,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'upper-line',
     name: 'Rangée du haut',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -105,6 +107,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'lower-line',
     name: 'Rangée du bas',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -153,6 +156,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'index-finger',
     name: 'Index',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -180,6 +184,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'middle-finger',
     name: 'Majeur',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -200,6 +205,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'ring-finger',
     name: 'Annulaire',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -220,6 +226,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'little-finger',
     name: 'Auriculaire',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -233,6 +240,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'mix-caps',
     name: 'Majuscules mixtes',
     keyboardLayouts: ['fr-ch'],
     exercises: [
@@ -260,6 +268,7 @@ export const FR_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'stories',
     name: 'Histoires',
     keyboardLayouts: ['fr-ch'],
     exercises: [

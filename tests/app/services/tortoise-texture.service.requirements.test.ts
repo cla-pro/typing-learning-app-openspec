@@ -19,7 +19,7 @@ describe('TortoiseTextureService Requirements', () => {
   test('returns default obstacle asset URL for unknown obstacle types', () => {
     const fallbackUrl = service.getObstacleAssetUrl('unknown-obstacle');
 
-    expect(fallbackUrl).toBe('assets/reward-game/obstacles/rock.png');
+    expect(fallbackUrl).toBe('assets/reward-game/tortoise/rock.png');
     expect(service.isAssetPreloaded(fallbackUrl)).toBe(true);
   });
 

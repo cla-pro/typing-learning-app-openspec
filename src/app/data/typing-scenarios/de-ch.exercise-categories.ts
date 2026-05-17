@@ -2,6 +2,7 @@ import { ExerciseCategory } from '../../models/exercise-config.model';
 
 export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
   {
+    id: 'middle-line',
     name: 'Mittlere Reihe',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -50,6 +51,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'upper-line',
     name: 'Obere Reihe',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -105,6 +107,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'lower-line',
     name: 'Untere Reihe',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -153,6 +156,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'index-finger',
     name: 'Zeigefinger',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -180,6 +184,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'middle-finger',
     name: 'Mittelfinger',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -200,6 +205,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'ring-finger',
     name: 'Ringfinger',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -220,6 +226,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'little-finger',
     name: 'Kleiner Finger',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -233,6 +240,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'mix-caps',
     name: 'Gross und Klein',
     keyboardLayouts: ['de-ch'],
     exercises: [
@@ -260,6 +268,7 @@ export const DE_CH_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'stories',
     name: 'Geschichten',
     keyboardLayouts: ['de-ch'],
     exercises: [

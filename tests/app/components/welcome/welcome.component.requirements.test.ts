@@ -43,11 +43,13 @@ const exercises: ExerciseConfig[] = [
 
 const exerciseCategories: ExerciseCategory[] = [
   {
+    id: 'first-group',
     name: 'First Group',
     keyboardLayouts: ['fr-ch', 'de-ch'],
     exercises: [exercises[0], exercises[1]]
   },
   {
+    id: 'second-group',
     name: 'Second Group',
     keyboardLayouts: ['fr-ch', 'de-ch'],
     exercises: [exercises[2]]
@@ -82,6 +84,7 @@ describe('Welcome Component Requirements', () => {
       if (layout === 'de-ch') {
         return [
           {
+            id: 'german-group',
             name: 'German Group',
             keyboardLayouts: ['de-ch'],
             exercises: [exercises[2]]

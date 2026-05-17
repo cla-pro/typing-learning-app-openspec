@@ -1,7 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+
+import { ExerciseConfigService } from './exercise-config.service';
+import { SettingsService } from './settings.service';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseProgressService {
+  private readonly exerciseConfigService = inject(ExerciseConfigService);
+  private readonly settingsService = inject(SettingsService);
+
   recordCompletion(exerciseId: string, errorCount: number, totalChars: number): void {
     const stars = this.computeStars(errorCount, totalChars);
 
@@ -59,6 +65,23 @@ export class ExerciseProgressService {
     } catch {
       return 0;
     }
+  }
+
+  getStarsByCategory(): Map<string, number> {
+    const layout = this.settingsService.getChosenLayout();
+    const categories = this.exerciseConfigService.listExerciseCategories(layout);
+    const starsByCategory = new Map<string, number>();
+
+    for (const category of categories) {
+      const categoryTotal = category.exercises.reduce((total, exercise) => total + this.getStars(exercise.id), 0);
+      starsByCategory.set(category.id, categoryTotal);
+    }
+
+    return starsByCategory;
+  }
+
+  getStarsForCategory(categoryId: string): number {
+    return this.getStarsByCategory().get(categoryId) ?? 0;
   }
 
   private computeStars(errorCount: number, totalChars: number): number {

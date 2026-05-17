@@ -2,6 +2,7 @@ import { ExerciseCategory } from '../../models/exercise-config.model';
 
 export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
   {
+    id: 'middle-line',
     name: 'Middle Line',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -44,6 +45,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'upper-line',
     name: 'Upper Line',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -92,6 +94,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'lower-line',
     name: 'Lower Line',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -134,6 +137,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'index-finger',
     name: 'Index Finger',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -158,6 +162,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'middle-finger',
     name: 'Middle Finger',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -176,6 +181,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'ring-finger',
     name: 'Ring Finger',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -194,6 +200,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'little-finger',
     name: 'Little Finger',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -206,6 +213,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'mix-caps',
     name: 'Mix Caps',
     keyboardLayouts: ['en-us'],
     exercises: [
@@ -230,6 +238,7 @@ export const EN_US_EXERCISE_CATEGORIES: ExerciseCategory[] = [
     ]
   },
   {
+    id: 'stories',
     name: 'Stories',
     keyboardLayouts: ['en-us'],
     exercises: [

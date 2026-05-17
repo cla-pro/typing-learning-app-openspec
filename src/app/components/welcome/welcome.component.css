@@ -28,12 +28,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 999px;
   color: #2c3e50;
   text-decoration: none;
-  font-size: 1.15rem;
+  font-size: 2.3rem;
   border: 1px solid #d5dde4;
   background-color: #ffffff;
 }
@@ -47,6 +47,7 @@ h1 {
   margin-bottom: 1.5rem;
   color: #2c3e50;
   font-weight: 700;
+  text-align: left;
 }
 
 .exercises-nav {

@@ -7,6 +7,7 @@ export interface ExerciseConfig {
 }
 
 export interface ExerciseCategory {
+  id: string;
   name: string;
   keyboardLayouts: string[];
   exercises: ExerciseConfig[];

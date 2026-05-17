@@ -17,10 +17,12 @@
   },
   "rewardGames": {
     "games": {
-      "bubbleSorter": "Blasensortierer",
-      "keyGarden": "Tastengarten",
-      "meteorDash": "Meteorflug",
-      "tortoiseForestPath": "Schildkröten-Waldpfad"
+      "tortoisePath1": "Schildkröten-Waldpfad 1",
+      "tortoisePath2": "Schildkröten-Waldpfad 2",
+      "tortoisePath3": "Schildkröten-Waldpfad 3",
+      "tortoisePath4": "Schildkröten-Waldpfad 4",
+      "tortoisePath5": "Schildkröten-Waldpfad 5",
+      "tortoisePath6": "Schildkröten-Waldpfad 6"
     },
     "lockedIntro": "Verdiene mehr Sterne, um diese Bonusspiele freizuschalten.",
     "lockedStatus": "Gesperrt",

@@ -22,10 +22,12 @@ const translations = {
       lockedIntro: "Gagnez plus d'étoiles pour débloquer ces jeux bonus.",
       lockedStatus: 'Verrouillé',
       games: {
-        tortoiseForestPath: 'Sentier de la tortue',
-        meteorDash: 'Course de météores',
-        bubbleSorter: 'Trieur de bulles',
-        keyGarden: 'Jardin des touches'
+        tortoisePath1: 'Sentier de la tortue 1',
+        tortoisePath2: 'Sentier de la tortue 2',
+        tortoisePath3: 'Sentier de la tortue 3',
+        tortoisePath4: 'Sentier de la tortue 4',
+        tortoisePath5: 'Sentier de la tortue 5',
+        tortoisePath6: 'Sentier de la tortue 6'
       }
     }
   }
@@ -89,34 +91,56 @@ describe('Reward Games Component Requirements', () => {
 
     expect(element.querySelector('h1')?.textContent?.trim()).toBe('Jeux bonus');
     expect(element.querySelector('.reward-games-intro')?.textContent?.trim()).toBe("Gagnez plus d'étoiles pour débloquer ces jeux bonus.");
-    expect(cards).toHaveLength(4);
+    expect(cards).toHaveLength(6);
   });
 
   test('shows locked reward game entries as non-interactive cards with a visible lock overlay', () => {
     const element = fixture.nativeElement as HTMLElement;
     const lockedCards = Array.from(element.querySelectorAll('.reward-games-card--locked'));
 
-    expect(lockedCards).toHaveLength(3);
+    expect(lockedCards).toHaveLength(6);
     expect(lockedCards.every(card => card.querySelector('.reward-games-lock')?.textContent?.trim() === '🔒')).toBe(true);
     expect(lockedCards.every(card => card.querySelector('a, button') === null)).toBe(true);
-    expect(lockedCards.map(card => card.querySelector('.reward-games-status')?.textContent?.trim())).toEqual([
-      'Verrouillé',
-      'Verrouillé',
-      'Verrouillé'
-    ]);
+    expect(lockedCards.every(card => card.querySelector('.reward-games-status')?.textContent?.trim() === 'Verrouillé')).toBe(true);
   });
 
-  test('renders the tortoise game entry as a launchable card without a lock overlay', () => {
+  test('renders implemented tortoise game as locked when unlock criteria are not yet satisfied', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    const lockedCards = Array.from(element.querySelectorAll('.reward-games-card--locked'));
+    const tortoiseLockedCard = lockedCards.find(card =>
+      (card.querySelector('.reward-games-name')?.textContent ?? '').includes('Sentier de la tortue 1')
+    );
+
+    expect(tortoiseLockedCard).toBeDefined();
+    expect(tortoiseLockedCard?.querySelector('.reward-games-lock')).not.toBeNull();
+    expect(tortoiseLockedCard?.querySelector('a')).toBeNull();
+  });
+
+  test('renders the tortoise game entry as launchable when unlock criteria are satisfied', async () => {
+    fixture.destroy();
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '1');
+
+    fixture = TestBed.createComponent(RewardGamesComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
     const element = fixture.nativeElement as HTMLElement;
     const cards = Array.from(element.querySelectorAll('.reward-games-card'));
-    const tortoiseCard = cards.find(card => !card.classList.contains('reward-games-card--locked'));
+    const launchableCard = cards.find(card => !card.classList.contains('reward-games-card--locked'));
 
-    expect(tortoiseCard).toBeDefined();
-    expect(tortoiseCard?.querySelector('.reward-games-lock')).toBeNull();
-    expect(tortoiseCard?.querySelector('a')).not.toBeNull();
+    expect(launchableCard).toBeDefined();
+    expect(launchableCard?.querySelector('.reward-games-lock')).toBeNull();
+    expect(launchableCard?.querySelector('a')).not.toBeNull();
   });
 
-  test('activating the tortoise game entry navigates to the corresponding game route', async () => {
+  test('activating the unlocked tortoise game entry navigates to the corresponding game route', async () => {
+    fixture.destroy();
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '1');
+
+    fixture = TestBed.createComponent(RewardGamesComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
     const element = fixture.nativeElement as HTMLElement;
     const router = TestBed.inject(Router);
     const tortoiseLink = element.querySelector('.reward-games-card-link') as HTMLAnchorElement | null;
@@ -141,6 +165,7 @@ describe('Reward Games Component Requirements', () => {
 
   test('shows a crown marker when localStorage completion for the tortoise game is true', async () => {
     fixture.destroy();
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '1');
     globalThis.localStorage?.setItem(`reward-game-${TORTOISE_GAME_ID}-completion`, 'true');
 
     fixture = TestBed.createComponent(RewardGamesComponent);
@@ -157,20 +182,23 @@ describe('Reward Games Component Requirements', () => {
   test('reads persisted completion on initial render and keeps lock overlay behavior for locked entries', async () => {
     fixture.destroy();
     globalThis.localStorage?.setItem(`reward-game-${TORTOISE_GAME_ID}-completion`, 'true');
-    globalThis.localStorage?.setItem('reward-game-meteor-dash-completion', 'true');
+    globalThis.localStorage?.setItem('reward-game-tortoise-path-2-completion', 'true');
 
     fixture = TestBed.createComponent(RewardGamesComponent);
     fixture.detectChanges();
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
-    const launchableCard = element.querySelector('.reward-games-card:not(.reward-games-card--locked)') as HTMLElement;
+    const tortoiseLockedCard = Array.from(element.querySelectorAll('.reward-games-card--locked')).find(card =>
+      (card.querySelector('.reward-games-name')?.textContent ?? '').includes('Sentier de la tortue 1')
+    ) as HTMLElement | undefined;
     const lockedCards = Array.from(element.querySelectorAll('.reward-games-card--locked'));
     const lockedMeteorCard = lockedCards.find(card =>
-      (card.querySelector('.reward-games-name')?.textContent ?? '').includes('Course de météores')
+      (card.querySelector('.reward-games-name')?.textContent ?? '').includes('Sentier de la tortue 2')
     ) as HTMLElement | undefined;
 
-    expect(launchableCard.querySelector('.reward-games-crown')).not.toBeNull();
+    expect(tortoiseLockedCard?.querySelector('.reward-games-crown')).not.toBeNull();
+    expect(tortoiseLockedCard?.querySelector('.reward-games-lock')).not.toBeNull();
     expect(lockedMeteorCard?.querySelector('.reward-games-lock')).not.toBeNull();
     expect(lockedMeteorCard?.querySelector('.reward-games-crown')).not.toBeNull();
     expect(lockedMeteorCard?.querySelector('a, button')).toBeNull();

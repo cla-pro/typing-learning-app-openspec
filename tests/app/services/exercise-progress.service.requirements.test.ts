@@ -1,13 +1,18 @@
+import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, test } from 'vitest';
 
 import { ExerciseProgressService } from '../../../src/app/services/exercise-progress.service';
+import { SettingsService } from '../../../src/app/services/settings.service';
 
 describe('ExerciseProgressService Requirements', () => {
   let service: ExerciseProgressService;
+  let settingsService: SettingsService;
 
   beforeEach(() => {
     globalThis.localStorage?.clear();
-    service = new ExerciseProgressService();
+    TestBed.resetTestingModule();
+    service = TestBed.runInInjectionContext(() => new ExerciseProgressService());
+    settingsService = TestBed.inject(SettingsService);
   });
 
   test('isCompleted returns false and getStars returns 0 before any recordCompletion call', () => {
@@ -91,5 +96,34 @@ describe('ExerciseProgressService Requirements', () => {
     globalThis.localStorage?.setItem('broken_stars', 'oops');
 
     expect(service.getTotalStars()).toBe(3);
+  });
+
+  test('getStarsByCategory aggregates stars by stable category id for selected layout', () => {
+    settingsService.setChosenLayout('fr-ch');
+    service.recordCompletion('fr-ch-middle-line-fj', 0, 20);
+    service.recordCompletion('fr-ch-middle-line-dk', 1, 20);
+    service.recordCompletion('fr-ch-upper-line-tz', 5, 20);
+
+    const starsByCategory = service.getStarsByCategory();
+
+    expect(starsByCategory.get('middle-line')).toBe(5);
+    expect(starsByCategory.get('upper-line')).toBe(0);
+  });
+
+  test('getStarsByCategory uses currently selected keyboard layout', () => {
+    service.recordCompletion('fr-ch-middle-line-fj', 0, 20);
+    service.recordCompletion('de-ch-middle-line-fj', 1, 20);
+
+    settingsService.setChosenLayout('de-ch');
+    const deChStarsByCategory = service.getStarsByCategory();
+
+    expect(deChStarsByCategory.get('middle-line')).toBe(2);
+  });
+
+  test('getStarsForCategory returns zero for unknown category id', () => {
+    settingsService.setChosenLayout('fr-ch');
+    service.recordCompletion('fr-ch-middle-line-fj', 0, 20);
+
+    expect(service.getStarsForCategory('unknown-category')).toBe(0);
   });
 });
