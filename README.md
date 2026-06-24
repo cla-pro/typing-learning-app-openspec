@@ -55,6 +55,37 @@ npm run build:angular
 ```
 Build output is generated in `public/dist`.
 
+### Automated Release Pipeline (`build-deploy`)
+```bash
+npm run build-deploy -- --host <sftp-host> --username <sftp-user> --remote-dir <remote-path>
+```
+
+Optional flags:
+- `--port <port>` (default: `22`)
+- `--backup-dir <remote-backup-path>` (default: `<remote-dir>-backup`)
+- `--local-dir <local-build-path>` (default: `public/dist`)
+- `--dry-run` (validate and print actions only; no remote mutations)
+
+Pipeline steps are fixed and fail-fast:
+1. Empty `public/`
+2. Run tests (`npm test`)
+3. Run production guard (`debugGrid` cannot be hardcoded to `true`) and build artifacts
+4. Generate deployment script and deploy over SFTP
+
+Security behavior:
+- The deployment script asks for the SFTP password interactively at runtime.
+- No FTP fallback is attempted when SFTP fails.
+- Passwords are not read from repository-tracked files.
+
+Remote deployment behavior:
+- Existing remote files are moved into a timestamped folder under backup path.
+- New artifacts are uploaded to the active remote directory only after backup rotation succeeds.
+
+Rollback:
+1. Stop the broken deployment attempt.
+2. Move files from the latest timestamped folder under backup path back into the active remote directory.
+3. Re-run `npm run build-deploy -- --dry-run ...` to validate paths and connectivity before next live deploy.
+
 ### Running Tests
 ```bash
 npm test

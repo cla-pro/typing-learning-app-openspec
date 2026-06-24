@@ -118,7 +118,7 @@ describe('Reward Games Component Requirements', () => {
 
   test('renders the tortoise game entry as launchable when unlock criteria are satisfied', async () => {
     fixture.destroy();
-    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '1');
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '15');
 
     fixture = TestBed.createComponent(RewardGamesComponent);
     fixture.detectChanges();
@@ -135,7 +135,7 @@ describe('Reward Games Component Requirements', () => {
 
   test('activating the unlocked tortoise game entry navigates to the corresponding game route', async () => {
     fixture.destroy();
-    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '1');
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '15');
 
     fixture = TestBed.createComponent(RewardGamesComponent);
     fixture.detectChanges();
@@ -165,7 +165,7 @@ describe('Reward Games Component Requirements', () => {
 
   test('shows a crown marker when localStorage completion for the tortoise game is true', async () => {
     fixture.destroy();
-    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '1');
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '15');
     globalThis.localStorage?.setItem(`reward-game-${TORTOISE_GAME_ID}-completion`, 'true');
 
     fixture = TestBed.createComponent(RewardGamesComponent);

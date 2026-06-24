@@ -4,10 +4,12 @@
   "description": "A keyboard typing learning application",
   "main": "src/main.ts",
   "scripts": {
-    "start": "ng serve --configuration development --port 3000",
+    "start": "ng serve --configuration production --port 3000",
     "dev": "ng serve --configuration development --port 3000",
     "build:angular": "ng build --configuration production",
+    "build-deploy": "node scripts/build-deploy.js",
     "dev:angular": "ng serve --configuration development",
+    "generate:deploy-script": "node scripts/generate-deploy-script.js",
     "test": "npm run check:behavior-tests && vitest run --coverage",
     "lint": "eslint src tests",
     "check:deps": "node scripts/check-dependency-policy.js",
@@ -31,6 +33,7 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "rxjs": "^7.8.0",
+    "ssh2-sftp-client": "^12.0.1",
     "tslib": "^2.6.0",
     "zone.js": "^0.16.1"
   },

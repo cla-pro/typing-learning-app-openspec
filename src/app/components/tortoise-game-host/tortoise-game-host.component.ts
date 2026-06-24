@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, inject, isDevMode } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -53,6 +53,7 @@ export class TortoiseGameHostComponent implements OnInit {
   clearedObstacleKeys: string[] = [];
   obstacleCharItems: Array<{ char: string; typed: boolean; index: number }> = [];
   streamSizeScale = 1;
+  readonly showDebugGrid = isDevMode();
 
   private visualizationComponent?: TortoiseVisualizationComponent;
   private lastAnimatedTargetKey: string | null = null;
