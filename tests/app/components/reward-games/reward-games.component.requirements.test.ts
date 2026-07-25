@@ -101,7 +101,10 @@ describe('Reward Games Component Requirements', () => {
     expect(lockedCards).toHaveLength(6);
     expect(lockedCards.every(card => card.querySelector('.reward-games-lock')?.textContent?.trim() === '🔒')).toBe(true);
     expect(lockedCards.every(card => card.querySelector('a, button') === null)).toBe(true);
-    expect(lockedCards.every(card => card.querySelector('.reward-games-status')?.textContent?.trim() === 'Verrouillé')).toBe(true);
+    const expectedProgress = ['0/15', '0/30', '0/45', '0/60', '0/75', '0/90'];
+    const displayedProgress = lockedCards.map(card => card.querySelector('.reward-games-status')?.textContent?.trim());
+
+    expect(displayedProgress).toEqual(expectedProgress);
   });
 
   test('renders implemented tortoise game as locked when unlock criteria are not yet satisfied', () => {
@@ -114,6 +117,23 @@ describe('Reward Games Component Requirements', () => {
     expect(tortoiseLockedCard).toBeDefined();
     expect(tortoiseLockedCard?.querySelector('.reward-games-lock')).not.toBeNull();
     expect(tortoiseLockedCard?.querySelector('a')).toBeNull();
+    expect(tortoiseLockedCard?.querySelector('.reward-games-status')?.textContent?.trim()).toBe('0/15');
+  });
+
+  test('shows locked progress text using current total stars and required stars threshold', async () => {
+    fixture.destroy();
+    globalThis.localStorage?.setItem('fr-ch-middle-line-fj_stars', '12');
+
+    fixture = TestBed.createComponent(RewardGamesComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const lockedCards = Array.from(element.querySelectorAll('.reward-games-card--locked'));
+    const expectedProgress = ['12/15', '12/30', '12/45', '12/60', '12/75', '12/90'];
+    const displayedProgress = lockedCards.map(card => card.querySelector('.reward-games-status')?.textContent?.trim());
+
+    expect(displayedProgress).toEqual(expectedProgress);
   });
 
   test('renders the tortoise game entry as launchable when unlock criteria are satisfied', async () => {

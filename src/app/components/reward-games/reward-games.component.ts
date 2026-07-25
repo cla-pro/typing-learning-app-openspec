@@ -7,12 +7,14 @@ import { RewardGameSetup } from '../../models/reward-game-setup.model';
 import { RewardGamesConfigService } from '../../services/reward-games-config.service';
 import { RewardGameCompletionService } from '../../services/reward-game-completion.service';
 import { RewardGameUnlockService } from '../../services/reward-game-unlock.service';
+import { ExerciseProgressService } from '../../services/exercise-progress.service';
 
 interface RewardGameItem {
   id: string;
   nameKey: string;
   icon: string;
   locked: boolean;
+  lockedProgressText?: string;
   routePath?: string;
   isCompleted: boolean;
 }
@@ -27,6 +29,9 @@ export class RewardGamesComponent {
   private readonly rewardGamesConfigService = inject(RewardGamesConfigService);
   private readonly rewardGameUnlockService = inject(RewardGameUnlockService);
   private readonly rewardGameCompletionService = inject(RewardGameCompletionService);
+  private readonly exerciseProgressService = inject(ExerciseProgressService);
+
+  private readonly totalStars = this.exerciseProgressService.getTotalStars();
 
   readonly rewardGames: RewardGameItem[] = this.rewardGamesConfigService
     .listRewardGameSetups()
@@ -41,6 +46,7 @@ export class RewardGamesComponent {
         nameKey: setup.nameKey,
         icon: setup.icon,
         locked: !launchable,
+        lockedProgressText: !launchable ? `${this.totalStars}/${setup.unlockCriteria.TotalNbStarsRequired}` : undefined,
         routePath: launchable ? routePath : undefined,
         isCompleted: this.rewardGameCompletionService.isCompleted(setup.id)
       };

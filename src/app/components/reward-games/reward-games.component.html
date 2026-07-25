@@ -29,7 +29,7 @@
               <span class="reward-games-lock" aria-hidden="true">🔒</span>
             </div>
             <span class="reward-games-name">{{ game.nameKey | translate }}</span>
-            <span class="reward-games-status">{{ 'rewardGames.lockedStatus' | translate }}</span>
+            <span class="reward-games-status">{{ game.lockedProgressText }}</span>
           </li>
         }
       }

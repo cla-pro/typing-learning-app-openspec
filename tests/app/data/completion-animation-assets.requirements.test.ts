@@ -21,7 +21,7 @@ describe('Completion Animation Assets Requirements', () => {
   });
 
   test('builds follow-up stars GIF path with <stars>-stars.gif convention', () => {
-    expect(getStarsCelebrationAnimationPath(2)).toBe('assets/start-gifs/2-stars.gif');
+    expect(getStarsCelebrationAnimationPath(2)).toBe('assets/star-gifs/2-stars.gif');
   });
 
   test('allows deterministic random selection through a test double', () => {

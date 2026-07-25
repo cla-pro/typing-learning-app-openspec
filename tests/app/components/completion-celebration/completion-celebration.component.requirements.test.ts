@@ -61,12 +61,12 @@ describe('CompletionCelebrationComponent Requirements', () => {
 
     vi.advanceTimersByTime(20);
     expect(component.phase).toBe('second');
-    expect(component.currentGifSrc).toBe('assets/start-gifs/3-stars.gif');
+    expect(component.currentGifSrc).toBe('assets/star-gifs/3-stars.gif');
 
     vi.advanceTimersByTime(30);
     expect(component.phase).toBe('done');
     expect(component.overlayVisible).toBe(true);
-    expect(component.currentGifSrc).toBe('assets/start-gifs/3-stars.gif');
+    expect(component.currentGifSrc).toBe('assets/star-gifs/3-stars.gif');
 
     vi.useRealTimers();
   });

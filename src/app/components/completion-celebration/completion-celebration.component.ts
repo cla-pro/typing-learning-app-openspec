@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import {
   getStarsCelebrationAnimationPath,
@@ -18,7 +18,6 @@ const DEFAULT_SECOND_PHASE_DURATION_MS = 1100;
 })
 export class CompletionCelebrationComponent implements OnChanges, OnDestroy {
   private readonly router = inject(Router);
-  private route = inject(ActivatedRoute);
 
   @Input() visible: boolean = false;
   @Input() achievedStars: number = 0;
