@@ -1,4 +1,4 @@
-<app-home-button></app-home-button>
+<app-home-button [destination]="exerciseBackDestination"></app-home-button>
 
 <main class="exercise-container">
   <div
@@ -73,5 +73,12 @@
         ></app-keyboard-display>
       </section>
     </section>
+
+    <app-completion-celebration
+      [visible]="showCompletionCelebration"
+      [achievedStars]="completionCelebrationStars"
+      [destination]="exerciseBackDestination"
+      (retryRequested)="handleCompletionCelebrationRetry()"
+    ></app-completion-celebration>
   </div>
 </main>

@@ -1,0 +1,31 @@
+@if (overlayVisible) {
+  <div class="completion-overlay" data-testid="completion-overlay">
+    <div class="completion-panel" data-testid="completion-panel">
+      <img
+        class="completion-gif"
+        [src]="currentGifSrc"
+        alt="Completion celebration animation"
+      />
+      <div class="completion-actions">
+        <button
+          type="button"
+          class="completion-action-button completion-action-button--retry"
+          (click)="onRetryClick()"
+          data-testid="completion-retry-button"
+          aria-label="Retry exercise"
+        >
+          <span class="retry-icon" aria-hidden="true">&#8635;</span>
+          Retry
+        </button>
+        <button
+          type="button"
+          class="completion-action-button completion-action-button--ok"
+          (click)="onOkClick()"
+          data-testid="completion-ok-button"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+}

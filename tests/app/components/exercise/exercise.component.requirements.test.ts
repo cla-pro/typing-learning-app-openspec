@@ -13,7 +13,10 @@ describe('Exercise Component Requirements', () => {
   let paramMap$: Subject<any>;
   let serviceStub: { getExerciseById: ReturnType<typeof vi.fn> };
   let routerStub: { navigate: ReturnType<typeof vi.fn> };
-  let progressStub: { recordCompletion: ReturnType<typeof vi.fn> };
+  let progressStub: {
+    recordCompletion: ReturnType<typeof vi.fn>;
+    getStars: ReturnType<typeof vi.fn>;
+  };
   let settingsStub: {
     getStreamSizeValue: ReturnType<typeof vi.fn>;
     getChosenLayout: ReturnType<typeof vi.fn>;
@@ -42,7 +45,8 @@ describe('Exercise Component Requirements', () => {
     };
 
     progressStub = {
-      recordCompletion: vi.fn()
+      recordCompletion: vi.fn(),
+      getStars: vi.fn(() => 2)
     };
 
     settingsStub = {
@@ -334,6 +338,8 @@ describe('Exercise Component Requirements', () => {
     paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
     component.toggleRuntimeState();
 
+    expect(component.showCompletionCelebration).toBe(false);
+
     component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
     component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
     component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
@@ -342,6 +348,72 @@ describe('Exercise Component Requirements', () => {
     component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
 
     expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.showCompletionCelebration).toBe(true);
+    expect(component.completionCelebrationStars).toBe(2);
+    expect(progressStub.getStars).toHaveBeenCalledWith('basic-typing');
+  });
+
+  test('shows completion celebration overlay only on completed transition', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+
+    expect(component.showCompletionCelebration).toBe(false);
+
+    component.toggleRuntimeState();
+    expect(component.exerciseRuntimeState).toBe('running');
+    expect(component.showCompletionCelebration).toBe(false);
+
+    component.toggleRuntimeState();
+    expect(component.exerciseRuntimeState).toBe('pending');
+    expect(component.showCompletionCelebration).toBe(false);
+
+    component.toggleRuntimeState();
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
+    expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.showCompletionCelebration).toBe(true);
+  });
+
+  test('keeps completion celebration overlay visible until explicit action', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
+    expect(component.showCompletionCelebration).toBe(true);
+  });
+
+  test('retry action restarts exercise flow without leaving exercise context', () => {
+    paramMap$.next(convertToParamMap({ id: 'basic-typing' }));
+    component.toggleRuntimeState();
+
+    component.handleExerciseKeydown({ key: 'x' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'a' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'b' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'C' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'd' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'e' } as KeyboardEvent);
+    component.handleExerciseKeydown({ key: 'f' } as KeyboardEvent);
+
+    expect(component.exerciseRuntimeState).toBe('completed');
+    expect(component.showCompletionCelebration).toBe(true);
+
+    component.handleCompletionCelebrationRetry();
+
+    expect(component.exerciseRuntimeState).toBe('opened');
+    expect(component.activeExpectedCharIndex).toBe(0);
+    expect(component.errorCount).toBe(0);
+    expect(component.showCompletionCelebration).toBe(false);
+    expect(routerStub.navigate).not.toHaveBeenCalledWith(['/']);
   });
 
   test('correct key press sets isLastKeyWrong to false for green keyboard highlight', () => {

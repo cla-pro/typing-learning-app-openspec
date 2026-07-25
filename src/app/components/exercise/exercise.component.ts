@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { CompletionCelebrationComponent } from '../completion-celebration/completion-celebration.component';
 import { HomeButtonComponent } from '../home-button/home-button.component';
 import { KeyboardDisplayComponent } from '../keyboard-display/keyboard-display.component';
 import { ExerciseConfigService } from '../../services/exercise-config.service';
@@ -16,7 +17,7 @@ const MODIFIER_KEYS = new Set(['Shift', 'Control', 'Alt', 'AltGraph', 'CapsLock'
 
 @Component({
     selector: 'app-exercise',
-  imports: [HomeButtonComponent, KeyboardDisplayComponent, TranslateModule],
+  imports: [CompletionCelebrationComponent, HomeButtonComponent, KeyboardDisplayComponent, TranslateModule],
     templateUrl: './exercise.component.html',
     styleUrls: ['./exercise.component.css']
 })
@@ -42,6 +43,9 @@ export class ExerciseComponent implements OnInit {
   isAltGrActive: boolean = false;
   streamSizeValue: number = STREAM_SIZE_MIN;
   isShufflable: boolean = false;
+  showCompletionCelebration: boolean = false;
+  completionCelebrationStars: number = 0;
+  readonly exerciseBackDestination: string = '/';
   private hasValidExercise: boolean = false;
 
   get activeExpectedChar(): string {
@@ -126,6 +130,8 @@ export class ExerciseComponent implements OnInit {
       this.isShufflable = exerciseConfig.shufflable ?? false;
       this.chosenLayout = this.settingsService.getChosenLayout();
       this.exerciseRuntimeState = 'opened';
+      this.showCompletionCelebration = false;
+      this.completionCelebrationStars = 0;
       this.lastPressedKey = '';
       this.errorCount = 0;
       this.isLastKeyWrong = false;
@@ -179,6 +185,8 @@ export class ExerciseComponent implements OnInit {
     if (this.activeExpectedCharIndex >= this.expectedCharsToDisplay.length - 1) {
       this.activeExpectedCharIndex = this.expectedCharsToDisplay.length;
       this.exerciseProgressService.recordCompletion(this.exerciseId, this.errorCount, this.expectedCharsToDisplay.length);
+      this.completionCelebrationStars = this.exerciseProgressService.getStars(this.exerciseId);
+      this.showCompletionCelebration = true;
       this.exerciseRuntimeState = 'completed';
       return;
     }
@@ -202,6 +210,8 @@ export class ExerciseComponent implements OnInit {
     this.activeExpectedCharIndex = 0;
     this.impactedKeys = [];
     this.isShufflable = false;
+    this.showCompletionCelebration = false;
+    this.completionCelebrationStars = 0;
     this.chosenLayout = 'fr-ch';
     this.exerciseRuntimeState = 'opened';
     this.lastPressedKey = '';
@@ -212,6 +222,18 @@ export class ExerciseComponent implements OnInit {
 
   private focusExerciseContent(): void {
     this.exerciseContentRef?.nativeElement.focus();
+  }
+
+  handleCompletionCelebrationRetry(): void {
+    this.activeExpectedCharIndex = 0;
+    this.exerciseRuntimeState = 'opened';
+    this.lastPressedKey = '';
+    this.errorCount = 0;
+    this.isLastKeyWrong = false;
+    this.isShiftActive = false;
+    this.isAltGrActive = false;
+    this.completionCelebrationStars = 0;
+    this.showCompletionCelebration = false;
   }
 
   private redirectToNotFound(): void {
